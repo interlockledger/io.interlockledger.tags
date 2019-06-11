@@ -128,4 +128,8 @@ public interface ILTagStandardTags {
 	* The ILTag version tag. It contains the semantic version number (major.minor.revision.build).
 	*/
 	public static final long TAG_VERSION = 24;
+	/**
+	 * ITU Object Identifier. 
+	 */
+	public static final long TAG_OID = 25;
 }
