@@ -41,7 +41,7 @@ public class InputStreamHandler implements ILIntCodec.InputHandler<InputStream>{
 	public int get(InputStream in) throws ILIntException {
 		try {
 			int r = in.read();
-			if (r <= 0) {
+			if (r < 0) {
 				throw new ILIntException("Premature end of stream."); 
 			}
 			return r;
