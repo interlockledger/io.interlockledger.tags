@@ -15,7 +15,6 @@
  */
 package io.interlockledger.iltags;
 
-import java.beans.Encoder;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,9 +23,6 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
-
-import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
  * This class implements the String ILTag.
