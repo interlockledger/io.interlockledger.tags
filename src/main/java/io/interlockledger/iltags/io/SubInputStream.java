@@ -1,5 +1,21 @@
+/*
+ * Copyright 2019 InterlockLedger Network
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.interlockledger.iltags.io;
 
+import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +59,12 @@ public class SubInputStream extends FilterInputStream {
 	public int read() throws IOException {
 		
 		if (this.size > 0) {
+			int r = super.read();
+			if(r < 0) {
+				throw new EOFException("Unexpected end of the underlying stream.");
+			}
 			this.size--;
-			return super.read();
+			return r;
 		} else {
 			return -1;
 		}
@@ -57,16 +77,24 @@ public class SubInputStream extends FilterInputStream {
 	
 	@Override
 	public int available() throws IOException {
-		return (int)Math.min(this.available(), this.size);
+		return (int)Math.min(super.available(), this.size);
 	}
 	
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		
-		len = (int)Math.min(len, this.size);
-		int read = super.read(b, off, len); 
-		this.size -= read;
-		return read;
+		if (this.size > 0) {
+			len = (int)Math.min(len, this.size);
+			int read = super.read(b, off, len); 
+			if (read < 0) {
+				throw new EOFException("Unexpected end of the underlying stream.");
+			} else {
+				this.size -= read;
+				return read;
+			}
+		} else {
+			return -1;
+		}
 	}
 
 	@Override
@@ -80,16 +108,15 @@ public class SubInputStream extends FilterInputStream {
 	/**
 	 * Seek the end of the sub stream.
 	 *  
+	 * @return true if the end of the stream was reached or false otherwise.
 	 * @throws IOException In case of error.
 	 */
 	public void end() throws IOException {
-		long count = this.size;
+		
 		while (this.size > 0) {
-			if (count < 0) {
-				throw new IOException("Unable to reach the end of the stream.");
+			if (this.skip(this.size) == 0) {
+				this.read(); // Force a single byte skip to check the end of file.
 			}
-			this.skip(this.size);
-			count--;
 		}
 	}
 	
