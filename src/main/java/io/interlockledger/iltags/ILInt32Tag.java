@@ -19,59 +19,40 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
-
 /**
- * This class implements the ILInt ILTag.
- *
+ * This class implements the standard int16 tag and its variants.
+ * 
  * @author Fabio Jun Takada Chino
- * @since 2019.06.10
+ * @since 2019.06.12
  */
-public class ILILIntTag extends ILTag {
+public class ILInt32Tag extends ILFixedSizeTag {
+	
+	protected int value;
 
-	protected long value;
-
-	public ILILIntTag(long id) {
-		super(id);
+	public ILInt32Tag(long id) {
+		super(id, 4);
 	}
 	
-	public ILILIntTag() {
-		super(ILTagStandardTags.TAG_ILINT64);
+	public ILInt32Tag() {
+		this(ILTagStandardTags.TAG_INT32);
 	}
 
 	@Override
 	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
-		try {
-			ILIntCodec.encode(value, out);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
+		out.writeShort(this.value);
 	}
 
 	@Override
-	public long getValueSize() {
-		return ILIntCodec.getEncodedSize(this.value);
+	public void deserializeValueCore(ILTagFactory factory, DataInputStream in)
+			throws ILTagException, IOException {
+		this.value = in.readInt();
 	}
 
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException {
-
-		if (tagSize != -1) {
-			throw new ILTagException("Invalid value.");
-		}		
-		try {
-			this.value = ILIntCodec.decode(in);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
-	}
-
-	public long getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	public void setValue(long value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 }

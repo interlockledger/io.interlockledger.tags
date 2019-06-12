@@ -49,12 +49,24 @@ public abstract class ILTag {
 			0   // Reserved
 	};
 	
-	private long id;
+	private final long id;
 	
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param id The tag id.
+	 */
 	protected ILTag(long id) {
 		this.id = id;
 	}
 	
+	/**
+	 * Serializes the value.
+	 * 
+	 * @param out The output stream.
+	 * @throws ILTagException In case of errors.
+	 * @throws IOException In case of IO errors.
+	 */
 	protected abstract void serializeValue(DataOutputStream out) throws ILTagException, IOException;
 
 	public abstract long getValueSize();
@@ -86,12 +98,11 @@ public abstract class ILTag {
 	}
 
 	/**
-	 * Serializes this tag. The serialization must be written to the current
-	 * position of the buffer out.
+	 * Serializes this tag.
 	 *  
-	 * @param out
-	 * @throws ILTagException
-	 * @throws IOException
+	 * @param out The output stream.
+	 * @throws ILTagException In case of errors.
+	 * @throws IOException In case of
 	 */
 	public void serialize(DataOutputStream out)  throws ILTagException {
 		
@@ -110,9 +121,8 @@ public abstract class ILTag {
 	 * Deserializes the value of the tag.
 	 *
 	 * @param factory The ILTagFactory if required.
-	 * @param buff The buffer that contains the tag value.
-	 * @param in The size of the buff in bytes. Use -1 if the tag size is unknown.
-	 * @return true for success or false otherwise.
+	 * @param tagSize The size of the tag or -1 if the tag size is unknown.
+	 * @param in The input stream with the tag data.
 	 */	
 	public abstract void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException;
 	
