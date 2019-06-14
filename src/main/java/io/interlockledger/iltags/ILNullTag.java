@@ -25,10 +25,10 @@ import java.io.IOException;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class ILNullTag extends ILTag {
+public class ILNullTag extends ILFixedSizeTag {
 
 	public ILNullTag() {
-		super(ILTagStandardTags.TAG_NULL);
+		super(ILTagStandardTags.TAG_NULL, 0);
 	}
 
 	@Override
@@ -36,14 +36,6 @@ public class ILNullTag extends ILTag {
 	}
 
 	@Override
-	public long getValueSize() {
-		return 0;
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException {
-		if (tagSize != this.getValueSize()) {
-			throw new ILTagException("Invalid value.");
-		}		
+	protected void deserializeValueCore(ILTagFactory factory, DataInputStream in) throws ILTagException, IOException {
 	}
 }
