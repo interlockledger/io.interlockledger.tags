@@ -45,8 +45,8 @@ public abstract class ILTag {
 			4,  // TAG_BINARY32
 			8,  // TAG_BINARY64
 			16, // TAG_BINARY128
-			0,  // Reserved
-			0   // Reserved
+			-1,  // Reserved
+			-1   // Reserved
 	};
 	
 	private final long id;
@@ -81,7 +81,7 @@ public abstract class ILTag {
 		long valueSize;
 		
 		valueSize = this.getValueSize();
-		size = ILIntCodec.getEncodedSize(this.getId() + valueSize);
+		size = ILIntCodec.getEncodedSize(this.getId()) + valueSize;
 		if (!this.isImplicity()) {
 			size += ILIntCodec.getEncodedSize(valueSize);
 		}
@@ -175,9 +175,7 @@ public abstract class ILTag {
 	 */	
 	public static long getImplicitValueSize(long tagId) {
 
-		if (tagId == ILTagStandardTags.TAG_ILINT64) {
-			throw new IllegalArgumentException("TAG_ILINT64 does not have a fixed size.");
-		} else if (isImplicity(tagId)) {
+		if (isImplicity(tagId)) {
 			return STANDARD_SIZES[(int)tagId];
 		} else {
 			throw new IllegalArgumentException("The specified tag is not implicity.");
