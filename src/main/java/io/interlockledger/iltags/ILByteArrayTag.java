@@ -44,6 +44,8 @@ public class ILByteArrayTag extends ILTag {
 		
 		if (value != null) {
 			out.write(this.value);
+		} else {
+			throw new ILTagException("Value not set.");
 		}
 	}
 
