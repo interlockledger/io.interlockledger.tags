@@ -24,6 +24,10 @@ import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
+ * Base implementation for ILTagDataReader implementations. It provides
+ * the implementation for most of the methods of the interface, simplifying
+ * the implementation of the subclasses.
+ * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
@@ -33,29 +37,47 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 	
 	private final Stack<Long> limits = new Stack<Long>();
 	
-	private long remaining = -1;
+	private long offset = 0;
+	
+	// The value Long.MAX_VALUE will be used to denote the unlimited
+	private long currentLimit = Long.MAX_VALUE;
 	
 	protected ILBaseTagDataReader() {
 		tmp = ByteBuffer.allocate(8);
 		tmp.order(ByteOrder.BIG_ENDIAN);		
 	}
 	
-	protected void consumeBytes(long n) throws ILTagNotEnoughDataException {
+	/**
+	 * Updates the offset by registering the use of n bytes. It also
+	 * verifies if the specified number of bytes can be used based on
+	 * the current limit. 
+	 * 
+	 * @param n The number of bytes to use.
+	 * @throws ILTagNotEnoughDataException If there are not enough bytes
+	 * to be read.
+	 */
+	protected void updateOffset(long n) throws ILTagNotEnoughDataException {
 	
-		if (this.isLimited()) {
-			if (n > this.remaining) {
-				throw new ILTagNotEnoughDataException("Unexpected end of data.");
-			}
-			this.remaining -= n;
+		if (n > this.getRemaining()) {
+			throw new ILTagNotEnoughDataException(
+					String.format("Trying to read %1$d bytes out of %2$d.", n, this.getRemaining()));
 		}
+		this.offset += n;
 	}
 
 	@Override
 	public byte readByte() throws ILTagException {
-		consumeBytes(1);
+		updateOffset(1);
 		return this.readByteCore();
 	}
 	
+	/**
+	 * Reads a byte from the data source. It is called by readByte()
+	 * after the validation of read limits.
+	 * 
+	 * @return The byte read.
+	 * @throws ILTagException In case of error.
+	 */
 	protected abstract byte readByteCore() throws ILTagException;
 
 	@Override
@@ -85,7 +107,7 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 	}
 
 	@Override
-	public double reatDouble() throws ILTagException {
+	public double readDouble() throws ILTagException {
 		readBytes(tmp, 8);
 		return tmp.getDouble();
 	}
@@ -99,14 +121,24 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 		readBytes(tmp.array(), 0, size);
 		tmp.rewind();
 	}
-
 	
 	@Override
 	public void readBytes(byte[] v, int off, int size) throws ILTagException {
-		consumeBytes(size);
+		updateOffset(size);
 		readBytesCore(v, off, size);
 	}
 	
+	/**
+	 * Reads bytes from the data source. It is called by readBytes(byte[],int,int)
+	 * after the validation of read limits.
+	 * 
+	 * <p>This method must succeed if and only if all bytes are read.</p>.
+	 * 
+	 * @param v The buffer that will receive the data.
+	 * @param off The offset.
+	 * @param size The number of bytes to read.
+	 * @throws ILTagException In case of error.
+	 */
 	protected abstract void readBytesCore(byte[] v, int off, int size) throws ILTagException;
 	
 	@Override
@@ -114,45 +146,74 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 		try {
 			return ILIntCodec.decode(this, ILTagDataReaderHandler.INSTANCE);
 		} catch(ILIntException e) {
-			throw new ILTagException(e);
+			if (e.getCause() instanceof ILTagNotEnoughDataException) {
+				throw new ILTagNotEnoughDataException(e.getCause().getMessage(), e.getCause());
+			} else {
+				throw new ILTagException(e.getMessage(), e);
+			}
 		}
 	}
 
 	@Override
 	public void skip(long n) throws ILTagException {
-		consumeBytes(n);
+		updateOffset(n);
 		skipCore(n);
 	}
 	
+	/**
+	 * Skips a certain number of bytes from the data source. It is called by skip(long)
+	 * after the validation of read limits.
+	 * 
+	 * <p>This method must succeed if and only if all bytes are skipped.</p>.
+	 * 
+	 * @param n The number of bytes to skip.
+	 * @throws ILTagException In case of error.
+	 */
 	protected abstract void skipCore(long n) throws ILTagException;
 	
-	public void pushLimit(long newLimit) {
-		
+	@Override
+	public void pushLimit(long size) {
+
+		if (size < 0) {
+			throw new IllegalArgumentException("The size cannot be negative.");
+		}		
+		long newLimit = this.offset + size;
+		if (newLimit < 0) {
+			throw new IllegalArgumentException("Overflow.");
+		}
 		if (this.isLimited()) {
-			if (newLimit > this.remaining) {
-				throw new IllegalArgumentException("");
+			if (newLimit > this.currentLimit) {
+				throw new IllegalArgumentException("The new size exceeds the available");
 			}
 		}
-		this.limits.push(this.remaining);
-		this.remaining = newLimit;
+		this.limits.push(this.currentLimit);
+		this.currentLimit = newLimit;
 	}
 
+	@Override
 	public void popLimit(boolean checkRemaining) throws ILTagException {
 		
 		if (this.limits.size() == 0) {
 			throw new IllegalStateException("No limits to pop.");
 		}
 		if ((checkRemaining) && (this.getRemaining() > 0)) {
-			throw new ILTagTooMuchDataException(String.format("Unexpected %1$d bytes in the stream.", this.getRemaining()));
+			throw new ILTagTooMuchDataException(String.format("The reader still have %1$d unread bytes.", this.getRemaining()));
 		}
-		this.remaining = this.limits.pop();
+		this.currentLimit = this.limits.pop();
 	}
 	
+	@Override
 	public long getRemaining() {
-		return this.remaining;
+		return this.currentLimit - this.offset;
 	}
 	
+	@Override
 	public boolean isLimited() {
-		return remaining >= 0;
+		return (this.currentLimit != Long.MAX_VALUE);
+	}
+	
+	@Override
+	public long getOffset() {
+		return this.offset;
 	}
 }
