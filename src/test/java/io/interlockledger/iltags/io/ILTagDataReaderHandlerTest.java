@@ -15,26 +15,33 @@
  */
 package io.interlockledger.iltags.io;
 
-import io.interlockledger.iltags.ILTagException;
-import io.interlockledger.iltags.ilint.ILIntCodec;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import io.interlockledger.iltags.ilint.ILIntException;
 
-/**
- * Implementation of the ILIntCodec's InputHandler for ILTagDataReader instances.
- * 
- * @author Fabio Jun Takada Chino
- * @since 2019.06.14
- */
-public class ILTagDataReaderHandler implements ILIntCodec.InputHandler<ILTagDataReader> {
+public class ILTagDataReaderHandlerTest {
 	
-	public static final ILTagDataReaderHandler INSTANCE = new ILTagDataReaderHandler();
+	@Test
+	public void testInstance() {
+		assertNotNull(ILTagDataReaderHandler.INSTANCE);
+	}
 
-	@Override
-	public int get(ILTagDataReader in) throws ILIntException {
-		try {
-			return in.readByte() & 0xFF;
-		} catch (ILTagException e) {
-			throw new ILIntException(e.getMessage(), e);
+	@Test
+	public void testGet() throws Exception {
+		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+		
+		for (int i = 0; i < 256; i++) {
+			assertEquals((i + 1) &0xFF, ILTagDataReaderHandler.INSTANCE.get(r));
 		}
+	}
+
+	@Test(expected = ILIntException.class)
+	public void testGetFail() throws Exception {
+		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+		
+		r.pushLimit(0);
+		ILTagDataReaderHandler.INSTANCE.get(r);
 	}
 }
