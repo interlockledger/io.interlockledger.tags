@@ -75,6 +75,14 @@ public class ILBaseTagDataReaderTest {
 			}
 		}		
 	}
+	
+	@Test(expected = ILTagNotEnoughDataException.class)
+	public void testUpdateOffsetFail() throws ILTagException {
+		TestTagDataReader r = new TestTagDataReader();
+		
+		r.pushLimit(10);
+		r.updateOffset(11);
+	}
 
 	@Test
 	public void testReadByte() throws Exception {
@@ -189,18 +197,98 @@ public class ILBaseTagDataReaderTest {
 	}
 	
 	@Test
-	public void testReadBytesByteArray() {
-		fail("Not yet implemented");
+	public void testReadBytesByteArray() throws Exception {
+		
+		for (int size = 0; size < 256; size++) {
+			TestTagDataReader r = new TestTagDataReader();
+			byte [] bin = new byte[size];
+			r.readBytes(bin);
+			byte [] expected = new byte[size];
+			for (int i = 0; i < size; i++) {
+				expected[i] = (byte)i;
+			}
+		}
+		
+		for (int size = 0; size < 256; size++) {
+			TestTagDataReader r = new TestTagDataReader();
+			byte [] bin = new byte[size];
+			r.pushLimit(size);
+			r.readBytes(bin);
+			byte [] expected = new byte[size];
+			for (int i = 0; i < size; i++) {
+				expected[i] = (byte)i;
+			}
+		}
+	}
+
+	@Test(expected = ILTagNotEnoughDataException.class)
+	public void testReadBytesByteArrayFail() throws Exception {
+		TestTagDataReader r = new TestTagDataReader();
+
+		r.pushLimit(9);
+		r.readBytes(new byte[10]);
+	}
+	
+	@Test
+	public void testReadBytesByteArrayIntInt() throws Exception {
+		TestTagDataReader r = new TestTagDataReader();
+		
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				for (int size = 0; size < 16; size++) {
+					byte [] bin = new byte[i + j + size];
+					r.readBytes(bin, i, size);
+					byte [] expected = new byte[i + j + size];
+					for (int k = 0; k < size; k++) {
+						expected[i + k] = (byte)k;
+					}
+					assertArrayEquals(expected, bin);
+				}
+			}
+		}
+		
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				for (int size = 0; size < 16; size++) {
+					byte [] bin = new byte[i + j + size];
+					r.pushLimit(size);
+					r.readBytes(bin, i, size);
+					r.popLimit(true);
+					byte [] expected = new byte[i + j + size];
+					for (int k = 0; k < size; k++) {
+						expected[i + k] = (byte)k;
+					}
+					assertArrayEquals(expected, bin);
+				}
+			}
+		}
+	}
+	
+	@Test(expected = ILTagNotEnoughDataException.class)
+	public void testReadBytesByteArrayIntIntFail() throws Exception {
+		TestTagDataReader r = new TestTagDataReader();
+		
+		r.pushLimit(9);
+		r.readBytes(new byte[10]);
 	}
 
 	@Test
-	public void testReadBytesByteArrayIntInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testReadBytesCore() {
-		fail("Not yet implemented");
+	public void testReadBytesCore() throws Exception {
+		TestTagDataReader r = new TestTagDataReader();
+		
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				for (int size = 0; size < 16; size++) {
+					byte [] bin = new byte[i + j + size];
+					r.readBytesCore(bin, i, size);
+					byte [] expected = new byte[i + j + size];
+					for (int k = 0; k < size; k++) {
+						expected[i + k] = (byte)k;
+					}
+					assertArrayEquals(expected, bin);
+				}
+			}
+		}	
 	}
 
 	@Test(expected = ILTagNotEnoughDataException.class)
@@ -301,7 +389,7 @@ public class ILBaseTagDataReaderTest {
 		assertEquals(9, r.getRemaining());
 		r.skip(9);
 		r.popLimit(true);
-		assertEquals(Long.MAX_VALUE - 1, r.getRemaining());
+		assertEquals(Long.MAX_VALUE - 10, r.getRemaining());
 	}
 
 	@Test(expected = IllegalStateException.class)
