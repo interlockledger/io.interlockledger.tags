@@ -34,7 +34,7 @@ public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements 
 	}
 
 	@Override
-	public void writeByte(byte v) throws ILTagException {
+	protected void writeByteCore(byte v) throws ILTagException {
 		try {
 			this.out.write(v & 0xFF);
 		} catch (IOException e) {
@@ -43,7 +43,7 @@ public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements 
 	}
 
 	@Override
-	public void writeBytes(byte[] v, int off, int size) throws ILTagException {
+	protected void writeBytesCore(byte[] v, int off, int size) throws ILTagException {
 		try {
 			this.out.write(v, off, size);
 		} catch (IOException e) {

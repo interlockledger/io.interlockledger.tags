@@ -30,13 +30,25 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 
 	private final ByteBuffer tmp;
 	
+	private long offset = 0;
+	
 	protected ILBaseTagDataWriter() {
 		tmp = ByteBuffer.allocate(8);
 		tmp.order(ByteOrder.BIG_ENDIAN);
 	}
 	
+	protected void updateOffset(int size) {
+		this.offset += size;
+	}
+	
 	@Override
-	public abstract void writeByte(byte v) throws ILTagException;
+	public void writeByte(byte v) throws ILTagException {
+		updateOffset(1);
+		writeByteCore(v);
+	}
+	
+	protected abstract void writeByteCore(byte v) throws ILTagException;
+	
 	
 	@Override
 	public void writeShort(short v) throws ILTagException {
@@ -84,7 +96,12 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	}
 	
 	@Override
-	public abstract void writeBytes(byte[] v, int off, int size) throws ILTagException;
+	public void writeBytes(byte[] v, int off, int size) throws ILTagException {
+		this.updateOffset(size);
+		this.writeBytesCore(v, off, size);
+	}
+
+	protected abstract void writeBytesCore(byte[] v, int off, int size) throws ILTagException;
 	
 	@Override
 	public void writeILInt(long v) throws ILTagException {
@@ -96,5 +113,10 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 		} catch (ILIntException e) {
 			throw new ILTagException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public long getOffset() {
+		return offset;
 	}
 }
