@@ -15,12 +15,6 @@
  */
 package io.interlockledger.iltags;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
-
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 import io.interlockledger.iltags.io.UTF8Utils;
@@ -47,7 +41,7 @@ public class ILStringTag extends ILTag {
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 
 		if (this.value == null) {
-			throw new ILTagException("Value not set.");	
+			throw new IllegalStateException("Value not set.");	
 		}
 		out.writeString(this.value);
 	}

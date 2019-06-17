@@ -43,7 +43,7 @@ public class ILByteArrayTag extends ILTag {
 		if (value != null) {
 			out.writeBytes(this.value);
 		} else {
-			throw new ILTagException("Value not set.");
+			throw new IllegalStateException("Value not set.");
 		}
 	}
 
@@ -53,7 +53,7 @@ public class ILByteArrayTag extends ILTag {
 		if (value != null) {
 			return this.value.length;
 		} else {
-			return 0;
+			throw new IllegalStateException("Value not set.");
 		}
 	}
 
