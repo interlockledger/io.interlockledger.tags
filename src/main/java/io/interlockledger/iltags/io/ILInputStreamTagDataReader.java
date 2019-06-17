@@ -22,6 +22,8 @@ import java.io.InputStream;
 import io.interlockledger.iltags.ILTagException;
 
 /**
+ * This class implements the ILTagDataReader for InputStreams.
+ * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
@@ -29,6 +31,11 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 
 	protected final InputStream in;
 	
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param in The underlying input stream.
+	 */
 	public ILInputStreamTagDataReader(InputStream in) {
 		this.in = in;
 	}
@@ -39,7 +46,7 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 		try {
 			int r = in.read();
 			if (r < 0) {
-				throw new ILTagNotEnoughDataException();
+				throw new ILTagNotEnoughDataException("Unexpected end of stream.");
 			}
 			return (byte)r;
 		} catch (IOException e) {
@@ -49,14 +56,37 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 
 	@Override
 	protected void readBytesCore(byte[] v, int off, int size) throws ILTagException {
-		// TODO Auto-generated method stub
-
+		
+		try {
+			while (size > 0) {
+				int r = this.in.read(v, off, size);
+				if (r < 0) {
+					throw new ILTagNotEnoughDataException("Unexpected end of stream.");
+				}
+				size -= r;
+				off += r;
+			}
+		} catch (IOException e) {
+			throw new ILTagException(e.getMessage(), e);
+		}
 	}
 
 	@Override
 	protected void skipCore(long n) throws ILTagException {
-		// TODO Auto-generated method stub
-
+		
+		try {
+			while (n > 0) {
+				long s = this.in.skip(n);
+				if (s == 0) {
+					this.readByteCore(); // Test EOF
+					n--;
+				} else {
+					n -= s;
+				}
+			}
+		} catch (IOException e) {
+			throw new ILTagException(e.getMessage(), e);
+		}
 	}
 
 	@Override
