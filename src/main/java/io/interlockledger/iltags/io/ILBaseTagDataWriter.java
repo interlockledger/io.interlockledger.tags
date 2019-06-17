@@ -17,6 +17,9 @@ package io.interlockledger.iltags.io;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
@@ -32,6 +35,8 @@ import io.interlockledger.iltags.ilint.ILIntException;
  */
 public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 
+	protected static Charset UTF8 = Charset.forName("utf-8");
+	
 	private final ByteBuffer tmp;
 	
 	private long offset = 0;
@@ -145,5 +150,11 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	@Override
 	public long getOffset() {
 		return offset;
+	}
+	
+	@Override
+	public void writeString(CharSequence v) throws ILTagException {
+		ByteBuffer out = UTF8.encode(CharBuffer.wrap(v));
+		this.writeBytes(out.array(), 0, out.limit());
 	}
 }

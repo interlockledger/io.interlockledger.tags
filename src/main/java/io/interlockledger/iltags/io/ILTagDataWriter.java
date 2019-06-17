@@ -107,4 +107,13 @@ public interface ILTagDataWriter {
 	 * @return The current offset.
 	 */
 	public long getOffset();
+	
+	/**
+	 * Writes a string as its UTF-8 byte representation.
+	 * 
+	 * @param v The string to be written.
+	 * @throws ILTagException
+	 * @since 2019.06.17
+	 */
+	public void writeString(CharSequence v) throws ILTagException;
 }

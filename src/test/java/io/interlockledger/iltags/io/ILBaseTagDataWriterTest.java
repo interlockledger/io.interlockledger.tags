@@ -26,6 +26,8 @@ import org.junit.Test;
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
 
+import static io.interlockledger.iltags.io.BaseDataTest.*;
+
 public class ILBaseTagDataWriterTest {
 	
 	public static class TestBaseTagDataWriter extends ILBaseTagDataWriter {
@@ -311,4 +313,27 @@ public class ILBaseTagDataWriterTest {
 			assertEquals(offs, w.getOffset());
 		}
 	}
+
+	@Test
+	public void testWriteString() throws Exception {
+
+		for (int size = 0; size < 1024; size += 33) {
+			TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+			String s = genRandomString(size);
+			w.writeString(s);
+			ByteBuffer out = UTF8.encode(s);
+			byte [] expected = new byte[out.limit()];
+			out.get(expected);
+			assertArrayEquals(expected, w.toByteArray());
+		}
+	}
+	
+	@Test
+	public void testWriteStringSample() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		w.writeString(SAMPLE);
+		assertArrayEquals(SAMPLE_BIN, w.toByteArray());
+	}	
 }
