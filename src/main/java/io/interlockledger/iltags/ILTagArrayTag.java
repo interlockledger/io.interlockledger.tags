@@ -15,16 +15,13 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
-import io.interlockledger.iltags.io.SubInputStream;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the standard tag array tag but can also be
@@ -46,13 +43,8 @@ public class ILTagArrayTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
-
-		try {
-			ILIntCodec.encode(this.value.size(), out);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeILInt(this.getValueSize());
 		for (ILTag t: this.value) {
 			t.serialize(out);
 		}
@@ -70,23 +62,11 @@ public class ILTagArrayTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
-		SubInputStream sub = new SubInputStream(in, tagSize, false);
-		this.deserializeValueCore(factory, tagSize, new DataInputStream(sub));
-		if (sub.remaining() > 0) {
-			throw new ILTagException("Invalid tag size.");
-		}
-	}
-	
-	private void deserializeValueCore(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
+			throws ILTagException {
 		long count;
-		try {
-			count = ILIntCodec.decode(in);
-		} catch (ILIntException e) {
-			throw new ILTagException(e);
-		}
+
+		count = in.readILInt();
 		if (count > Integer.MAX_VALUE) {
 			throw new ILTagException("Unsupported number of entries.");
 		}

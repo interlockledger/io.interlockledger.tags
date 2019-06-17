@@ -18,22 +18,21 @@ package io.interlockledger.iltags;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 import org.junit.Test;
+
+import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILNullTagTest {
 
 	@Test
 	public void testSerializeValue() throws Exception {
 		ILNullTag t = new ILNullTag();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
 		
-		t.serializeValue(new DataOutputStream(out));
-		out.close();
-		assertEquals(0, out.toByteArray().length);
+		t.serializeValue(out);
+		assertArrayEquals(new byte[0], out.toByteArray());
 	}
 
 	@Test
@@ -48,7 +47,7 @@ public class ILNullTagTest {
 		ILNullTag t = new ILNullTag();
 		ByteArrayInputStream in = new ByteArrayInputStream(new byte[0]);
 		
-		t.deserializeValue(null, 0, new DataInputStream(in));
+		t.deserializeValue(null, 0, new ILInputStreamTagDataReader(in));
 		in.close();
 	}
 

@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the standard int8 tag and its variants.
@@ -38,13 +37,13 @@ public class ILInt8Tag extends ILFixedSizeTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		out.writeByte(this.value);
 	}
 
 	@Override
-	protected void deserializeValueCore(ILTagFactory factory, DataInputStream in)
-			throws ILTagException, IOException {
+	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in)
+			throws ILTagException {
 		this.value = in.readByte();
 	}
 

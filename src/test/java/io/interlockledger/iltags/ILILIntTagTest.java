@@ -19,13 +19,13 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.util.Random;
 
 import org.junit.Test;
 
 import io.interlockledger.iltags.ilint.ILIntCodec;
+import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILILIntTagTest {
 
@@ -38,9 +38,8 @@ public class ILILIntTagTest {
 			ILILIntTag t = new ILILIntTag();
 			t.setValue(v);
 			
-			ByteArrayOutputStream actual = new ByteArrayOutputStream();
-			t.serializeValue(new DataOutputStream(actual));
-			actual.close();
+			ILMemoryTagDataWriter actual = new ILMemoryTagDataWriter();
+			t.serializeValue(actual);
 			ByteArrayOutputStream expected = new ByteArrayOutputStream();
 			ILIntCodec.encode(v, expected);
 			expected.close();
@@ -73,7 +72,7 @@ public class ILILIntTagTest {
 			raw.close();
 			
 			ILILIntTag t = new ILILIntTag();
-			try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(raw.toByteArray()))) {
+			try (ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(raw.toByteArray()))) {
 				t.deserializeValue(null, -1, in);
 			}
 			assertEquals(v, t.getValue());

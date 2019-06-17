@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the boolean ILTag.
@@ -25,31 +24,26 @@ import java.io.IOException;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class ILBooleanTag extends ILTag {
+public class ILBooleanTag extends ILFixedSizeTag {
 
 	public boolean value;
-	
+
 	public ILBooleanTag() {
-		super(ILTagStandardTags.TAG_BOOL);
+		this(ILTagStandardTags.TAG_BOOL);
+	}
+
+	public ILBooleanTag(long id) {
+		super(id, 1);
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
-		out.write(this.value ? 1 : 0);
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeByte((byte) (this.value ? 1 : 0));
 	}
 
 	@Override
-	public long getValueSize() {
-		return 1;
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException {
-
-		if (tagSize != this.getValueSize()) {
-			throw new ILTagException("Invalid value.");
-		}		
-		switch (in.read()) {
+	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
+		switch (in.readByte()) {
 		case 0:
 			this.value = false;
 			break;

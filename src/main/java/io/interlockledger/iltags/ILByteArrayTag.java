@@ -15,10 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the standard byte array tag but can also be
@@ -40,10 +38,10 @@ public class ILByteArrayTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		
 		if (value != null) {
-			out.write(this.value);
+			out.writeBytes(this.value);
 		} else {
 			throw new ILTagException("Value not set.");
 		}
@@ -60,23 +58,14 @@ public class ILByteArrayTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
+			throws ILTagException {
 		if ((tagSize < 0) || (tagSize > Integer.MAX_VALUE)) {
 			throw new ILTagException("Invalid byte array size.");
 		}
 		int size = (int)tagSize;
 		this.value = new byte[size];
-		
-		int offs = 0;
-		while (size > 0) {
-			int read = in.read(this.value, offs, size);
-			if (read < 0) {
-				throw new EOFException("Unexpected end of stream.");
-			}
-			size -= read;
-			offs += read;
-		}
+		in.readBytes(this.value);
 	}
 
 	public byte[] getValue() {

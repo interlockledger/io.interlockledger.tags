@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 public class ILTestTag extends ILTag {
 
@@ -29,10 +28,10 @@ public class ILTestTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		
 		for (long i = 0; i < this.valueSize; i++) {
-			out.write((int)(i & 0xFF));
+			out.writeByte((byte)(i & 0xFF));
 		}
 	}
 
@@ -42,8 +41,8 @@ public class ILTestTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
+			throws ILTagException {
 		throw new UnsupportedOperationException("This method should not be tested.");
 	}
 }

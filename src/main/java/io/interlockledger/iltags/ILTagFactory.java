@@ -15,7 +15,7 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.InputStream;
+import io.interlockledger.iltags.io.ILTagDataReader;
 
 public class ILTagFactory {
 
@@ -35,7 +35,7 @@ public class ILTagFactory {
 	 * @param[in] The input buffer.
 	 * @return The extracted tag or NULL otherwise.
 	 */
-	public ILTag deserialize(InputStream in) throws ILTagException {
+	public ILTag deserialize(ILTagDataReader in) throws ILTagException {
 		return null;
 	}
 	

@@ -15,8 +15,9 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
 import java.io.IOException;
+
+import io.interlockledger.iltags.io.ILTagDataReader;
 
 /**
  * This class implements the base fixed size tag.
@@ -48,8 +49,8 @@ public abstract class ILFixedSizeTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
+			throws ILTagException {
 		if (tagSize != this.valueSize) {
 			throw new ILTagException("Invalid byte tag size.");
 		}
@@ -66,6 +67,6 @@ public abstract class ILFixedSizeTag extends ILTag {
 	 * @throws ILTagException In case of erros.
 	 * @throws IOException  In case of I/O erros.
 	 */
-	protected abstract void deserializeValueCore(ILTagFactory factory, DataInputStream in)
-			throws ILTagException, IOException;
+	protected abstract void deserializeValueCore(ILTagFactory factory, ILTagDataReader in)
+			throws ILTagException;
 }

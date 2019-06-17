@@ -15,12 +15,9 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the base class for all ILTag classes.
@@ -63,11 +60,10 @@ public abstract class ILTag {
 	/**
 	 * Serializes the value.
 	 * 
-	 * @param out The output stream.
+	 * @param out The tag writer.
 	 * @throws ILTagException In case of errors.
-	 * @throws IOException In case of IO errors.
 	 */
-	protected abstract void serializeValue(DataOutputStream out) throws ILTagException, IOException;
+	protected abstract void serializeValue(ILTagDataWriter out) throws ILTagException;
 
 	public abstract long getValueSize();
 	
@@ -100,21 +96,16 @@ public abstract class ILTag {
 	/**
 	 * Serializes this tag.
 	 *  
-	 * @param out The output stream.
-	 * @throws ILTagException In case of errors.
-	 * @throws IOException In case of
+	 * @param out The tag writer.
+	 * @throws ILTagException In case of error.
 	 */
-	public void serialize(DataOutputStream out)  throws ILTagException {
-		
-		try {
-			ILIntCodec.encode(this.getId(), out);
-			if (!this.isImplicity() ) {
-				ILIntCodec.encode(this.getValueSize(), out);
-			}
-			this.serializeValue(out);			
-		} catch (ILIntException | IOException e) {
-			throw new ILTagException(e.getMessage(), e);
+	public void serialize(ILTagDataWriter out) throws ILTagException {
+
+		out.writeILInt(this.getId());
+		if (!this.isImplicity() ) {
+			out.writeILInt(this.getValueSize());
 		}
+		this.serializeValue(out);	
 	}
 	
 	/**
@@ -122,9 +113,9 @@ public abstract class ILTag {
 	 *
 	 * @param factory The ILTagFactory if required.
 	 * @param tagSize The size of the tag or -1 if the tag size is unknown.
-	 * @param in The input stream with the tag data.
+	 * @param in The tag data reader.
 	 */	
-	public abstract void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException;
+	public abstract void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException;
 	
 	/**
 	 * Verifies if this tag is implicit or not.

@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the standard float 128 array tag but can also be
@@ -40,13 +39,13 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 	}
 
 	@Override
-	protected void deserializeValueCore(ILTagFactory factory, DataInputStream in) throws ILTagException, IOException {
-		in.readFully(this.value);
+	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
+		in.readBytes(this.value);
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
-		out.write(this.value);
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeBytes(this.value);
 	}
 
 	public byte [] getValue() {

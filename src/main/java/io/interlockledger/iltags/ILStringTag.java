@@ -15,14 +15,14 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the String ILTag.
@@ -41,9 +41,9 @@ public class ILStringTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		ByteBuffer tmp = CHARSET.encode(this.value);
-		out.write(tmp.array(), 0, tmp.limit());
+		out.writeBytes(tmp.array(), 0, tmp.limit());
 	}
 
 	@Override
@@ -61,14 +61,13 @@ public class ILStringTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
 
 		if (tagSize > Integer.MAX_VALUE) {
 			throw new ILTagException("String too long.");
 		}
 		ByteBuffer bytes = ByteBuffer.allocate((int)tagSize);
-
-		
+		// TODO Not implemented yet.		
 	}
 
 	public String getValue() {

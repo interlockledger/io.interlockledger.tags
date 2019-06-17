@@ -15,16 +15,12 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
-import io.interlockledger.iltags.io.SubInputStream;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the standard tag array tag but can also be
@@ -46,7 +42,7 @@ public class ILTagSequenceTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 
 		for (ILTag t: this.value) {
 			t.serialize(out);
@@ -65,16 +61,10 @@ public class ILTagSequenceTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in)
-			throws ILTagException, IOException {
-		SubInputStream sub = new SubInputStream(in, tagSize, false);
-		this.deserializeValueCore(factory, tagSize, sub);
-	}
-	
-	private void deserializeValueCore(ILTagFactory factory, long tagSize, SubInputStream in)
-			throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
+			throws ILTagException {
 		this.value.clear();
-		while(in.remaining() > 0) {
+		while(in.getRemaining() > 0) {
 			this.value.add(factory.deserialize(in));
 		}		
 	}

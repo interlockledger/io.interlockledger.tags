@@ -19,10 +19,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.util.Random;
 
 import org.junit.Test;
+
+import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
 
 public class ILFixedSizeTagTest {
 
@@ -43,14 +44,14 @@ public class ILFixedSizeTagTest {
 		
 		for (int i = 0; i < 64; i++) {		
 			ILTestFixedSizeTag t = new ILTestFixedSizeTag(i + 1, i);
-			DataInputStream in = new DataInputStream(new ByteArrayInputStream(new byte[10]));
+			ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(new byte[10]));
 			t.deserializeValue(null, i, in);
 			in.close();
 		}
 		
 		for (int i = 0; i < 64; i++) {		
 			ILTestFixedSizeTag t = new ILTestFixedSizeTag(i + 1, i);
-			DataInputStream in = new DataInputStream(new ByteArrayInputStream(new byte[10]));
+			ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(new byte[10]));
 			try {
 				t.deserializeValue(null, i - 1, in);
 				fail();

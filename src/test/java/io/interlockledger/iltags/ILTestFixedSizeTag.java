@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 public class ILTestFixedSizeTag extends ILFixedSizeTag {
 
@@ -26,10 +25,10 @@ public class ILTestFixedSizeTag extends ILFixedSizeTag {
 	}
 
 	@Override
-	protected void deserializeValueCore(ILTagFactory factory, DataInputStream in) throws ILTagException, IOException {
+	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 	}
 }

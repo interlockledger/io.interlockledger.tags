@@ -18,12 +18,12 @@ package io.interlockledger.iltags;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.util.Random;
 
 import org.junit.Test;
+
+import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILByteArrayTagTest {
 
@@ -37,21 +37,18 @@ public class ILByteArrayTagTest {
 			ILByteArrayTag t = new ILByteArrayTag();
 			t.setValue(src);
 			
-			ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-			try (DataOutputStream out = new DataOutputStream(bOut)){
-				t.serializeValue(out);
-			}
-			assertArrayEquals(src, bOut.toByteArray());
+			ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
+			t.serializeValue(out);
+			assertArrayEquals(src, out.toByteArray());
 		}
 	}
 	
 	@Test(expected = ILTagException.class)
 	public void testSerializeValueNotSet() throws Exception {
 		ILByteArrayTag t = new ILByteArrayTag();
-			
-		try (DataOutputStream out = new DataOutputStream(new ByteArrayOutputStream())){
-			t.serializeValue(out);
-		}
+
+		ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
+		t.serializeValue(out);
 	}	
 
 	@Test
@@ -75,7 +72,7 @@ public class ILByteArrayTagTest {
 			byte [] src = new byte[size];
 			random.nextBytes(src);
 			ILByteArrayTag t = new ILByteArrayTag();
-			try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(src))){
+			try (ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(src))){
 				t.deserializeValue(null, src.length, in);
 			}
 			assertArrayEquals(src, t.getValue());

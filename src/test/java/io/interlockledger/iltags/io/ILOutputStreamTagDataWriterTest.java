@@ -24,7 +24,6 @@ import java.util.Random;
 import org.junit.Test;
 
 import io.interlockledger.iltags.ILTagException;
-import io.interlockledger.iltags.io.ILBaseTagDataWriterTest.TestBaseTagDataWriter;
 
 public class ILOutputStreamTagDataWriterTest {
 

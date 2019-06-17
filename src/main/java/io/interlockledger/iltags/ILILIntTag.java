@@ -15,12 +15,9 @@
  */
 package io.interlockledger.iltags;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.ilint.ILIntException;
+import io.interlockledger.iltags.io.ILTagDataReader;
+import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
  * This class implements the ILInt ILTag.
@@ -41,12 +38,8 @@ public class ILILIntTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(DataOutputStream out) throws ILTagException, IOException {
-		try {
-			ILIntCodec.encode(value, out);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeILInt(this.getValue());
 	}
 
 	@Override
@@ -55,16 +48,12 @@ public class ILILIntTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, DataInputStream in) throws ILTagException, IOException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
 
 		if (tagSize != -1) {
 			throw new ILTagException("Invalid value.");
-		}		
-		try {
-			this.value = ILIntCodec.decode(in);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
 		}
+		this.value = in.readILInt();
 	}
 
 	public long getValue() {

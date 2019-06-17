@@ -18,11 +18,11 @@ package io.interlockledger.iltags;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 
 import org.junit.Test;
 
 import io.interlockledger.iltags.ilint.ILIntCodec;
+import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILTagTest {
 
@@ -75,8 +75,8 @@ public class ILTagTest {
 	@Test
 	public void testSerializeFakeStandard1() throws Exception {
 		ILTestTag t = new ILTestTag(0, 0);
-		ByteArrayOutputStream actual = new ByteArrayOutputStream();
-		t.serialize(new DataOutputStream(actual));
+		ILMemoryTagDataWriter actual = new ILMemoryTagDataWriter();
+		t.serialize(actual);
 		
 		ByteArrayOutputStream expected = new ByteArrayOutputStream();
 		expected.write(0);
@@ -87,8 +87,9 @@ public class ILTagTest {
 	@Test
 	public void testSerializeFakeStandard2() throws Exception {
 		ILTestTag t = new ILTestTag(1, 1);
-		ByteArrayOutputStream actual = new ByteArrayOutputStream();
-		t.serialize(new DataOutputStream(actual));
+		ILMemoryTagDataWriter actual = new ILMemoryTagDataWriter();
+		
+		t.serialize(actual);
 		
 		ByteArrayOutputStream expected = new ByteArrayOutputStream();
 		expected.write(1);
@@ -103,8 +104,9 @@ public class ILTagTest {
 		
 		for (int size = 0; size < 512; size += 128) {
 			ILTestTag t = new ILTestTag(16, size);
-			ByteArrayOutputStream actual = new ByteArrayOutputStream();
-			t.serialize(new DataOutputStream(actual));
+			ILMemoryTagDataWriter actual = new ILMemoryTagDataWriter();
+			
+			t.serialize(actual);
 			
 			ByteArrayOutputStream expected = new ByteArrayOutputStream();
 			expected.write(16);
