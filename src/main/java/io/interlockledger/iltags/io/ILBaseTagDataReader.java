@@ -24,7 +24,7 @@ import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
- * Base implementation for ILTagDataReader implementations. It provides
+ * Base class for ILTagDataReader implementations. It provides
  * the implementation for most of the methods of the interface, simplifying
  * the implementation of the subclasses.
  * 
