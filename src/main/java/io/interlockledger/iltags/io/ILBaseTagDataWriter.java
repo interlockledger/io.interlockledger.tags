@@ -23,6 +23,10 @@ import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
+ * Base class for ILTagDataWriter implementations. It provides
+ * the implementation for most of the methods of the interface, simplifying
+ * the implementation of the subclasses.
+ *
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
@@ -32,23 +36,37 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	
 	private long offset = 0;
 	
+	/**
+	 * Creates a new instance of this class.
+	 */
 	protected ILBaseTagDataWriter() {
-		tmp = ByteBuffer.allocate(8);
+		tmp = ByteBuffer.allocate(9);
 		tmp.order(ByteOrder.BIG_ENDIAN);
 	}
 	
+	/**
+	 * Updates the current offset.
+	 * 
+	 * @param size The number of bytes to add.
+	 */
 	protected void updateOffset(int size) {
 		this.offset += size;
 	}
 	
 	@Override
 	public void writeByte(byte v) throws ILTagException {
-		updateOffset(1);
 		writeByteCore(v);
+		updateOffset(1);
 	}
 	
+	/**
+	 * Writes a byte. This method is called by writeByte(byte) before
+	 * the update of the offset.
+	 * 
+	 * @param v The value to be written.
+	 * @throws ILTagException In case of error.
+	 */
 	protected abstract void writeByteCore(byte v) throws ILTagException;
-	
 	
 	@Override
 	public void writeShort(short v) throws ILTagException {
@@ -97,10 +115,19 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	
 	@Override
 	public void writeBytes(byte[] v, int off, int size) throws ILTagException {
-		this.updateOffset(size);
 		this.writeBytesCore(v, off, size);
+		this.updateOffset(size);
 	}
 
+	/**
+	 * Writes bytes. This method is called by writeBytes(byte,int,int) before
+	 * the update of the offset.
+	 * 
+	 * @param v The value to be written.
+	 * @param off The offset.
+	 * @param size The size.
+	 * @throws ILTagException In case of error.
+	 */
 	protected abstract void writeBytesCore(byte[] v, int off, int size) throws ILTagException;
 	
 	@Override
