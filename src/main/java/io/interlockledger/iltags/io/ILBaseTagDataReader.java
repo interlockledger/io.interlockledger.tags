@@ -15,7 +15,6 @@
  */
 package io.interlockledger.iltags.io;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
@@ -251,5 +250,4 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 			throw new ILTagException(e.getMessage(), e);
 		}
 	}
-
 }

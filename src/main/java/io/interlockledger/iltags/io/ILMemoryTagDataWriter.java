@@ -16,9 +16,6 @@
 package io.interlockledger.iltags.io;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import io.interlockledger.iltags.ILTagException;
 
