@@ -23,6 +23,7 @@ import java.nio.charset.CoderResult;
 
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
+import io.interlockledger.iltags.io.UTF8Utils;
 
 /**
  * This class implements the String ILTag.
@@ -32,42 +33,36 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILStringTag extends ILTag {
 
-	private static final Charset CHARSET = Charset.forName("utf-8");
-	
 	public String value;
 	
 	public ILStringTag() {
-		super(ILTagStandardTags.TAG_STRING);
+		this(ILTagStandardTags.TAG_STRING);
+	}
+	
+	public ILStringTag(long id) {
+		super(id);
 	}
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		ByteBuffer tmp = CHARSET.encode(this.value);
-		out.writeBytes(tmp.array(), 0, tmp.limit());
+
+		if (this.value == null) {
+			throw new ILTagException("Value not set.");	
+		}
+		out.writeString(this.value);
 	}
 
 	@Override
 	public long getValueSize() {
-		CharsetEncoder encoder = CHARSET.newEncoder();
-		ByteBuffer output = ByteBuffer.allocate(256);
-		CharBuffer input = CharBuffer.wrap(this.value);
-		long size = 0;
-		while (encoder.encode(input, output, true) == CoderResult.OVERFLOW) {
-			size += output.position();
-			output.rewind();
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");	
 		}
-		size += output.position();
-		return size; 
+		return UTF8Utils.getEncodedSize(this.value); 
 	}
 
 	@Override
 	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
-
-		if (tagSize > Integer.MAX_VALUE) {
-			throw new ILTagException("String too long.");
-		}
-		ByteBuffer bytes = ByteBuffer.allocate((int)tagSize);
-		// TODO Not implemented yet.		
+		this.value = in.readString(tagSize);	
 	}
 
 	public String getValue() {

@@ -18,8 +18,6 @@ package io.interlockledger.iltags.io;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CodingErrorAction;
 import java.util.Stack;
 
 import io.interlockledger.iltags.ILTagException;
@@ -35,8 +33,6 @@ import io.interlockledger.iltags.ilint.ILIntException;
  * @since 2019.06.14
  */
 public abstract class ILBaseTagDataReader implements ILTagDataReader {
-	
-	protected static Charset UTF8 = Charset.forName("utf-8");
 
 	private final ByteBuffer tmp;
 	
@@ -240,10 +236,7 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 		ByteBuffer out = ByteBuffer.allocate((int)n);
 		this.readBytes(out.array(), 0, (int)n);
 		try { 
-			CharBuffer dec = UTF8.newDecoder()
-					.onMalformedInput(CodingErrorAction.REPORT)
-					.onUnmappableCharacter(CodingErrorAction.REPORT)
-					.decode(out);
+			CharBuffer dec = UTF8Utils.newDecoder().decode(out);
 			v.append(dec, 0, dec.limit());
 			return dec.limit();
 		} catch (Exception e) {

@@ -19,8 +19,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CodingErrorAction;
 
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
@@ -36,8 +34,6 @@ import io.interlockledger.iltags.ilint.ILIntException;
  */
 public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 
-	protected static Charset UTF8 = Charset.forName("utf-8");
-	
 	private final ByteBuffer tmp;
 	
 	private long offset = 0;
@@ -156,10 +152,7 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	@Override
 	public void writeString(CharSequence v) throws ILTagException {
 		try {
-			ByteBuffer out = UTF8.newEncoder()
-					.onMalformedInput(CodingErrorAction.REPORT)
-					.onUnmappableCharacter(CodingErrorAction.REPORT)
-					.encode(CharBuffer.wrap(v));
+			ByteBuffer out =UTF8Utils.newEncoder().encode(CharBuffer.wrap(v));
 			this.writeBytes(out.array(), 0, out.limit());
 		} catch (CharacterCodingException e) {
 			throw new ILTagException(e.getMessage(), e);
