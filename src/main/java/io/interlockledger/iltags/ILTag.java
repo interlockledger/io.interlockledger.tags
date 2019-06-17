@@ -172,4 +172,16 @@ public abstract class ILTag {
 			throw new IllegalArgumentException("The specified tag is not implicity.");
 		}
 	}
+	
+	/**
+	 * Reads the contents of the tag as a byte array.
+	 * 
+	 * @param tagSize The tag size.
+	 * @param in The data reader.
+	 * @return The data
+	 * @throws ILTagException
+	 */
+	protected byte[] readRawBytes(long tagSize, ILTagDataReader in) throws ILTagException {
+		return null;
+	}
 }
