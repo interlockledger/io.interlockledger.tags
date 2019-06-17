@@ -22,13 +22,23 @@ import java.io.OutputStream;
 import io.interlockledger.iltags.ILTagException;
 
 /**
+ * This class implements the ILTagDataWriter for OutputStreams.
+ * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
 public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements Closeable {
 
+	/**
+	 * The underlying output stream.
+	 */
 	protected OutputStream out;
 	
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param out The underlying output stream.
+	 */
 	public ILOutputStreamTagDataWriter(OutputStream out) {
 		this.out = out; 
 	}
@@ -51,6 +61,10 @@ public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements 
 		}
 	}
 
+	public void flush() throws IOException {
+		this.out.flush();
+	}
+	
 	@Override
 	public void close() throws IOException {
 		this.out.close();		
