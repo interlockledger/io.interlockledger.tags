@@ -17,12 +17,16 @@ package io.interlockledger.iltags.io;
 
 import static org.junit.Assert.*;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Test;
 
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
+import static io.interlockledger.iltags.io.BaseDataTest.*;
 
 public class ILBaseTagDataReaderTest {
+
 
 	public static class TestTagDataReader extends ILBaseTagDataReader { 
 
@@ -41,6 +45,42 @@ public class ILBaseTagDataReaderTest {
 		@Override
 		protected void skipCore(long n) throws ILTagException {
 		}
+	}
+	
+	public static class TestTagDataReader2 extends ILBaseTagDataReader {
+
+		private final ByteBuffer in;
+		
+		public TestTagDataReader2(ByteBuffer in) {
+			this.in = in;
+		}
+		
+		@Override
+		protected byte readByteCore() throws ILTagException {
+			if (in.hasRemaining()) {
+				return in.get();
+			} else {
+				throw new ILTagException();
+			}
+		}
+
+		@Override
+		protected void readBytesCore(byte[] v, int off, int size) throws ILTagException {
+			if (size <= in.remaining()) {
+				in.get(v, off, size);
+			} else {
+				throw new ILTagException();
+			}			
+		}
+
+		@Override
+		protected void skipCore(long n) throws ILTagException {
+			if (n <= in.remaining()) {
+				in.position((int)(in.position() + n));
+			} else {
+				throw new ILTagException();
+			}			
+		}		
 	}
 	
 	@Test
@@ -466,4 +506,49 @@ public class ILBaseTagDataReaderTest {
 			assertEquals(i + 1, r.getOffset());
 		}		
 	}
+	
+	@Test
+	public void testReadStringLong() throws Exception {
+		
+		for (int size = 0; size < 256; size += 33) {
+			String s = genRandomString(size);
+			byte [] sBin = stringToUTF8(s);
+			ByteBuffer b = ByteBuffer.allocate(sBin.length + 1);
+			b.put(sBin);
+			b.rewind();
+			TestTagDataReader2 r = new TestTagDataReader2(b);
+			assertEquals(s, r.readString(sBin.length));
+		}
+	}
+	
+	@Test
+	public void testReadStringLongSample() throws Exception {
+		TestTagDataReader2 r = new TestTagDataReader2(ByteBuffer.wrap(SAMPLE_BIN));
+		
+		assertEquals(SAMPLE, r.readString(SAMPLE_BIN.length));				
+	}
+	
+	@Test(expected = ILTagException.class)
+	public void testReadStringLongFail() throws Exception {
+		TestTagDataReader2 r = new TestTagDataReader2(ByteBuffer.wrap(SAMPLE_BIN));
+		
+		r.readString(SAMPLE_BIN.length +  1);				
+	}
+	
+	@Test
+	public void testReadStringLongAppendable() throws Exception {
+		
+		for (int size = 0; size < 256; size += 33) {
+			String s = genRandomString(size);
+			byte [] sBin = stringToUTF8(s);
+			ByteBuffer b = ByteBuffer.allocate(sBin.length + 1);
+			b.put(sBin);
+			b.rewind();
+			TestTagDataReader2 r = new TestTagDataReader2(b);
+			StringBuffer sb = new StringBuffer();
+			assertEquals(s.length(), r.readString(sBin.length, sb));
+			assertEquals(s, sb.toString());
+		}
+	}
+	
 }

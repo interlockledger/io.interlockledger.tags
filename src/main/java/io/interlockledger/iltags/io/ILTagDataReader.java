@@ -152,4 +152,24 @@ public interface ILTagDataReader {
 	 * @return The read position.
 	 */
 	public long getOffset();
+	
+	/**
+	 * Reads a n bytes and converts it into a UTF-8 string.
+	 * 
+	 * @param n The number of bytes to read.
+	 * @return The string read.
+	 * @since 2019.06.17
+	 * @throws ILTagException In case of error.
+	 */
+	public String readString(long n) throws ILTagException;
+	
+	/**
+	 * Reads a n bytes and converts it into a UTF-8 string.
+	 * 
+	 * @param n The number of bytes to read.
+	 * @param v The appendable that will receive the result.
+	 * @return The number of characters read.
+	 * @throws ILTagException In case of error.
+	 */
+	public long readString(long n, Appendable v) throws ILTagException;
 }
