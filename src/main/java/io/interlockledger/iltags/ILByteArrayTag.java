@@ -34,7 +34,7 @@ public class ILByteArrayTag extends ILTag {
 	}
 
 	public ILByteArrayTag() {
-		this(ILTagStandardTags.TAG_BYTE_ARRAY);
+		this(ILStandardTags.TAG_BYTE_ARRAY);
 	}
 
 	@Override

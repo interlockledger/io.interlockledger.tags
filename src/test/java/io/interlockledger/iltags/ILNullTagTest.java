@@ -55,6 +55,6 @@ public class ILNullTagTest {
 	public void testILNullTag() {
 		ILNullTag t = new ILNullTag();
 		
-		assertEquals(ILTagStandardTags.TAG_NULL, t.getId());
+		assertEquals(ILStandardTags.TAG_NULL, t.getId());
 	}
 }

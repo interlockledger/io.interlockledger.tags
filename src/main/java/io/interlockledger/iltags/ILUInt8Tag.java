@@ -24,7 +24,7 @@ package io.interlockledger.iltags;
 public class ILUInt8Tag extends ILInt8Tag {
 	
 	public ILUInt8Tag() {
-		super(ILTagStandardTags.TAG_UINT8);
+		super(ILStandardTags.TAG_UINT8);
 	}
 	
 	public int getUnsignedValue() {

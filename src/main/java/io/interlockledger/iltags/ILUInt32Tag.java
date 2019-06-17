@@ -24,7 +24,7 @@ package io.interlockledger.iltags;
 public class ILUInt32Tag extends ILInt32Tag {
 	
 	public ILUInt32Tag() {
-		super(ILTagStandardTags.TAG_UINT32);
+		super(ILStandardTags.TAG_UINT32);
 	}
 	
 	public long getUnsignedValue() {

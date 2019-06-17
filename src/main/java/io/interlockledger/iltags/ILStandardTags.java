@@ -15,7 +15,7 @@
  */
 package io.interlockledger.iltags;
 
-public interface ILTagStandardTags {
+public interface ILStandardTags {
 	/**
 	 * The NULL tag. It contains no payload.
 	 */

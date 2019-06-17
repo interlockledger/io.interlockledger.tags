@@ -35,7 +35,7 @@ public class ILTagArrayTag extends ILTag {
 	private ArrayList<ILTag> value = new ArrayList<ILTag>();
 
 	public ILTagArrayTag() {
-		this(ILTagStandardTags.TAG_ILTAG_ARRAY);
+		this(ILStandardTags.TAG_ILTAG_ARRAY);
 	}
 	
 	public ILTagArrayTag(long id) {
