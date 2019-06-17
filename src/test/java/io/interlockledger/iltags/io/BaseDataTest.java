@@ -18,6 +18,7 @@ package io.interlockledger.iltags.io;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
 import java.util.Base64;
 import java.util.Random;
 
@@ -48,13 +49,15 @@ public abstract class BaseDataTest {
 		StringBuffer sb = new StringBuffer(size);
 		
 		for (; size > 0; size--) {
-			sb.append((char)(random.nextInt(0x10000) + 1));
+			sb.append((char)(random.nextInt(0x266A) + 1));
 		}
 		return sb.toString();
 	}
 	
-	public static byte [] stringToUTF8(String s) {
-		ByteBuffer b = UTF8.encode(CharBuffer.wrap(s));
+	public static byte [] stringToUTF8(String s) throws Exception {
+		
+		ByteBuffer b = UTF8.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT).
+				encode(CharBuffer.wrap(s));
 		byte [] ret = new byte[b.limit()];
 		b.get(ret);
 		return ret;		
