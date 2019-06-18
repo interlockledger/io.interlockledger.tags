@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.interlockledger.iltags.io;
+package io.interlockledger.iltags;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -22,7 +22,7 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Base64;
 import java.util.Random;
 
-public abstract class BaseDataTest {
+public abstract class TestUtils {
 
 	public static final Charset UTF8 = Charset.forName("utf8");
 	

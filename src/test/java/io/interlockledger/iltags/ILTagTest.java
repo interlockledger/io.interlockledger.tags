@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import org.junit.Test;
 
 import io.interlockledger.iltags.ilint.ILIntCodec;
+import io.interlockledger.iltags.io.ILBaseTagDataReaderTest;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILTagTest {
@@ -190,6 +191,19 @@ public class ILTagTest {
 				assertEquals(-1, ILTestTag.getImplicitValueSize(i));
 				fail();
 			} catch (IllegalArgumentException e) {}
+		}
+	}
+	
+	@Test
+	public void testReadRawBytes() throws Exception {
+		
+		for (int size = 0; size < 1024; size += 33) {
+			ILTestTag t = new ILTestTag(16, size);
+			ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+			r.pushLimit(size);
+			byte [] v = t.readRawBytes(size, r);
+			r.popLimit(true);
+			// TODO
 		}
 	}
 

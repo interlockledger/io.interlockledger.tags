@@ -15,6 +15,7 @@
  */
 package io.interlockledger.iltags.io;
 
+import static io.interlockledger.iltags.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.nio.ByteBuffer;
@@ -23,7 +24,6 @@ import org.junit.Test;
 
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
-import static io.interlockledger.iltags.io.BaseDataTest.*;
 
 public class ILBaseTagDataReaderTest {
 
