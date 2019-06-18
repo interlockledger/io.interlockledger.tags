@@ -44,8 +44,7 @@ public class ILInt16Tag extends ILFixedSizeTag {
 	@Override
 	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in)
 			throws ILTagException {
-		int read = in.readShort();
-		this.value = (byte)read;
+		this.value = in.readShort();
 	}
 
 	public short getValue() {
