@@ -17,14 +17,13 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
 
 import org.junit.Test;
 
 import io.interlockledger.iltags.ilint.ILIntCodec;
-import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILILIntTagTest {
@@ -72,9 +71,8 @@ public class ILILIntTagTest {
 			raw.close();
 			
 			ILILIntTag t = new ILILIntTag();
-			try (ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(raw.toByteArray()))) {
-				t.deserializeValue(null, -1, in);
-			}
+			ILMemoryTagDataReader in = new ILMemoryTagDataReader(raw.toByteArray());
+			t.deserializeValue(null, -1, in);
 			assertEquals(v, t.getValue());
 		}
 	}

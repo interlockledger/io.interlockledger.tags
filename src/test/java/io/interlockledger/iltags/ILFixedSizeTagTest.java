@@ -18,12 +18,11 @@ package io.interlockledger.iltags;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
 import java.util.Random;
 
 import org.junit.Test;
 
-import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
 
 public class ILFixedSizeTagTest {
 
@@ -44,14 +43,13 @@ public class ILFixedSizeTagTest {
 		
 		for (int i = 0; i < 64; i++) {		
 			ILTestFixedSizeTag t = new ILTestFixedSizeTag(i + 1, i);
-			ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(new byte[10]));
+			ILMemoryTagDataReader in = new ILMemoryTagDataReader(new byte[10]);
 			t.deserializeValue(null, i, in);
-			in.close();
 		}
 		
 		for (int i = 0; i < 64; i++) {		
 			ILTestFixedSizeTag t = new ILTestFixedSizeTag(i + 1, i);
-			ILInputStreamTagDataReader in = new ILInputStreamTagDataReader(new ByteArrayInputStream(new byte[10]));
+			ILMemoryTagDataReader in = new ILMemoryTagDataReader(new byte[10]);
 			try {
 				t.deserializeValue(null, i - 1, in);
 				fail();
@@ -60,7 +58,6 @@ public class ILFixedSizeTagTest {
 				t.deserializeValue(null, i + 1, in);
 				fail();
 			} catch (ILTagException e) {};
-			in.close();
 		}
 	}
 
