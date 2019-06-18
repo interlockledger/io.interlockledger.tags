@@ -17,13 +17,12 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
 import java.util.Random;
 
 import org.junit.Test;
 
-import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILBigIntTagTest {
@@ -77,7 +76,7 @@ public class ILBigIntTagTest {
 			BigInteger b = BigInteger.probablePrime(15, random);
 			
 			ILBigIntTag t = new ILBigIntTag();
-			ILInputStreamTagDataReader r = new ILInputStreamTagDataReader(new ByteArrayInputStream(b.toByteArray()));
+			ILMemoryTagDataReader r = new ILMemoryTagDataReader(b.toByteArray());
 			t.deserializeValue(null, b.toByteArray().length, r);
 			assertEquals(b, t.getValue());
 		}
@@ -87,7 +86,7 @@ public class ILBigIntTagTest {
 	public void testDeserializeValueFail() throws Exception {
 
 		ILBigIntTag t = new ILBigIntTag();
-		ILInputStreamTagDataReader r = new ILInputStreamTagDataReader(new ByteArrayInputStream(new byte[1]));
+		ILMemoryTagDataReader r = new ILMemoryTagDataReader(new byte[1]);
 		t.deserializeValue(null, 2, r);
 	}
 	

@@ -17,12 +17,11 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 
 import org.junit.Test;
 
-import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILBinary32TagTest {
@@ -47,7 +46,7 @@ public class ILBinary32TagTest {
 		ILBinary32Tag t = new ILBinary32Tag();
 		float value = 1234.567f;
 		b.putFloat(value);
-		ILInputStreamTagDataReader r = new ILInputStreamTagDataReader(new ByteArrayInputStream(b.array()));
+		ILMemoryTagDataReader r = new ILMemoryTagDataReader(b.array());
 		t.deserializeValueCore(null, r);
 		assertEquals(value, t.getValue(), 0.0f);
 	}
@@ -57,7 +56,7 @@ public class ILBinary32TagTest {
 		ByteBuffer b = ByteBuffer.allocate(3);
 		
 		ILBinary32Tag t = new ILBinary32Tag();
-		ILInputStreamTagDataReader r = new ILInputStreamTagDataReader(new ByteArrayInputStream(b.array()));
+		ILMemoryTagDataReader r = new ILMemoryTagDataReader(b.array());
 		t.deserializeValueCore(null, r);
 	}
 

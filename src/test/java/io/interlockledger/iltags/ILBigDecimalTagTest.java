@@ -17,14 +17,13 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 import org.junit.Test;
 
-import io.interlockledger.iltags.io.ILInputStreamTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILBigDecimalTagTest {
@@ -73,7 +72,7 @@ public class ILBigDecimalTagTest {
 		b.put(SAMPLE_UNSCALED);
 
 		ILBigDecimalTag t = new ILBigDecimalTag();
-		t.deserializeValue(null, b.position(), new ILInputStreamTagDataReader(new ByteArrayInputStream(b.array())));
+		t.deserializeValue(null, b.position(), new ILMemoryTagDataReader(b.array()));
 		assertEquals(SAMPLE, t.getValue());
 	}
 	
@@ -85,7 +84,7 @@ public class ILBigDecimalTagTest {
 		b.put(SAMPLE_UNSCALED, 0, SAMPLE_UNSCALED.length - 1);
 
 		ILBigDecimalTag t = new ILBigDecimalTag();
-		t.deserializeValue(null, b.position() + 1, new ILInputStreamTagDataReader(new ByteArrayInputStream(b.array())));
+		t.deserializeValue(null, b.position() + 1, new ILMemoryTagDataReader(b.array()));
 	}
 
 	@Test
