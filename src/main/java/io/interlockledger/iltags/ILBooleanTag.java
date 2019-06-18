@@ -55,7 +55,7 @@ public class ILBooleanTag extends ILFixedSizeTag {
 		}
 	}
 
-	public boolean isValue() {
+	public boolean getValue() {
 		return value;
 	}
 
