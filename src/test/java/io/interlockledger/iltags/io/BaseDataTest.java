@@ -62,4 +62,17 @@ public abstract class BaseDataTest {
 		b.get(ret);
 		return ret;		
 	}
+	
+	public static void fillSampleByteArray(byte [] v, int offs, int size) {
+
+		for (int i = 0; i < size; i++) {
+			v[i + offs] = (byte)(i & 0xFF);
+		}
+	}
+	
+	public static byte[] createSampleByteArray(int size) {
+		byte [] v = new byte[size];
+		fillSampleByteArray(v, 0, v.length);
+		return v;
+	}
 }
