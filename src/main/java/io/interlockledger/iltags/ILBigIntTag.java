@@ -78,12 +78,7 @@ public class ILBigIntTag extends ILTag {
      */
 	public static int getBigIntegerSize(BigInteger value) {
 
-		int size = (value.bitLength() + 1);
-		if ((size % 8) == 0) {
-			return size / 8;
-		} else {
-			return (size / 8) + 1;
-		}
+		return (value.bitLength() + 8) / 8;
 	}
 	
 	
