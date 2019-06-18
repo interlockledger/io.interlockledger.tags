@@ -24,6 +24,9 @@ import org.junit.Test;
 import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.io.ILBaseTagDataReaderTest;
 import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
+import io.interlockledger.iltags.io.ILTagNotEnoughDataException;
+
+import static io.interlockledger.iltags.TestUtils.*;
 
 public class ILTagTest {
 
@@ -203,8 +206,33 @@ public class ILTagTest {
 			r.pushLimit(size);
 			byte [] v = t.readRawBytes(size, r);
 			r.popLimit(true);
-			// TODO
+			byte [] expected = createSampleByteArray(size);
+			assertArrayEquals(expected, v);
 		}
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testReadRawBytesFailNegativeSize() throws Exception {
+		ILTestTag t = new ILTestTag(16, 16);
+		
+		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+		t.readRawBytes(-1, r);		
+	}
+	
+	@Test(expected = ILTagException.class)
+	public void testReadRawBytesFailTooLarge() throws Exception {
+		ILTestTag t = new ILTestTag(16, 16);
+		
+		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+		t.readRawBytes(((long)Integer.MAX_VALUE) + 1, r);		
+	}
+	
+	@Test(expected = ILTagNotEnoughDataException.class)
+	public void testReadRawBytesFailNoData() throws Exception {
+		ILTestTag t = new ILTestTag(16, 16);
+		
+		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
+		r.pushLimit(15);
+		t.readRawBytes(16, r);		
+	}
 }

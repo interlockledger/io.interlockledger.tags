@@ -18,6 +18,7 @@ package io.interlockledger.iltags;
 import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
+import io.interlockledger.iltags.io.ILTagNotEnoughDataException;
 
 /**
  * This class implements the base class for all ILTag classes.
@@ -174,14 +175,27 @@ public abstract class ILTag {
 	}
 	
 	/**
-	 * Reads the contents of the tag as a byte array.
+	 * Reads the contents of the tag as a byte array. It also performs some validations
+	 * on the size of the tag prior to reading it.
 	 * 
 	 * @param tagSize The tag size.
 	 * @param in The data reader.
-	 * @return The data
-	 * @throws ILTagException
+	 * @return The byte array read.
+	 * @throws ILTagException In case of error.
+	 * @since 2019.06.18
 	 */
 	protected byte[] readRawBytes(long tagSize, ILTagDataReader in) throws ILTagException {
-		return null;
+		if (tagSize < 0) {
+			throw new IllegalArgumentException("The tagSize cannot be negative.");
+		}
+		if (tagSize > Integer.MAX_VALUE) {
+			throw new ILTagException("The tag size is too large for this implementation.");
+		}
+		if (tagSize > in.getRemaining()) {
+			throw new ILTagNotEnoughDataException(String.format("Trying to read %1$d bytes from %2$d.", tagSize, in.getRemaining()));
+		}
+		byte [] v = new byte[(int)tagSize];
+		in.readBytes(v);
+		return v;
 	}
 }
