@@ -30,7 +30,7 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 	private byte [] value;
 
 	public ILBinary128Tag() {
-		this(ILStandardTags.TAG_BINARY32);
+		this(ILStandardTags.TAG_BINARY128);
 	}
 	
 	public ILBinary128Tag(long id) {
@@ -53,6 +53,9 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 	}
 
 	public void setValue(byte [] value) {
-		this.value = value;
+		if (value.length != this.value.length) {
+			throw new IllegalArgumentException("value must have 16 bytes.");
+		}
+		System.arraycopy(value, 0, this.value, 0, this.value.length);
 	}
 }
