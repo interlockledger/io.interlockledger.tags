@@ -43,7 +43,7 @@ public class ILByteArrayTagTest {
 		}
 	}
 	
-	@Test(expected = ILTagException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testSerializeValueNotSet() throws Exception {
 		ILByteArrayTag t = new ILByteArrayTag();
 

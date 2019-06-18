@@ -41,8 +41,10 @@ public class ILBigIntTag extends ILTag {
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		// TODO Auto-generated method stub
-
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
+		}
+		out.writeBytes(this.value.toByteArray());
 	}
 
 	@Override
@@ -50,16 +52,12 @@ public class ILBigIntTag extends ILTag {
 		if (this.value == null) {
 			throw new IllegalStateException("Value not set.");	
 		}
-		int size = (this.value.bitLength() + 1);
-		if ((size % 8) == 0) {
-			return size / 8;
-		} else {
-			return (size / 8) + 1;
-		}
+		return getBigIntegerSize(this.value);
 	}
 
 	@Override
 	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		this.value = new BigInteger(this.readRawBytes(tagSize, in));
 	}
 
 	public BigInteger getValue() {
@@ -68,5 +66,28 @@ public class ILBigIntTag extends ILTag {
 
 	public void setValue(BigInteger value) {
 		this.value = value;
+	}
+	
+	/**
+	 * Returns the size of a BigInteger in bytes.
+	 * 
+	 * @param value The value.
+	 * @return The size of the BigInteger in bytes when represented as
+	 * a complement of 2.
+	 * @since 2019.06.18
+     */
+	public static int getBigIntegerSize(BigInteger value) {
+
+		int size = (value.bitLength() + 1);
+		if ((size % 8) == 0) {
+			return size / 8;
+		} else {
+			return (size / 8) + 1;
+		}
+	}
+	
+	
+	public static byte [] serializeBigInteger(BigInteger value) {
+		return value.toByteArray();
 	}
 }

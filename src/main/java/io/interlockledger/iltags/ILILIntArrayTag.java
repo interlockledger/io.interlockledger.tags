@@ -15,59 +15,62 @@
  */
 package io.interlockledger.iltags;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard byte array tag but can also be
+ * This class implements the standard ILInt array tag but can also be
  * used to implement other variants.
  * 
  * @author Fabio Jun Takada Chino
- * @since 2019.06.12
+ * @since 2019.06.18
  */
-public class ILByteArrayTag extends ILTag {
+public class ILILIntArrayTag extends ILTag {
+
+	private ArrayList<Long> value = new ArrayList<Long>();
 	
-	private byte [] value;
-
-	public ILByteArrayTag(long id) {
-		super(id);
+	public ILILIntArrayTag() {
+		this(ILStandardTags.TAG_ILINT64_ARRAY);
 	}
-
-	public ILByteArrayTag() {
-		this(ILStandardTags.TAG_BYTE_ARRAY);
+	
+	public ILILIntArrayTag(long id) {
+		super(id);
 	}
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		
-		if (value != null) {
-			out.writeBytes(this.value);
-		} else {
-			throw new IllegalStateException("Value not set.");
-		}
+
+		out.writeILInt(this.value.size());
+		for (Long v: this.value) {
+			out.writeILInt(v);
+		}		
 	}
 
 	@Override
 	public long getValueSize() {
 
-		if (value != null) {
-			return this.value.length;
-		} else {
-			throw new IllegalStateException("Value not set.");
+		long size = ILIntCodec.getEncodedSize(this.value.size());
+		for (Long v: this.value) {
+			size += ILIntCodec.getEncodedSize(v);
 		}
+		return size;
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
-		this.value = readRawBytes(tagSize, in);
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+
+		long count = in.readILInt();
+		this.value.clear();
+		for (;count > 0; count--) {
+			this.value.add(in.readILInt());
+		}
 	}
 
-	public byte[] getValue() {
+	public List<Long> getValue() {
 		return value;
-	}
-
-	public void setValue(byte[] value) {
-		this.value = value;
 	}
 }

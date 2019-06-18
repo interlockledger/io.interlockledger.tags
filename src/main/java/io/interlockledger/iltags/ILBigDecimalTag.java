@@ -15,59 +15,60 @@
  */
 package io.interlockledger.iltags;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard byte array tag but can also be
+ * This class implements the standard big integer tag but can also be
  * used to implement other variants.
  * 
  * @author Fabio Jun Takada Chino
- * @since 2019.06.12
+ * @since 2019.06.17
  */
-public class ILByteArrayTag extends ILTag {
+public class ILBigDecimalTag extends ILTag {
+
+	private BigDecimal value;
 	
-	private byte [] value;
-
-	public ILByteArrayTag(long id) {
-		super(id);
+	public ILBigDecimalTag() {
+		this(ILStandardTags.TAG_BINT);
 	}
-
-	public ILByteArrayTag() {
-		this(ILStandardTags.TAG_BYTE_ARRAY);
+	
+	public ILBigDecimalTag(long id) {
+		super(id);
 	}
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		
-		if (value != null) {
-			out.writeBytes(this.value);
-		} else {
+		if (this.value == null) {
 			throw new IllegalStateException("Value not set.");
 		}
+		out.writeInt(this.value.scale());
+		out.writeBytes(ILBigIntTag.serializeBigInteger(this.value.unscaledValue()));
 	}
 
 	@Override
 	public long getValueSize() {
-
-		if (value != null) {
-			return this.value.length;
-		} else {
-			throw new IllegalStateException("Value not set.");
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");	
 		}
+		return 4 + ILBigIntTag.getBigIntegerSize(this.value.unscaledValue());
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
-		this.value = readRawBytes(tagSize, in);
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		int scale = in.readInt();
+		byte [] unscaled = readRawBytes(tagSize - 4, in);
+		this.value = new BigDecimal(new BigInteger(unscaled), scale);	
 	}
 
-	public byte[] getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
-	public void setValue(byte[] value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 }

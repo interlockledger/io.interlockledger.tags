@@ -73,19 +73,19 @@ public class ILTagFactory {
 		} else if (tagId == ILStandardTags.TAG_BINT) {
 			return new ILBigIntTag();
 		} else if (tagId == ILStandardTags.TAG_BDEC) {
-			return null;
+			return new ILBigDecimalTag();
 		} else if (tagId == ILStandardTags.TAG_ILINT64_ARRAY) {
-			return null;
+			return new ILILIntArrayTag();
 		} else if (tagId == ILStandardTags.TAG_ILTAG_ARRAY) {
 			return new ILTagArrayTag();
 		} else if (tagId == ILStandardTags.TAG_ILTAG_SEQ) {
 			return new ILTagSequenceTag();
 		} else if (tagId == ILStandardTags.TAG_RANGE) {
-			return null;
+			return new ILRangeTag();
 		} else if (tagId == ILStandardTags.TAG_VERSION) {
-			return null;
+			return new ILVersionTag();
 		} else if (tagId == ILStandardTags.TAG_OID) {
-			return null;
+			return new ILOIDTag();
 		} else {
 			return null;
 		}
