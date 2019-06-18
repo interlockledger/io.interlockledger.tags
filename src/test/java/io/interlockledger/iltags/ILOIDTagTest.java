@@ -15,16 +15,15 @@
  */
 package io.interlockledger.iltags;
 
-/**
- * This class implements the standard OID tag but can also be
- * used to implement other variants.
- * 
- * @author Fabio Jun Takada Chino
- * @since 2019.06.18
- */
-public class ILOIDTag extends ILILIntArrayTag {
+import static org.junit.Assert.*;
 
-	public ILOIDTag() {
-		super(ILStandardTags.TAG_OID);
+import org.junit.Test;
+
+public class ILOIDTagTest {
+
+	@Test
+	public void testILOIDTag() {
+		ILOIDTag t = new ILOIDTag();
+		assertEquals(ILStandardTags.TAG_OID, t.getId());
 	}
 }
