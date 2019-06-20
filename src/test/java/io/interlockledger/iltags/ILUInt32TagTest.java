@@ -15,22 +15,34 @@
  */
 package io.interlockledger.iltags;
 
-/**
- * This class implements the standard uint8 tag and its variants.
- * 
- * @author Fabio Jun Takada Chino
- * @since 2019.06.12
- */
-public class ILUInt32Tag extends ILInt32Tag {
-	
-	public ILUInt32Tag() {
-		super(ILStandardTags.TAG_UINT32);
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class ILUInt32TagTest {
+	@Test
+	public void testILUInt32Tag() {
+		ILUInt32Tag t = new ILUInt32Tag();
+		assertEquals(ILStandardTags.TAG_UINT32, t.getId());
 	}
-	public ILUInt32Tag(long id) {
-		super(id);
+
+	@Test
+	public void testILUInt32TagLong() {
+		ILUInt32Tag t = new ILUInt32Tag(123);
+		assertEquals(123, t.getId());
 	}
-	
-	public long getUnsignedValue() {
-		return ((long)this.value) & 0xFFFFFFFFl;
-	}	
+
+	@Test
+	public void testGetUnsignedValue() {
+		ILUInt32Tag t = new ILUInt32Tag();
+		
+		t.setValue(0);
+		assertEquals(0, t.getUnsignedValue());
+		
+		t.setValue(0x80000000);
+		assertEquals(0x80000000l, t.getUnsignedValue());
+		
+		t.setValue(-1);
+		assertEquals(0xFFFFFFFFl, t.getUnsignedValue());
+	}
 }

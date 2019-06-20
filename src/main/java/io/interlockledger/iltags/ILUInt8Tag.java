@@ -27,6 +27,10 @@ public class ILUInt8Tag extends ILInt8Tag {
 		super(ILStandardTags.TAG_UINT8);
 	}
 	
+	public ILUInt8Tag(long id) {
+		super(id);
+	}
+	
 	public int getUnsignedValue() {
 		return this.value & 0xFF;
 	}	

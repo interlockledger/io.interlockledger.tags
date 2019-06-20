@@ -27,6 +27,10 @@ public class ILUInt16Tag extends ILInt16Tag {
 		super(ILStandardTags.TAG_UINT16);
 	}
 	
+	public ILUInt16Tag(long id) {
+		super(id);
+	}
+	
 	public int getUnsignedValue() {
 		return this.value & 0xFFFF;
 	}	
