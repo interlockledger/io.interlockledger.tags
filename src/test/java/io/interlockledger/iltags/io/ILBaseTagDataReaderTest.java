@@ -551,4 +551,52 @@ public class ILBaseTagDataReaderTest {
 		}
 	}
 	
+	@Test(expected = ILTagException.class)
+	public void testReadStringLongAppendableFail1() throws Exception {
+		
+		ByteBuffer src = ByteBuffer.allocate(1);
+		src.put((byte)0x80);
+		
+		src.rewind();
+		TestTagDataReader2 r = new TestTagDataReader2(src);
+		StringBuffer sb = new StringBuffer();
+		r.readString(1, sb);
+	}
+	
+	@Test(expected = ILTagException.class)
+	public void testReadStringLongAppendableFail2() throws Exception {
+		
+		ByteBuffer src = ByteBuffer.allocate(2);
+		src.put((byte)0b11000000);
+		src.rewind();		
+		TestTagDataReader2 r = new TestTagDataReader2(src);
+		StringBuffer sb = new StringBuffer();
+		r.readString(2, sb);
+	}
+	
+	@Test(expected = ILTagException.class)
+	public void testReadStringLongAppendableFail3() throws Exception {
+		
+		ByteBuffer src = ByteBuffer.allocate(3);
+		src.put((byte)0b11100000);
+		src.put((byte)0b10000000);
+		src.rewind();		
+		TestTagDataReader2 r = new TestTagDataReader2(src);
+		StringBuffer sb = new StringBuffer();
+		r.readString(3, sb);
+	}
+	
+	
+	@Test(expected = ILTagException.class)
+	public void testReadStringLongAppendableFail4() throws Exception {
+		
+		ByteBuffer src = ByteBuffer.allocate(4);
+		src.put((byte)0b11110000);
+		src.put((byte)0b10000000);
+		src.put((byte)0b10000000);
+		src.rewind();		
+		TestTagDataReader2 r = new TestTagDataReader2(src);
+		StringBuffer sb = new StringBuffer();
+		r.readString(4, sb);
+	}
 }

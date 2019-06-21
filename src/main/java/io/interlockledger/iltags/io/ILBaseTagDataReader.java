@@ -15,9 +15,9 @@
  */
 package io.interlockledger.iltags.io;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.CharBuffer;
 import java.util.Stack;
 
 import io.interlockledger.iltags.ILTagException;
@@ -227,20 +227,36 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 	
 	@Override
 	public long readString(long n, Appendable v) throws ILTagException {
+
 		if (n < 0) {
 			throw new IllegalArgumentException("n cannot be negative.");
 		}
-		if (n > Integer.MAX_VALUE) {
-			throw new ILTagException("n is too large for this implementation.");
+		if (n == 0) {
+			return 0;
 		}
-		ByteBuffer out = ByteBuffer.allocate((int)n);
-		this.readBytes(out.array(), 0, (int)n);
-		try { 
-			CharBuffer dec = UTF8Utils.newDecoder().decode(out);
-			v.append(dec, 0, dec.limit());
-			return dec.limit();
-		} catch (Exception e) {
-			throw new ILTagException(e.getMessage(), e);
+		try {
+			this.pushLimit(n);
+			int count = 0;
+			char [] tmp = new char[2];
+			do {
+				this.tmp.array()[0] = this.readByte();
+				int charLen = UTF8Utils.getUTF8EncodedCharSize(this.tmp.array()[0]);
+				if (charLen > 1) {
+					this.readBytes(this.tmp.array(), 1, charLen - 1);
+				}
+				int cp = UTF8Utils.toCodepoint(this.tmp.array(), charLen);
+				int surrogateLen = Character.charCount(cp);
+				Character.toChars(cp, tmp, 0);
+				v.append(tmp[0]);	
+				if (surrogateLen == 2) {
+					v.append(tmp[1]);	
+				}
+				count += surrogateLen;
+			} while (this.getRemaining() > 0);
+			this.popLimit(true);
+			return count;
+		} catch (IOException | IllegalArgumentException e) {
+			throw new ILTagException("Unable to read the string.", e);
 		}
 	}
 }
