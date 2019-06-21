@@ -228,6 +228,15 @@ public abstract class ILTag {
 		return false;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ILTag) {
+			return equals((ILTag)obj);
+		} else {
+			return false;
+		}
+	}	
+	
 	/**
 	 * Checks if the value of this tag is  the same of other. This method is called
 	 * by io.interlockledger.iltags.ILTag.equals(ILTag) if and only if the this and

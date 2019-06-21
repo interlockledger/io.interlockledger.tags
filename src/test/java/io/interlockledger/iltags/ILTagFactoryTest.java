@@ -164,101 +164,90 @@ public class ILTagFactoryTest {
 		}		
 	}
 	
-	private static <T extends ILTag> T serializeAndDeserialize(T tag, Class<T> tagClass) throws ILTagException {
+	private static <T extends ILTag> void serializeAndDeserialize(T tag, Class<T> tagClass) throws ILTagException {
 		ILTagFactory f = new ILTagFactory();
 		ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
 		tag.serialize(out);
 		ILTagDataReader in = new ILMemoryTagDataReader(out.toByteArray());
 		ILTag ret =  f.deserialize(in);
 		assertNotSame(tag, ret);
-		return tagClass.cast(ret);
+		assertEquals(tag, ret);
 	}
 
 	@Test
 	public void testDeserializeILNullTag() throws Exception {
 		ILNullTag src = new ILNullTag();
-		ILNullTag dst = serializeAndDeserialize(src, ILNullTag.class);
-		assertNotNull(dst);
+		serializeAndDeserialize(src, ILNullTag.class);
 	}
 
 	@Test
 	public void testDeserializeILBooleanTag() throws Exception {
 		ILBooleanTag src = new ILBooleanTag();
 		src.setValue(true);
-		ILBooleanTag dst = serializeAndDeserialize(src, ILBooleanTag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILBooleanTag.class);
 	}
 	
 	@Test
 	public void testDeserializeILInt8Tag() throws Exception {
 		ILInt8Tag src = new ILInt8Tag();
 		src.setValue((byte)0x12);
-		ILInt8Tag dst = serializeAndDeserialize(src, ILInt8Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILInt8Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILUInt8Tag() throws Exception {
 		ILUInt8Tag src = new ILUInt8Tag();
 		src.setValue((byte)0x12);
-		ILUInt8Tag dst = serializeAndDeserialize(src, ILUInt8Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILUInt8Tag.class);
 	}
 
 	@Test
 	public void testDeserializeILInt16Tag() throws Exception {
 		ILInt16Tag src = new ILInt16Tag();
 		src.setValue((short)0x1234);
-		ILInt16Tag dst = serializeAndDeserialize(src, ILInt16Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILInt16Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILUInt16Tag() throws Exception {
 		ILUInt16Tag src = new ILUInt16Tag();
 		src.setValue((short)0x1234);
-		ILUInt16Tag dst = serializeAndDeserialize(src, ILUInt16Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILUInt16Tag.class);
 	}
 
 	@Test
 	public void testDeserializeILInt32Tag() throws Exception {
 		ILInt32Tag src = new ILInt32Tag();
 		src.setValue(0x12345678);
-		ILInt32Tag dst = serializeAndDeserialize(src, ILInt32Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILInt32Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILUInt32Tag() throws Exception {
 		ILUInt32Tag src = new ILUInt32Tag();
 		src.setValue(0x12345678);
-		ILUInt32Tag dst = serializeAndDeserialize(src, ILUInt32Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILUInt32Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILInt64Tag() throws Exception {
 		ILInt64Tag src = new ILInt64Tag();
 		src.setValue(0x1234567890ABCDEFl);
-		ILInt64Tag dst = serializeAndDeserialize(src, ILInt64Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILInt64Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILUInt64Tag() throws Exception {
 		ILUInt64Tag src = new ILUInt64Tag();
 		src.setValue(0x1234567890ABCDEFl);
-		ILUInt64Tag dst = serializeAndDeserialize(src, ILUInt64Tag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILUInt64Tag.class);
 	}
 	
 	@Test
 	public void testDeserializeILILIntTag() throws Exception {
 		ILILIntTag src = new ILILIntTag();
 		src.setValue(0x1234567890ABCDEFl);
-		ILILIntTag dst = serializeAndDeserialize(src, ILILIntTag.class);
-		assertEquals(src.getValue(), dst.getValue());
+		serializeAndDeserialize(src, ILILIntTag.class);
 	}	
 	
 	
