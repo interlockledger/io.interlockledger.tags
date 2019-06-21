@@ -19,8 +19,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 
 /**
  * This is the basic tag factories implementation. It can only
- * handle standard tags. Factories for the new tags must
- * extend this class.
+ * handle standard tags. Factories with support for the new tags 
+ * must extend this class.
  * 
  * @author Fabio Jun Takada Chino
  */
@@ -36,7 +36,7 @@ public class ILTagFactory {
 	 * @param tagId The tag ID.
 	 * @return The new tag instance or null if the tag is unknown.
 	 */
-	public ILTag create(long tagId) throws ILTagException {
+	public ILTag create(long tagId) {
 		// TODO Add unimplemented standard tags.
 		if (tagId == ILStandardTags.TAG_NULL) {
 			return new ILNullTag();
@@ -92,7 +92,7 @@ public class ILTagFactory {
 	}
 	
 	/**
-	 * Deserializes the first ILTag found inside the input. It uses 
+	 * Deserializes the first ILTag found inside the input. It uses create 
 	 *
 	 * @param[in] The input buffer.
 	 * @return The extracted tag.
