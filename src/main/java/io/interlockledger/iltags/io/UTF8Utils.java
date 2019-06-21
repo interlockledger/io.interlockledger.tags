@@ -65,12 +65,122 @@ public class UTF8Utils {
 	 * @return The encoded size in bytes.
 	 */
 	public static int getEncodedSize(CharSequence s) {
-		// TODO Improve this method later
-		try {
-			ByteBuffer b = newEncoder().encode(CharBuffer.wrap(s));
-			return b.limit();
-		} catch (CharacterCodingException e) {
-			throw new IllegalArgumentException("Invalid string.", e);
+		
+		if (s.length() == 0) {
+			return 0;
+		} else {
+				// To save memory, I'll encode at most 8 characters per round
+				int size = 0;
+				CharsetEncoder enc = newEncoder();
+				CharBuffer src = CharBuffer.wrap(s);
+				ByteBuffer dst = ByteBuffer.allocate((int)(enc.maxBytesPerChar() * 8));
+				return size;
 		}
+	}
+	
+	/**
+	 * Returns the number of bytes required to encode a given codepoint in UTF-8.
+	 * 
+	 * @param cp The unicode codepoint.
+	 * @return The number of bytes required to encode this codepoint.
+	 * @since 2018.06.20
+	 * @throws IllegalArgumentException In case of error.
+	 */
+	public static int getUTF8CharSize(int cp) {
+		
+		if (cp < 0) {
+			throw new IllegalArgumentException("Invalid codepoint.");
+		} else if (cp <= 0x7F) {
+			return 1;
+		} else if (cp <= 0x07FF) {
+			return 2;
+		} else if (cp <= 0xFFFF) {
+			return 3;
+		} else if (cp <= 0x10FFFF) {
+			return 4;
+		} else {
+			throw new IllegalArgumentException("Invalid codepoint.");
+		}
+	}
+	
+	/**
+	 * Returns the number of bytes required to encode a given codepoint in UTF-8 based
+	 * on the first encoded byte.
+	 * 
+	 * @param firstByte The first byte
+	 * @return The number of bytes required to encode this codepoint.
+	 * @since 2018.06.20
+	 * @throws IllegalArgumentException In case of error.
+	 */
+	public static int getUTF8EncodedCharSize(byte firstByte) {
+		int v = firstByte & 0xFF;
+		
+		if (v <= 0b01111111) {
+			return 1;
+		} else if (v <= 0b11011111) {
+			return 2;
+		} else if (v <= 0b11101111) {
+			return 3;
+		} else if (v <= 0b11110111) {
+			return 4;
+		} else {
+			throw new IllegalArgumentException("Invalid UTF8 character.");
+		}
+	}
+	
+	private static final int [] UTF8_1ST_CLEAR_MASK = {
+			0b01111111,
+			0b00011111,
+			0b00001111,
+			0b00000111};
+	
+	/**
+	 * Converts up to 4 bytes into a codepoint using UTF-8 encoding. This method
+	 * does not check the integrity of the first byte but will check the integrity
+	 * of all subsequent bytes.  
+	 * 
+	 * @param b The bytes.
+	 * @param size The size of the character. It must be a value between 1 and 4.
+	 * @return The codepoint.
+	 * @since 2018.06.20
+	 * @throws IllegalArgumentException In case of error.
+	 */
+	public static int toCodepoint(byte b [], int size) {
+		
+		int cp = b[0] & UTF8_1ST_CLEAR_MASK[size - 1];
+		for (int i = 1; i < size; i++) {
+			int v = b[i] & 0xFF;
+			if ((v & 0b11000000) != 0b10000000) {
+				throw new IllegalArgumentException("Invalid encoded character.");
+			}
+			cp = (cp << 6) | (v & 0b00111111);
+		}
+		return cp;
+	}
+	
+	private static final int [] UTF8_1ST_HEADER_MASK = {
+			0b00000000,
+			0b11000000,
+			0b11100000,
+			0b11110000};	
+	
+	/**
+	 * Converts a unicode codepoint into its UTF-8 representation.
+	 *  
+	 * @param cp The codepoint.
+	 * @param b The output byte array. It must have at least 4 bytes.
+	 * @return The number of bytes used.
+	 * @since 2018.06.20
+	 * @throws IllegalArgumentException In case of error.
+	 */
+	public static int toUTF8(int cp, byte [] b) {
+		int len = getUTF8CharSize(cp);
+
+		// First
+		b[0] = (byte)((cp >> (6 * (len - 1))) | UTF8_1ST_HEADER_MASK[len - 1]);
+		for (int i = 1; i < len; i++) {
+			b[i] = (byte)(((cp >> (6 * (len - i - 1)) & 0b00111111)) | 0b10000000);
+		}
+		return len;
 	}
 }
