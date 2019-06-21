@@ -17,23 +17,58 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
 import org.junit.Test;
+
+import io.interlockledger.iltags.io.ILMemoryTagDataReader;
+import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
+import io.interlockledger.iltags.io.UTF8Utils;
 
 public class ILStringTagTest {
 
 	@Test
-	public void testSerializeValue() {
-		fail("Not yet implemented");
+	public void testSerializeValue() throws Exception {
+		ILStringTag t = new ILStringTag();
+		
+		for (int size = 0; size < 1024; size += 33) {
+			String s = TestUtils.genRandomString(size, true);
+			t.setValue(s);
+			
+			ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
+			t.serializeValue(w);
+			
+			ByteBuffer exp = UTF8Utils.newEncoder().encode(CharBuffer.wrap(s));
+			byte [] bexp = new byte[exp.remaining()];
+			exp.get(bexp);
+			assertArrayEquals(bexp, w.toByteArray());
+		}
 	}
 
 	@Test
 	public void testGetValueSize() {
-		fail("Not yet implemented");
+		ILStringTag t = new ILStringTag();
+		
+		for (int size = 0; size < 1024; size += 33) {
+			String s = TestUtils.genRandomString(size, true);
+			t.setValue(s);
+			assertEquals(UTF8Utils.getEncodedSize(s), t.getValueSize());
+		}
 	}
 
 	@Test
-	public void testDeserializeValue() {
-		fail("Not yet implemented");
+	public void testDeserializeValue() throws Exception {
+		ILStringTag t = new ILStringTag();
+		
+		for (int size = 0; size < 1024; size += 33) {
+			String s = TestUtils.genRandomString(size, true);
+			ByteBuffer exp = UTF8Utils.newEncoder().encode(CharBuffer.wrap(s));
+			byte [] bexp = new byte[exp.remaining()];
+			exp.get(bexp);
+			t.deserializeValue(null, bexp.length, new ILMemoryTagDataReader(bexp));
+			assertEquals(s, t.getValue());
+		}
 	}
 
 	@Test
