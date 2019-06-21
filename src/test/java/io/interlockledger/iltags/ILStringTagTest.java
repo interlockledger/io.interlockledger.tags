@@ -95,4 +95,30 @@ public class ILStringTagTest {
 		t.setValue("value");
 		assertEquals("value", t.getValue());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILStringTag t1 = new ILStringTag();
+		t1.setValue(" ");
+		ILStringTag t2 = new ILStringTag();
+		t2.setValue(" ");
+		ILStringTag t3 = new ILStringTag();
+		t3.setValue("1");
+		ILStringTag t4 = new ILStringTag(15);
+		t4.setValue(" ");
+		ILStringTag t5 = new ILStringTag();
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertTrue((t1).equals(t2));
+		assertTrue((new ILStringTag()).equals(new ILStringTag()));
+
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+		assertFalse(t1.equals(t5));
+		
+		assertFalse(t1.equals(t4));
+
+	}
 }

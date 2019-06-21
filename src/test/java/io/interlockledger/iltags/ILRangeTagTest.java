@@ -15,8 +15,7 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -129,6 +128,25 @@ public class ILRangeTagTest {
 		t.setStart(12345);
 		t.setRange(1234);
 		assertEquals(12345 + 1234, t.getEnd());
+	}
+	
+	@Test
+	public void testEquals() {
+		ILRangeTag t1 = new ILRangeTag();
+		ILRangeTag t2 = new ILRangeTag();
+		ILRangeTag t3 = new ILRangeTag();
+		t3.setStart(1);
+		ILRangeTag t5 = new ILRangeTag();
+		t5.setRange(1);
+		ILRangeTag t4 = new ILRangeTag(15);
+		
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+		assertFalse(t1.equals(t5));
 	}
 
 }

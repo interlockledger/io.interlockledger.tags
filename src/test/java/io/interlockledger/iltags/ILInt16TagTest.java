@@ -82,4 +82,18 @@ public class ILInt16TagTest {
 		assertEquals(113, t.getValue());
 	}
 
+	@Test
+	public void testEquals() {
+		ILInt16Tag t1 = new ILInt16Tag();
+		ILInt16Tag t2 = new ILInt16Tag();
+		ILInt16Tag t3 = new ILInt16Tag();
+		t3.setValue((short)1);
+		ILInt16Tag t4 = new ILInt16Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

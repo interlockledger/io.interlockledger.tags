@@ -83,4 +83,18 @@ public class ILInt32TagTest {
 		assertEquals(113, t.getValue());
 	}
 
+	@Test
+	public void testEquals() {
+		ILInt32Tag t1 = new ILInt32Tag();
+		ILInt32Tag t2 = new ILInt32Tag();
+		ILInt32Tag t3 = new ILInt32Tag();
+		t3.setValue(1);
+		ILInt32Tag t4 = new ILInt32Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

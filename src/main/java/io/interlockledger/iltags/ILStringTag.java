@@ -70,6 +70,13 @@ public class ILStringTag extends ILTag {
 	@Override
 	protected boolean sameValue(ILTag other) {
 		ILStringTag t = (ILStringTag)other;
+		
+		if (this.getValue() == t.getValue()) {
+			return true;
+		}
+		if (this.getValue() == null) {
+			return false;
+		}
 		return this.getValue().equals(t.getValue());
 	}
 }

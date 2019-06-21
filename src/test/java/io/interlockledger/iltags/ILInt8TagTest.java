@@ -81,5 +81,19 @@ public class ILInt8TagTest {
 		t.setValue((byte)113);
 		assertEquals(113, t.getValue());
 	}
-
+	
+	@Test
+	public void testEquals() {
+		ILInt8Tag t1 = new ILInt8Tag();
+		ILInt8Tag t2 = new ILInt8Tag();
+		ILInt8Tag t3 = new ILInt8Tag();
+		t3.setValue((byte)1);
+		ILInt8Tag t4 = new ILInt8Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

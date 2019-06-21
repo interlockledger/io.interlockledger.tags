@@ -82,4 +82,19 @@ public class ILInt64TagTest {
 		t.setValue(113);
 		assertEquals(113, t.getValue());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILInt64Tag t1 = new ILInt64Tag();
+		ILInt64Tag t2 = new ILInt64Tag();
+		ILInt64Tag t3 = new ILInt64Tag();
+		t3.setValue((short)1);
+		ILInt64Tag t4 = new ILInt64Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }
