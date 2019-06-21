@@ -18,6 +18,16 @@ public class TestUtilsTest {
 	}
 	
 	@Test
+	public void testGenRandomString() {
+		
+		for (int size = 0; size < 1024; size += 33) {
+			String s = TestUtils.genRandomString(size);
+			assertEquals(size, s.length());
+			System.out.println(s);
+		}
+	}
+	
+	@Test
 	public void testFillSampleByteArray() {
 		
 		for (int size = 0; size < 16; size++) {

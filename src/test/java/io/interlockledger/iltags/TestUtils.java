@@ -43,13 +43,52 @@ public abstract class TestUtils {
 			"YWRvIHBhcmEgc2FiZXIgZGV1bnMgcGFww6lpcyByZWxhdGl2b3MgYSB1bSBwYXJlbnRlIGRhIHBy" + 
 			"b3bDrW5jaWEsIGUgYcOtIGVuY29udHJvdSBvIGRlcHV0YWRvIE1lbmVzZXMsIHF1ZSBhY2FiYXZh" + 
 			"IGRlIHRlciB1bWEgY29uZmVyw6puY2lhIHBvbMOtdGljYS4K");
-	
+
+	/**
+	 * Generates a random string using only single character codepoints.
+	 * 
+	 * @param size The number of characters.
+	 * @return The generated string.
+	 */
 	public static String genRandomString(int size) {
+		return genRandomString(size, false);
+	}
+	
+	/**
+	 * Generates a random string.
+	 *  
+	 * <p>If all is set to true, all possible codepoints from U+0 to U+10FFFF are used with
+	 * the exception of the reserved range U+D800 to U+DFFF. If all is set to false,
+	 * only characters from U+0 to U+FFFF will be used, excluding the reserved range.</p>
+	 * 
+	 * <p>The result will contain exactly the specified number of characters but may contain
+	 * less codepoints due to the use of surrogate pairs.</p>
+	 * 
+	 * @param size The number of characters.
+	 * @param all If true, include single and double character codepoints otherwise uses
+	 * only single character codepoints.
+	 * @return The generated string. 
+	 */
+	public static String genRandomString(int size, boolean all) {
 		Random random = new Random();
+		char [] tmp = new char[2];
+		int range = all? 0x10FFFF: 0xFFFF;		
+
 		StringBuffer sb = new StringBuffer(size);
-		
-		for (; size > 0; size--) {
-			sb.append((char)(random.nextInt(0x266A) + 1));
+		while (size > 0) {
+			int cp = random.nextInt(range) + 1;
+			if ((cp < 0xD800) || (cp > 0xDFFF)) {
+				int len = Character.toChars(cp, tmp, 0); 
+				if (len == 1) {
+					size--;
+					sb.append(tmp[0]);
+				} else {
+					if (size > 1) {
+						size -= 2;
+						sb.append(tmp, 0, 2);
+					}
+				}
+			}
 		}
 		return sb.toString();
 	}
