@@ -30,6 +30,41 @@ import java.nio.charset.CodingErrorAction;
  * @since 2019.06.17
  */
 public class UTF8Utils {
+	
+	/**
+	 * This class extracts unicode codepoints from a CharBuffer.
+	 * 
+	 * @author Fabio Jun Takada Chino
+	 * @since 2019.06.20
+	 */
+	public class CodepointExtractor {
+		
+		private CharBuffer src;
+		
+		public CodepointExtractor(CharBuffer src) {
+			this.src = src.duplicate();
+		}
+		
+		public int nextCodepoint() throws CharacterCodingException {
+			char high;
+			char low;
+			
+			if (!src.hasRemaining()) {
+				return -1;
+			}
+			high = src.get();
+			if (Character.isHighSurrogate(high)) {
+				if (src.hasRemaining()) {
+					low = src.get();
+					return Character.toCodePoint(high, low);
+				} else {
+					throw new CharacterCodingException();
+				}
+			} else {
+				return high & 0xFFFF; 
+			}
+		}
+	}
 
 	/**
 	 * The UTF-8 charset.
