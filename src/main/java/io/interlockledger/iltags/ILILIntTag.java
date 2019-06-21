@@ -63,4 +63,10 @@ public class ILILIntTag extends ILTag {
 	public void setValue(long value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILILIntTag t = (ILILIntTag)other;
+		return this.getValue() == t.getValue();
+	}
 }

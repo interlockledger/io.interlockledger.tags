@@ -166,4 +166,21 @@ public class ILBigIntTagTest {
 		}
 	}
 
+	@Test
+	public void testEquals() {
+		ILBigIntTag t1 = new ILBigIntTag();
+		t1.setValue(BigInteger.ONE);
+		ILBigIntTag t2 = new ILBigIntTag();
+		t2.setValue(BigInteger.ONE);
+		ILBigIntTag t3 = new ILBigIntTag();
+		t3.setValue(BigInteger.TEN);
+		ILBigIntTag t4 = new ILBigIntTag(15);
+		t4.setValue(BigInteger.ONE);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

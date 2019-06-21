@@ -86,4 +86,19 @@ public class ILBinary64TagTest {
 		t.setValue(value);
 		assertEquals(value, t.getValue(), 0.0d);
 	}
+	
+	@Test
+	public void testEquals() {
+		ILBinary64Tag t1 = new  ILBinary64Tag();
+		ILBinary64Tag t2 = new  ILBinary64Tag();
+		ILBinary64Tag t3 = new  ILBinary64Tag();
+		t3.setValue(1);
+		ILBinary64Tag t4 = new ILBinary64Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}	
 }

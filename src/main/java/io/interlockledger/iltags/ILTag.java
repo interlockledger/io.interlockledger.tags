@@ -198,4 +198,47 @@ public abstract class ILTag {
 		in.readBytes(v);
 		return v;
 	}
+
+	/**
+	 * Compares this tag with another and returns true if they have
+	 * exactly the same value.
+	 * 
+	 * This method returns true if and only if all of these conditions are satisfied:
+	 *   - other is not null; 
+	 *   - other has the same ID;
+	 *   - other has the same class;
+	 *   - sameValue(other) returns true;
+	 * 
+	 * @param other The other tag to be compared with.
+	 * @return true if this and other have the same value or false otherwise.
+	 * @since 2019.06.21 
+	 */
+	public boolean equals(ILTag other) {
+		if (other == null) {
+			return false;
+		}
+		if (this == other) {
+			return true;
+		}
+		if (this.getId() == other.getId()) {
+			if (this.getClass().equals(other.getClass())) {
+				return sameValue(other);
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if the value of this tag is  the same of other. This method is called
+	 * by io.interlockledger.iltags.ILTag.equals(ILTag) if and only if the this and
+	 * other have the same tagID and share exactly the same class.
+	 * 
+	 * <p>All tag classes are required to implement their own version of this
+	 * method.</p>
+	 * 
+	 * @param other The other instance.
+	 * @return true if this and other share the same value or false otherwise.
+	 * @since 2019.06.21 
+	 */
+	protected abstract boolean sameValue(ILTag other);
 }

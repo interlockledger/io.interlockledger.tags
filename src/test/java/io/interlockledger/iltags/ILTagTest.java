@@ -235,4 +235,18 @@ public class ILTagTest {
 		r.pushLimit(15);
 		t.readRawBytes(16, r);		
 	}
+	
+	@Test
+	public void testEquals() {
+		ILTestTag t1 = new ILTestTag(16, 16);
+		ILTestTag t2 = new ILTestTag(16, 16);
+		ILTestTag t3 = new ILTestTag(15, 16);
+		ILTestTag t4 = new ILTestTag(16, 15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

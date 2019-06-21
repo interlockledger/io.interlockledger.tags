@@ -29,6 +29,10 @@ public class ILNullTag extends ILFixedSizeTag {
 	public ILNullTag() {
 		super(ILStandardTags.TAG_NULL, 0);
 	}
+	
+	public ILNullTag(long id) {
+		super(id, 0);
+	}
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
@@ -36,5 +40,10 @@ public class ILNullTag extends ILFixedSizeTag {
 
 	@Override
 	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
+	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		return true;
 	}
 }

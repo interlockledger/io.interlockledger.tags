@@ -120,4 +120,22 @@ public class ILILIntArrayTagTest {
 		assertNotNull(t.getValue());
 		assertEquals(0, t.getValue().size());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILILIntArrayTag t1 = new ILILIntArrayTag();
+		t1.getValue().add(1l);
+		ILILIntArrayTag t2 = new ILILIntArrayTag();
+		t2.getValue().add(1l);
+		ILILIntArrayTag t3 = new ILILIntArrayTag();
+		t3.getValue().add(2l);
+		ILILIntArrayTag t4 = new ILILIntArrayTag(15);
+		t4.getValue().add(1l);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

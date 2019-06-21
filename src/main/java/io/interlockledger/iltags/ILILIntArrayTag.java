@@ -73,4 +73,18 @@ public class ILILIntArrayTag extends ILTag {
 	public List<Long> getValue() {
 		return value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILILIntArrayTag t = (ILILIntArrayTag)other;
+		if (this.getValue().size() != t.getValue().size()) {
+			return false;
+		}
+		for (int i = 0; i < this.getValue().size(); i++) {
+			if (!this.getValue().get(i).equals(t.getValue().get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

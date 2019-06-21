@@ -113,4 +113,22 @@ public class ILBigDecimalTagTest {
 		t.setValue(SAMPLE);
 		assertEquals(SAMPLE, t.getValue());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILBigDecimalTag t1 = new ILBigDecimalTag();
+		t1.setValue(BigDecimal.ONE);
+		ILBigDecimalTag t2 = new ILBigDecimalTag();
+		t2.setValue(BigDecimal.ONE);
+		ILBigDecimalTag t3 = new ILBigDecimalTag();
+		t3.setValue(BigDecimal.TEN);
+		ILBigDecimalTag t4 = new ILBigDecimalTag(15);
+		t4.setValue(BigDecimal.ONE);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

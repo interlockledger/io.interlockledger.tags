@@ -62,4 +62,10 @@ public class ILBooleanTag extends ILFixedSizeTag {
 	public void setValue(boolean value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBooleanTag t = (ILBooleanTag)other;
+		return this.getValue() == t.getValue();
+	}
 }

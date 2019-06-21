@@ -87,4 +87,19 @@ public class ILBinary32TagTest {
 		assertEquals(value, t.getValue(), 0.0f);
 	}
 
+	@Test
+	public void testEquals() {
+		ILBinary32Tag t1 = new  ILBinary32Tag();
+		ILBinary32Tag t2 = new  ILBinary32Tag();
+		ILBinary32Tag t3 = new  ILBinary32Tag();
+		t3.setValue(1);
+		ILBinary32Tag t4 = new ILBinary32Tag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
+
 }

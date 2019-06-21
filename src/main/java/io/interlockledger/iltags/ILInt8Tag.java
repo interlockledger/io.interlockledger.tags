@@ -54,4 +54,10 @@ public class ILInt8Tag extends ILFixedSizeTag {
 	public void setValue(byte value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILInt8Tag t = (ILInt8Tag)other;
+		return this.getValue() == t.getValue();
+	}
 }

@@ -15,6 +15,8 @@
  */
 package io.interlockledger.iltags;
 
+import java.util.Arrays;
+
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
@@ -57,5 +59,11 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 			throw new IllegalArgumentException("value must have 16 bytes.");
 		}
 		System.arraycopy(value, 0, this.value, 0, this.value.length);
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBinary128Tag t = (ILBinary128Tag)other;
+		return Arrays.equals(this.getValue(), t.getValue());
 	}
 }

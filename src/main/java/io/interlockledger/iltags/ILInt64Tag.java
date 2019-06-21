@@ -54,4 +54,10 @@ public class ILInt64Tag extends ILFixedSizeTag {
 	public void setValue(long value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILInt64Tag t = (ILInt64Tag)other;
+		return this.getValue() == t.getValue();
+	}
 }

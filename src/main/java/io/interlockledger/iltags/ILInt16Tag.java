@@ -54,4 +54,11 @@ public class ILInt16Tag extends ILFixedSizeTag {
 	public void setValue(short value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILInt16Tag t = (ILInt16Tag)other;
+		return this.getValue() == t.getValue();
+	}
+
 }

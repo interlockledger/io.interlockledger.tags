@@ -54,4 +54,10 @@ public class ILBinary32Tag extends ILFixedSizeTag {
 	public void setValue(float value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBinary32Tag t = (ILBinary32Tag)other;
+		return this.getValue() == t.getValue();
+	}
 }

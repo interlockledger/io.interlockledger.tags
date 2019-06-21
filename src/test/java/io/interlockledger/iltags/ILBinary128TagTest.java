@@ -95,4 +95,27 @@ public class ILBinary128TagTest {
 			assertArrayEquals(v, t.getValue());
 		}	
 	}
+	
+	@Test
+	public void testEquals() {
+		byte [] v0 = new byte[16];
+		byte [] v1 = new byte[16];
+		v1[15]++;
+		
+		ILBinary128Tag t1 = new ILBinary128Tag();
+		t1.setValue(v0);
+		ILBinary128Tag t2 = new ILBinary128Tag();
+		t2.setValue(v0);
+		ILBinary128Tag t3 = new ILBinary128Tag();
+		t3.setValue(v1);
+		ILBinary128Tag t4 = new ILBinary128Tag(15);
+		t4.setValue(v0);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
+	
 }

@@ -15,6 +15,8 @@
  */
 package io.interlockledger.iltags;
 
+import java.util.Arrays;
+
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
@@ -69,5 +71,11 @@ public class ILByteArrayTag extends ILTag {
 
 	public void setValue(byte[] value) {
 		this.value = value;
+	}	
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILByteArrayTag t = (ILByteArrayTag)other;
+		return Arrays.equals(this.getValue(), t.getValue());
 	}
 }

@@ -104,4 +104,19 @@ public class ILILIntTagTest {
 			assertEquals(v, t.getValue());
 		}
 	}
+	
+	@Test
+	public void testEquals() {
+		ILILIntTag t1 = new ILILIntTag();
+		ILILIntTag t2 = new ILILIntTag();
+		ILILIntTag t3 = new ILILIntTag();
+		t3.setValue(1);
+		ILILIntTag t4 = new ILILIntTag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

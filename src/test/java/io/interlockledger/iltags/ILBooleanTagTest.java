@@ -85,4 +85,19 @@ public class ILBooleanTagTest {
 		t.setValue(false);
 		assertFalse(t.getValue());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILBooleanTag t1 = new ILBooleanTag();
+		ILBooleanTag t2 = new ILBooleanTag();
+		ILBooleanTag t3 = new ILBooleanTag();
+		t3.setValue(true);
+		ILBooleanTag t4 = new ILBooleanTag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

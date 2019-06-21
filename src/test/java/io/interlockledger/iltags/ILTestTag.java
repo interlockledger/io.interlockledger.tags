@@ -45,4 +45,10 @@ public class ILTestTag extends ILTag {
 			throws ILTagException {
 		throw new UnsupportedOperationException("This method should not be tested.");
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILTestTag t = (ILTestTag)other;
+		return this.valueSize == t.valueSize;
+	}
 }

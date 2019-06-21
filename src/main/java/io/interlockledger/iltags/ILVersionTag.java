@@ -94,4 +94,13 @@ public class ILVersionTag extends ILFixedSizeTag {
 	public void setBuild(int build) {
 		this.build = build;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILVersionTag t = (ILVersionTag)other;
+		return (this.getMajor() == t.getMajor()) &&
+				(this.getMinor() == t.getMinor()) &&
+				(this.getRevision() == t.getRevision()) &&
+				(this.getBuild() == t.getBuild());
+	}
 }

@@ -80,4 +80,11 @@ public class ILRangeTag extends ILTag {
 	public long getEnd() {
 		return this.start + this.range;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILRangeTag t = (ILRangeTag)other;
+		return (this.getStart() == t.getStart()) &&
+				(this.getRange() == t.getRange());
+	}
 }

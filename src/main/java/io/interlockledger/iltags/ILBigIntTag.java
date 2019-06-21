@@ -85,4 +85,10 @@ public class ILBigIntTag extends ILTag {
 	public static byte [] serializeBigInteger(BigInteger value) {
 		return value.toByteArray();
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBigIntTag t = (ILBigIntTag)other;
+		return this.getValue().equals(t.getValue());
+	}
 }

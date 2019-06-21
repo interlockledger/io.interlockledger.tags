@@ -66,4 +66,10 @@ public class ILStringTag extends ILTag {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILStringTag t = (ILStringTag)other;
+		return this.getValue().equals(t.getValue());
+	}
 }

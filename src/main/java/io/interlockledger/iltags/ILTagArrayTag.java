@@ -84,4 +84,18 @@ public class ILTagArrayTag extends ILTag {
 		this.value.clear();
 		this.value.addAll(value);
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILTagArrayTag t = (ILTagArrayTag)other;
+		if (this.getValue().size() != t.getValue().size()) {
+			return false;
+		}
+		for (int i = 0; i < this.getValue().size(); i++) {
+			if (!this.getValue().get(i).equals(t.getValue().get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

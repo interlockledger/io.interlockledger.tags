@@ -102,5 +102,27 @@ public class ILByteArrayTagTest {
 			assertArrayEquals(src, t.getValue());
 		}
 	}
-
+	@Test
+	public void testEquals() {
+		byte [] v0 = new byte[1];
+		byte [] v1 = new byte[1];
+		v1[0]++;
+		
+		ILByteArrayTag t1 = new ILByteArrayTag();
+		t1.setValue(v0);
+		ILByteArrayTag t2 = new ILByteArrayTag();
+		t2.setValue(v0);
+		ILByteArrayTag t3 = new ILByteArrayTag();
+		t3.setValue(v1);
+		ILByteArrayTag t4 = new ILByteArrayTag(15);
+		t4.setValue(v0);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertTrue((new ILByteArrayTag()).equals(new ILByteArrayTag()));
+		
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}
 }

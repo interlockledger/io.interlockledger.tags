@@ -16,6 +16,8 @@
 package io.interlockledger.iltags;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Random;
@@ -70,4 +72,18 @@ public class ILFixedSizeTagTest {
 			assertEquals(i + 1, t.getId());
 		}
 	}
+	
+	@Test
+	public void testEquals() {
+		ILTestFixedSizeTag t1 = new ILTestFixedSizeTag(16, 16);
+		ILTestFixedSizeTag t2 = new ILTestFixedSizeTag(16, 16);
+		ILTestFixedSizeTag t3 = new ILTestFixedSizeTag(15, 16);
+		ILTestFixedSizeTag t4 = new ILTestFixedSizeTag(16, 15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+	}	
 }

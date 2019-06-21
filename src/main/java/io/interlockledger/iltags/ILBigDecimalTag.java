@@ -71,4 +71,10 @@ public class ILBigDecimalTag extends ILTag {
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
+	
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBigDecimalTag t = (ILBigDecimalTag)other;
+		return this.getValue().equals(t.getValue());
+	}
 }
