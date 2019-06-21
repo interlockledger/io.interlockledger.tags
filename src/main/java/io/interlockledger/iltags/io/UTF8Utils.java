@@ -15,7 +15,6 @@
  */
 package io.interlockledger.iltags.io;
 
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
@@ -30,41 +29,6 @@ import java.nio.charset.CodingErrorAction;
  * @since 2019.06.17
  */
 public class UTF8Utils {
-	
-	/**
-	 * This class extracts unicode codepoints from a CharBuffer.
-	 * 
-	 * @author Fabio Jun Takada Chino
-	 * @since 2019.06.20
-	 */
-	public class CodepointExtractor {
-		
-		private CharBuffer src;
-		
-		public CodepointExtractor(CharBuffer src) {
-			this.src = src.duplicate();
-		}
-		
-		public int nextCodepoint() throws CharacterCodingException {
-			char high;
-			char low;
-			
-			if (!src.hasRemaining()) {
-				return -1;
-			}
-			high = src.get();
-			if (Character.isHighSurrogate(high)) {
-				if (src.hasRemaining()) {
-					low = src.get();
-					return Character.toCodePoint(high, low);
-				} else {
-					throw new CharacterCodingException();
-				}
-			} else {
-				return high & 0xFFFF; 
-			}
-		}
-	}
 
 	/**
 	 * The UTF-8 charset.
@@ -94,22 +58,32 @@ public class UTF8Utils {
 	}
 	
 	/**
-	 * Computes the encoded size of the string s.
+	 * Computes the encoded size of the string s. This implementation does
+	 * consider surrogate characters during the computation.
 	 * 
 	 * @param s The string.
 	 * @return The encoded size in bytes.
+	 * @throws IllegalArgumentException If the string cannot be converted.
 	 */
 	public static int getEncodedSize(CharSequence s) {
 		
 		if (s.length() == 0) {
 			return 0;
 		} else {
-				// To save memory, I'll encode at most 8 characters per round
-				int size = 0;
-				CharsetEncoder enc = newEncoder();
+			try {
 				CharBuffer src = CharBuffer.wrap(s);
-				ByteBuffer dst = ByteBuffer.allocate((int)(enc.maxBytesPerChar() * 8));
+				int size = 0;
+				int cp;
+				do {
+					cp = nextCodepoint(src);
+					if (cp != -1) {
+						size += getUTF8CharSize(cp);
+					}
+				} while (cp >= 0);
 				return size;
+			} catch (CharacterCodingException e) {
+				throw new IllegalArgumentException("This string contains illegal unicode characters.");
+			}
 		}
 	}
 	
@@ -217,5 +191,36 @@ public class UTF8Utils {
 			b[i] = (byte)(((cp >> (6 * (len - i - 1)) & 0b00111111)) | 0b10000000);
 		}
 		return len;
+	}
+	
+	/**
+	 * Extracts a unicode codepoint from a CharBuffer.
+	 * 
+	 * @param src The source.
+	 * @return The codepoint or -1 if it is the end of the data.
+	 * @throws CharacterCodingException In case of an invalid codepoint.
+	 */
+	public static int nextCodepoint(CharBuffer src) throws CharacterCodingException {
+		char high;
+		char low;
+		
+		if (!src.hasRemaining()) {
+			return -1;
+		}
+		high = src.get();
+		if (Character.isHighSurrogate(high)) {
+			if (src.hasRemaining()) {
+				low = src.get();
+				if (Character.isSurrogatePair(high, low)) {
+					return Character.toCodePoint(high, low);
+				} else {
+					throw new CharacterCodingException();
+				}
+			} else {
+				throw new CharacterCodingException();
+			}
+		} else {
+			return high & 0xFFFF; 
+		}
 	}
 }

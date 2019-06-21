@@ -26,6 +26,8 @@ import java.nio.charset.CodingErrorAction;
 
 import org.junit.Test;
 
+import io.interlockledger.iltags.TestUtils;
+
 public class UTF8UtilsTest {
 
 	@Test
@@ -315,5 +317,30 @@ public class UTF8UtilsTest {
 		exp[2] = (byte)0b10111111;
 		exp[3] = (byte)0b10111111;
 		assertArrayEquals(exp, tmp);
+	}
+
+	@Test
+	public void testNextCodepoint() throws Exception {
+		CharBuffer src;
+		CharBuffer control;
+		
+		src = CharBuffer.wrap("abcdefg");
+		control = src.duplicate();
+		while (src.hasRemaining()) {
+			assertEquals(control.get() & 0xFF, UTF8Utils.nextCodepoint(src));
+		}
+		
+		src = CharBuffer.wrap(Character.toChars(0x10348));
+		while (src.hasRemaining()) {
+			assertEquals(0x10348, UTF8Utils.nextCodepoint(src));
+		}
+		
+		String s = TestUtils.genRandomString(32, true);
+		char [] cs = s.toCharArray();
+		src = CharBuffer.wrap(s);
+		while (src.hasRemaining()) {
+			int cp = Character.codePointAt(cs, src.position(), cs.length);
+			assertEquals(cp, UTF8Utils.nextCodepoint(src));
+		}
 	}
 }
