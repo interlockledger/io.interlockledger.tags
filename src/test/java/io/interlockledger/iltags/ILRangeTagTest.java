@@ -15,9 +15,8 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
-
-import java.util.Random;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
