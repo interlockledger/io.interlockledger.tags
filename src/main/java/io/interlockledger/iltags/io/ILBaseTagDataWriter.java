@@ -151,11 +151,18 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	
 	@Override
 	public void writeString(CharSequence v) throws ILTagException {
-		try {
-			ByteBuffer out =UTF8Utils.newEncoder().encode(CharBuffer.wrap(v));
-			this.writeBytes(out.array(), 0, out.limit());
-		} catch (CharacterCodingException e) {
-			throw new ILTagException(e.getMessage(), e);
+		
+		if (v.length() > 0) {
+			CharBuffer src = CharBuffer.wrap(v);
+			try {
+				do {
+					int cp = UTF8Utils.nextCodepoint(src);
+					int size = UTF8Utils.toUTF8(cp, this.tmp.array());
+					this.writeBytes(this.tmp.array(), 0, size);
+				} while (src.hasRemaining());
+			} catch (IllegalArgumentException | CharacterCodingException e) {
+				throw new ILTagException("Invalid string.", e);
+			}
 		}
 	}
 }

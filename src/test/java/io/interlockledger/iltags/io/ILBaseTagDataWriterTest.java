@@ -334,5 +334,5 @@ public class ILBaseTagDataWriterTest {
 
 		w.writeString(SAMPLE);
 		assertArrayEquals(SAMPLE_BIN, w.toByteArray());
-	}	
+	}
 }
