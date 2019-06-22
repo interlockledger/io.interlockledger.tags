@@ -31,12 +31,6 @@ public class InputStreamHandler implements ILIntCodec.InputHandler<InputStream>{
 	 */
 	public static final InputStreamHandler INSTANCE = new InputStreamHandler();
 	
-	/**
-	 * Creates a new instance of this class.
-	 */	
-	public InputStreamHandler() {
-	}
-
 	@Override
 	public int get(InputStream in) throws ILIntException {
 		try {

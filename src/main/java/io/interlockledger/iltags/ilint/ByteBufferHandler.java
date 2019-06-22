@@ -31,13 +31,7 @@ public class ByteBufferHandler implements ILIntCodec.OutputHandler<ByteBuffer>, 
 	 * Preallocated instance of this class.
 	 */
 	public static final ByteBufferHandler INSTANCE = new ByteBufferHandler();
-	
-	/**
-	 * Creates a new instance of this class.
-	 */
-	public ByteBufferHandler() {
-	}
-	
+
 	@Override
 	public void write(int b, ByteBuffer out) throws ILIntException {
 		try {

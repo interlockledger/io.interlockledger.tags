@@ -20,7 +20,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
 
 import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
@@ -184,10 +183,8 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 		if (newLimit < 0) {
 			throw new IllegalArgumentException("Overflow.");
 		}
-		if (this.isLimited()) {
-			if (newLimit > this.currentLimit) {
-				throw new IllegalArgumentException("The new size exceeds the available");
-			}
+		if ((this.isLimited()) && (newLimit > this.currentLimit)) {
+			throw new IllegalArgumentException("The new size exceeds the available");
 		}
 		this.limits.push(this.currentLimit);
 		this.currentLimit = newLimit;
@@ -200,7 +197,9 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 			throw new IllegalStateException("No limits to pop.");
 		}
 		if ((checkRemaining) && (this.getRemaining() > 0)) {
-			throw new ILTagTooMuchDataException(String.format("The reader still have %1$d unread bytes.", this.getRemaining()));
+			throw new ILTagTooMuchDataException(
+					String.format("The reader still have %1$d unread bytes.", 
+							this.getRemaining()));
 		}
 		this.currentLimit = this.limits.pop();
 	}
@@ -239,7 +238,7 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 		try {
 			this.pushLimit(n);
 			int count = 0;
-			char [] tmp = new char[2];
+			char [] tmpChar = new char[2];
 			do {
 				this.tmp.array()[0] = this.readByte();
 				int charLen = UTF8Utils.getUTF8EncodedCharSize(this.tmp.array()[0]);
@@ -248,10 +247,10 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 				}
 				int cp = UTF8Utils.toCodepoint(this.tmp.array(), charLen);
 				int surrogateLen = Character.charCount(cp);
-				Character.toChars(cp, tmp, 0);
-				v.append(tmp[0]);	
+				Character.toChars(cp, tmpChar, 0);
+				v.append(tmpChar[0]);	
 				if (surrogateLen == 2) {
-					v.append(tmp[1]);	
+					v.append(tmpChar[1]);	
 				}
 				count += surrogateLen;
 			} while (this.getRemaining() > 0);

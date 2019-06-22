@@ -119,10 +119,8 @@ public class ILTagSequenceTag extends ILTag {
 		for (int i = 0; i < a.size(); i++) {
 			ILTag ta = (a.get(i) == null)? ILNullTag.NULL: a.get(i);
 			ILTag tb = (b.get(i) == null)? ILNullTag.NULL: b.get(i);
-			if (ta != tb) {
-				if (!ta.equals(tb)) {
-					return false;
-				}					
+			if ((ta != tb) && (!ta.equals(tb))) {
+				return false;
 			}
 		}
 		return true;

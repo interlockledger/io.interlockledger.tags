@@ -30,12 +30,6 @@ public class OutputStreamHandler implements ILIntCodec.OutputHandler<OutputStrea
 	 * Preallocated instance of this class.
 	 */
 	public static final OutputStreamHandler INSTANCE = new OutputStreamHandler(); 
-	
-	/**
-	 * Creates a new instance of this class.
-	 */	
-	public OutputStreamHandler() {
-	}
 
 	@Override
 	public void write(int b, OutputStream out) throws ILIntException {

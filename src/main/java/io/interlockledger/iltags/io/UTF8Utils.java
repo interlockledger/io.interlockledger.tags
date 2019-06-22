@@ -30,6 +30,9 @@ import java.nio.charset.CodingErrorAction;
  */
 public class UTF8Utils {
 
+	private UTF8Utils() {
+	}
+	
 	/**
 	 * The UTF-8 charset.
 	 */
@@ -188,7 +191,7 @@ public class UTF8Utils {
 		// First
 		b[0] = (byte)((cp >> (6 * (len - 1))) | UTF8_1ST_HEADER_MASK[len - 1]);
 		for (int i = 1; i < len; i++) {
-			b[i] = (byte)(((cp >> (6 * (len - i - 1)) & 0b00111111)) | 0b10000000);
+			b[i] = (byte)(((cp >> (6 * (len - i - 1))) & 0b00111111) | 0b10000000);
 		}
 		return len;
 	}
