@@ -154,4 +154,28 @@ public class ILVersionTagTest {
 		assertEquals(0, t.getRevision());
 		assertEquals(1, t.getBuild());
 	}
+	
+	@Test
+	public void testEquals() {
+		ILVersionTag t1 = new ILVersionTag();
+		ILVersionTag t2 = new ILVersionTag();
+		ILVersionTag t3 = new ILVersionTag(15);
+		ILVersionTag t4 = new ILVersionTag();
+		t4.setValue(1, 0, 0, 0);
+		ILVersionTag t5 = new ILVersionTag();
+		t5.setValue(0, 1, 0, 0);
+		ILVersionTag t6 = new ILVersionTag();
+		t6.setValue(0, 0, 1, 0);
+		ILVersionTag t7 = new ILVersionTag();
+		t7.setValue(0, 0, 0, 1);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
+		assertFalse(t1.equals(t5));
+		assertFalse(t1.equals(t6));
+		assertFalse(t1.equals(t7));
+	}
 }

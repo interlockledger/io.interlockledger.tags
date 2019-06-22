@@ -53,4 +53,23 @@ public class ILNullTagTest {
 		
 		assertEquals(ILStandardTags.TAG_NULL, t.getId());
 	}
+	
+	@Test
+	public void testILNullTagLong() {
+		ILNullTag t = new ILNullTag(123);
+		
+		assertEquals(123, t.getId());
+	}
+	
+	@Test
+	public void testEquals() {
+		ILNullTag t1 = new ILNullTag();
+		ILNullTag t2 = new ILNullTag();
+		ILNullTag t4 = new ILNullTag(15);
+		
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t4));
+	}
 }
