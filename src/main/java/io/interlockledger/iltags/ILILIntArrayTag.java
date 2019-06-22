@@ -34,7 +34,7 @@ public class ILILIntArrayTag extends ILTag {
 	private ArrayList<Long> value = new ArrayList<>();
 	
 	public ILILIntArrayTag() {
-		this(ILStandardTags.TAG_ILINT64_ARRAY);
+		this(ILStandardTags.TAG_ILINT64_ARRAY.ordinal());
 	}
 	
 	public ILILIntArrayTag(long id) {

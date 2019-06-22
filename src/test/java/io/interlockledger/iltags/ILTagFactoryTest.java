@@ -32,139 +32,144 @@ public class ILTagFactoryTest {
 	public void testCreate() {
 		ILTagFactory f = new ILTagFactory();
 		ILTag t;
-		long tagId;
+		ILStandardTags tagId;
 		
 		tagId = ILStandardTags.TAG_NULL;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILNullTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BOOL;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBooleanTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_INT8;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILInt8Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_UINT8;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILUInt8Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_INT16;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILInt16Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 
 		tagId = ILStandardTags.TAG_UINT16;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILUInt16Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_INT32;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILInt32Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_UINT32;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILUInt32Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_INT64;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILInt64Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_UINT64;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILUInt64Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_ILINT64;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILILIntTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BINARY32;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBinary32Tag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BINARY64;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBinary64Tag);
-		assertEquals(tagId, t.getId());		
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BINARY128;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBinary128Tag);
-		assertEquals(tagId, t.getId());		
-
-		// Reserved
-		for (long reserved = 14; reserved < 16; reserved++) {
-			t = f.create(reserved);
-			assertNull(t);
-		}		
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BYTE_ARRAY;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILByteArrayTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_STRING;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILStringTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_BINT;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBigIntTag);
-		assertEquals(tagId, t.getId());		
+		assertEquals(tagId.ordinal(), t.getId());
 
 		tagId = ILStandardTags.TAG_BDEC;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILBigDecimalTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_ILINT64_ARRAY;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILILIntArrayTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_ILTAG_ARRAY;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILTagArrayTag	);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_ILTAG_SEQ;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILTagSequenceTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_RANGE;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILRangeTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_VERSION;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILVersionTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
 		
 		tagId = ILStandardTags.TAG_OID;
-		t = f.create(tagId);
+		t = f.create(tagId.ordinal());
 		assertTrue(t instanceof ILOIDTag);
-		assertEquals(tagId, t.getId());
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		assertNull(f.create(-1));
+		assertNull(f.create(32));
+	}
 
-		// Reserved
-		for (long reserved = 26; reserved < 32; reserved++) {
-			t = f.create(reserved);
-			assertNull(t);
-		}		
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testCreateNotSupported() {
+		ILTagFactory f = new ILTagFactory();
+		assertNull(f.create(ILStandardTags.RESERVED_14.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_15.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_26.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_27.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_28.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_29.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_30.ordinal()));
+		assertNull(f.create(ILStandardTags.RESERVED_31.ordinal()));
 	}
 	
 	private static <T extends ILTag> void serializeAndDeserialize(T tag, Class<T> tagClass) throws ILTagException {
@@ -364,6 +369,41 @@ public class ILTagFactoryTest {
 		serializeAndDeserialize(src, ILOIDTag.class);
 	}
 	
+	
+	@Test
+	public void testDeserializeUnknownPermissive() throws Exception {
+		ILTagFactory f = new ILTagFactory();
+		f.setStrictMode(false);
+		
+		byte [] b = new byte[4];
+		b[0] = (byte)32;
+		b[1] = (byte)2;
+		b[2] = (byte)3;
+		b[3] = (byte)4;
+		ILTag tag = f.deserialize(new ILMemoryTagDataReader(b));
+
+		assertNotNull(tag);
+		assertTrue(tag instanceof ILByteArrayTag);
+		assertEquals(32, tag.getId());
+		ILByteArrayTag bt = (ILByteArrayTag)tag;
+		assertEquals(2, bt.getValue().length);
+		assertEquals(3, bt.getValue()[0]);
+		assertEquals(4, bt.getValue()[1]);
+	}
+
+	@Test(expected = ILUnknownTagException.class)
+	public void testDeserializeUnknownStrict() throws Exception {
+		ILTagFactory f = new ILTagFactory();
+		f.setStrictMode(true);
+		
+		byte [] b = new byte[4];
+		b[0] = (byte)32;
+		b[1] = (byte)2;
+		b[2] = (byte)3;
+		b[3] = (byte)4;
+		f.deserialize(new ILMemoryTagDataReader(b));
+	}
+	
 	@Test
 	public void testILTagFactory() {
 		ILTagFactory f = new ILTagFactory();
@@ -379,5 +419,146 @@ public class ILTagFactoryTest {
 		assertTrue(f.isStrictMode());
 		f.setStrictMode(false);
 		assertFalse(f.isStrictMode());
+	}
+	
+	@Test
+	public void testCreateStandardILStandardTags() {
+		ILTag t;
+		ILStandardTags tagId;
+		
+		tagId = ILStandardTags.TAG_NULL;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILNullTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BOOL;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBooleanTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_INT8;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILInt8Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_UINT8;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILUInt8Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_INT16;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILInt16Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+
+		tagId = ILStandardTags.TAG_UINT16;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILUInt16Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_INT32;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILInt32Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_UINT32;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILUInt32Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_INT64;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILInt64Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_UINT64;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILUInt64Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_ILINT64;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILILIntTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BINARY32;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBinary32Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BINARY64;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBinary64Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BINARY128;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBinary128Tag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BYTE_ARRAY;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILByteArrayTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_STRING;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILStringTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_BINT;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBigIntTag);
+		assertEquals(tagId.ordinal(), t.getId());
+
+		tagId = ILStandardTags.TAG_BDEC;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILBigDecimalTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_ILINT64_ARRAY;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILILIntArrayTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_ILTAG_ARRAY;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILTagArrayTag	);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_ILTAG_SEQ;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILTagSequenceTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_RANGE;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILRangeTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_VERSION;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILVersionTag);
+		assertEquals(tagId.ordinal(), t.getId());
+		
+		tagId = ILStandardTags.TAG_OID;
+		t = ILTagFactory.createStandard(tagId);
+		assertTrue(t instanceof ILOIDTag);
+		assertEquals(tagId.ordinal(), t.getId());
+
+		assertNull(ILTagFactory.createStandard(ILStandardTags.NON_STANDARD_TAG));
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testtestCreateStandardILStandardTagsNotSupported() {
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_14));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_15));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_26));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_27));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_28));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_29));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_30));
+		assertNull(ILTagFactory.createStandard(ILStandardTags.RESERVED_31));
 	}
 }

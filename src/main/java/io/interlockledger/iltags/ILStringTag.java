@@ -30,7 +30,7 @@ public class ILStringTag extends ILTag {
 	protected String value;
 	
 	public ILStringTag() {
-		this(ILStandardTags.TAG_STRING);
+		this(ILStandardTags.TAG_STRING.ordinal());
 	}
 	
 	public ILStringTag(long id) {

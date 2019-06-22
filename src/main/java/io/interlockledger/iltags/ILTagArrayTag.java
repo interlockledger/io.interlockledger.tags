@@ -29,7 +29,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
 public class ILTagArrayTag extends ILTagSequenceTag {
 
 	public ILTagArrayTag() {
-		this(ILStandardTags.TAG_ILTAG_ARRAY);
+		this(ILStandardTags.TAG_ILTAG_ARRAY.ordinal());
 	}
 	
 	public ILTagArrayTag(long id) {

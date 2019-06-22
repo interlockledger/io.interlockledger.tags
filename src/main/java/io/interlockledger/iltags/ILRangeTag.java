@@ -34,7 +34,7 @@ public class ILRangeTag extends ILTag {
 	private int range;
 
 	public ILRangeTag() {
-		this(ILStandardTags.TAG_RANGE);
+		this(ILStandardTags.TAG_RANGE.ordinal());
 	}
 
 	public ILRangeTag(long id) {

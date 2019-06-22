@@ -90,7 +90,7 @@ public class ILILIntTagTest {
 		ILILIntTag t = new ILILIntTag();
 		
 		t = new ILILIntTag();
-		assertEquals(ILStandardTags.TAG_ILINT64, t.getId());
+		assertEquals(ILStandardTags.TAG_ILINT64.ordinal(), t.getId());
 	}
 
 	@Test

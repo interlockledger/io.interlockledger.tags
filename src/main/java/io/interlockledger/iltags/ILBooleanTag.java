@@ -29,7 +29,7 @@ public class ILBooleanTag extends ILFixedSizeTag {
 	protected boolean value;
 
 	public ILBooleanTag() {
-		this(ILStandardTags.TAG_BOOL);
+		this(ILStandardTags.TAG_BOOL.ordinal());
 	}
 
 	public ILBooleanTag(long id) {

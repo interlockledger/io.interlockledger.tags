@@ -91,7 +91,7 @@ public class ILBigDecimalTagTest {
 	public void testILBigDecimalTag() {
 		ILBigDecimalTag t = new ILBigDecimalTag();
 		
-		assertEquals(ILStandardTags.TAG_BDEC, t.getId());
+		assertEquals(ILStandardTags.TAG_BDEC.ordinal(), t.getId());
 		assertNull(t.getValue());
 	}
 

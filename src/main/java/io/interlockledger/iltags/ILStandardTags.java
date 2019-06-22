@@ -15,121 +15,217 @@
  */
 package io.interlockledger.iltags;
 
-public interface ILStandardTags {
+/**
+ * This enumeration represents the standard tags. The tag id is represented
+ * by the ordinal() of each declaration.
+ * 
+ * <p>It is important to notice that elements starting with RESERVED should
+ * never be used by applications because they may be renamed in the future
+ * in order to accommodate new standard tags.</p>
+ *  
+ * @author Fabio Jun Takada Chino
+ */
+public enum ILStandardTags {
+	
+	// WARNING: Never change the order of the declarations because
+	// they are used as the tag IDs.
+	
 	/**
-	 * The NULL tag. It contains no payload.
+	 * The NULL tag. It contains no value.
 	 */
-	public static final long TAG_NULL = 0;
+	TAG_NULL,
 	/**
 	 * The boolean tag. It contains a single byte that represents true (1)
 	 * or false (0).
 	 */
-	public static final long TAG_BOOL = 1;
+	TAG_BOOL,
 	/**
 	 * The signed 8-bit integer tag. It contains a single byte that
 	 * represents the value.
 	 */
-	public static final long TAG_INT8 = 2;
+	TAG_INT8,
 	/**
 	 * The unsigned 8-bit integer tag. It contains a single byte that
 	 * represents the value.
 	 */
-	public static final long TAG_UINT8 = 3;
+	TAG_UINT8,
 	/**
 	 * The signed 16-bit integer tag. It contains 2 bytes that represents
 	 * the value in Big Endian.
 	 */
-	public static final long TAG_INT16 = 4;
+	TAG_INT16,
 	/**
 	 * The unsigned 16-bit integer tag. It contains 2 bytes that represents
 	 * the value in Big Endian.
 	 */
-	public static final long TAG_UINT16 = 5;
+	TAG_UINT16,
 	/**
 	 * The signed 32-bit integer tag. It contains 4 bytes that represents
 	 * the value in Big Endian.
 	 */
-	public static final long TAG_INT32 = 6;
+	TAG_INT32,
 	/**
 	 * The unsigned 32-bit integer tag. It contains 4 bytes that represents
 	 * the value in Big Endian.
 	 */
-	public static final long TAG_UINT32 = 7;
+	TAG_UINT32,
 	/**
 	 * The signed 64-bit integer tag. It contains 8 bytes that represents
 	 * the value in Big Endian.
 	 */
-	public static final long TAG_INT64 = 8;
+	TAG_INT64,
 	/**
 	 * The unsigned 64-bit integer tag. It contains 8 bytes that
 	 * represents the value in Big Endian.
 	 */
-	public static final long TAG_UINT64 = 9;
+	TAG_UINT64,
 	/**
 	 * The ILInt64 tag. It contains 1 to 9 bytes that represents a 64-bit
 	 * integer encoded as an ILInt.
 	 */
-	public static final long TAG_ILINT64 = 10;
+	TAG_ILINT64,
 	/**
 	 * The single precision floating point tag. It contains a 4 bytes that
 	 * represents the value encoded as IEEE-754 in Big Endian.
 	 */
-	public static final long TAG_BINARY32 = 11;
+	TAG_BINARY32,
 	/**
 	 * The double precision floating point tag. It contains a 8 bytes that
 	 * represents the value encoded as IEEE-754 in Big Endian.
 	 */
-	public static final long TAG_BINARY64 = 12;
+	TAG_BINARY64,
 	/**
 	 * The quadruple precision floating point tag. It contains a 16 bytes
 	 * that represents the value encoded as IEEE-754 in Big Endian. The
 	 * support for this tag is optional.
 	 */
-	public static final long TAG_BINARY128 = 13;
+	TAG_BINARY128,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_14,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_15,
 	/**
 	 * The byte array tag. It contains a byte array with 0 or more bytes.
 	 */
-	public static final long TAG_BYTE_ARRAY = 16;
+	TAG_BYTE_ARRAY,
 	/**
 	 * The string tag. It contains a UTF-8 string with 0 or more caracters.
 	 */
-	public static final long TAG_STRING = 17;
+	TAG_STRING,
 	/**
 	 * The big integer tag. It contains the value encoded as
 	 * two's complement big endian value.
 	 */
-	public static final long TAG_BINT = 18;
+	TAG_BINT,
 	/**
 	 * The big decimal tag. It contains an arbitrary precision decimal
 	 * encoded as an ILInt64 for the precision and the integral part as
 	 * encoded as two's complement big endian value.
 	 */
-	public static final long TAG_BDEC = 19;
+	TAG_BDEC,
 	/**
 	 * The ILnt64 array tag. It contains an array of 64-bit integers encoded
 	 * as ILInt64 values. It is composed by an ILInt64 that encodes the
 	 * number of entries followed by the entries themselves.
 	 */
-	public static final long TAG_ILINT64_ARRAY = 20;
+	TAG_ILINT64_ARRAY,
 	/**
 	 * The ILTag array tag. It contains an ILInt64 value that encodes the
 	 * number of objects followed by the serialization of the tags.
 	 */
-	public static final long TAG_ILTAG_ARRAY = 21;
+	TAG_ILTAG_ARRAY,
     /**
 	 * The ILTag sequence tag. It contains the serialization of a sequence of tags.
 	 */
-	public static final long TAG_ILTAG_SEQ = 22;
+	TAG_ILTAG_SEQ,
 	/**
 	* The ILTag range tag. It contains a range of ILTagId.
 	*/
-	public static final long TAG_RANGE = 23;
+	TAG_RANGE,
 	/**
 	* The ILTag version tag. It contains the semantic version number (major.minor.revision.build).
 	*/
-	public static final long TAG_VERSION = 24;
+	TAG_VERSION,
 	/**
 	 * ITU Object Identifier. 
 	 */
-	public static final long TAG_OID = 25;
+	TAG_OID,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_26,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_27,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_28,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_29,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_30,
+	/**
+	 * Reserved for future uses. It may be renamed in the future. Do not use.
+	 * @since 2019.06.22
+	 */
+	@Deprecated
+	RESERVED_31,
+	/**
+	 * This is a special value reserved for non-standard tags.
+	 * @since 2019.06.22
+	 */
+	NON_STANDARD_TAG;
+	
+	/**
+	 * Verifies if the given tag id is one in the standard tag space.
+	 * 
+	 * @param id The ID to be tested.
+	 * @return true if the id represents one of the standard tags or false
+	 * otherwise.
+	 * @since 2019.06.22
+	 */
+	public static boolean isStandard(long id) {
+		return (id >= 0) && (id < 32);
+	}
+	
+	/**
+	 * Utility method that converts a tag id into one of the values
+	 * of this enumeration. All non standard tags are mapped to 
+	 * NON_STANDARD_TAG.
+	 * 
+	 * @param id The tag id to be parsed.
+	 * @return The corresponding enumeration.
+	 * @since 2019.06.22
+	 */
+	public static ILStandardTags parseId(long id) {
+		if (isStandard(id)) {
+			return ILStandardTags.values()[(int)id];
+		} else {
+			return NON_STANDARD_TAG;
+		}
+	}
 }

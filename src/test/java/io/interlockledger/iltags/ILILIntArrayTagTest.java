@@ -101,7 +101,7 @@ public class ILILIntArrayTagTest {
 	public void testILILIntArrayTag() {
 		ILILIntArrayTag t = new ILILIntArrayTag();
 		
-		assertEquals(ILStandardTags.TAG_ILINT64_ARRAY, t.getId());
+		assertEquals(ILStandardTags.TAG_ILINT64_ARRAY.ordinal(), t.getId());
 		assertEquals(0, t.getValue().size());
 	}
 

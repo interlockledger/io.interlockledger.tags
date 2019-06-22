@@ -32,7 +32,7 @@ public class ILBigIntTag extends ILTag {
 	private BigInteger value;
 	
 	public ILBigIntTag() {
-		this(ILStandardTags.TAG_BINT);
+		this(ILStandardTags.TAG_BINT.ordinal());
 	}
 	
 	public ILBigIntTag(long id) {

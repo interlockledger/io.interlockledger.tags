@@ -33,7 +33,7 @@ public class ILBigDecimalTag extends ILTag {
 	private BigDecimal value;
 	
 	public ILBigDecimalTag() {
-		this(ILStandardTags.TAG_BDEC);
+		this(ILStandardTags.TAG_BDEC.ordinal());
 	}
 	
 	public ILBigDecimalTag(long id) {

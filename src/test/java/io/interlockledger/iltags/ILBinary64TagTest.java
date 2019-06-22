@@ -64,7 +64,7 @@ public class ILBinary64TagTest {
 	public void testILBinary64Tag() {
 		ILBinary64Tag t = new ILBinary64Tag();
 		
-		assertEquals(ILStandardTags.TAG_BINARY64, t.getId());
+		assertEquals(ILStandardTags.TAG_BINARY64.ordinal(), t.getId());
 		assertEquals(0.0d, t.getValue(), 0.0d);
 	}
 

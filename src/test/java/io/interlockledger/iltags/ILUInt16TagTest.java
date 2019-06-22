@@ -24,7 +24,7 @@ public class ILUInt16TagTest {
 	@Test
 	public void testILUInt16Tag() {
 		ILUInt16Tag t = new ILUInt16Tag();
-		assertEquals(ILStandardTags.TAG_UINT16, t.getId());
+		assertEquals(ILStandardTags.TAG_UINT16.ordinal(), t.getId());
 	}
 
 	@Test

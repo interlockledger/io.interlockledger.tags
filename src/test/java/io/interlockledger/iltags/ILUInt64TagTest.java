@@ -23,7 +23,7 @@ public class ILUInt64TagTest {
 
 	@Test
 	public void testILUInt64Tag() {
-		ILUInt32Tag t = new ILUInt32Tag();
-		assertEquals(ILStandardTags.TAG_UINT64, t.getId());
+		ILUInt64Tag t = new ILUInt64Tag();
+		assertEquals(ILStandardTags.TAG_UINT64.ordinal(), t.getId());
 	}
 }

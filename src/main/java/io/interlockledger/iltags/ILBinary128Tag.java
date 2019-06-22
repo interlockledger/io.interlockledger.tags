@@ -32,7 +32,7 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 	private byte [] value;
 
 	public ILBinary128Tag() {
-		this(ILStandardTags.TAG_BINARY128);
+		this(ILStandardTags.TAG_BINARY128.ordinal());
 	}
 	
 	public ILBinary128Tag(long id) {

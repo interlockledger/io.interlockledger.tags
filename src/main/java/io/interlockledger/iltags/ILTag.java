@@ -159,7 +159,7 @@ public abstract class ILTag {
 	 * @return true if the tag is standard or false otherwise.
 	 */
 	public static boolean isStandard(long tagId) {
-		return tagId < 32;
+		return ILStandardTags.isStandard(tagId);
 	}
 	
 	/**

@@ -136,7 +136,7 @@ public class ILTagArrayTagTest {
 	public void testILTagArrayTag() {
 		ILTagArrayTag t = new ILTagArrayTag();
 
-		assertEquals(ILStandardTags.TAG_ILTAG_ARRAY, t.getId());
+		assertEquals(ILStandardTags.TAG_ILTAG_ARRAY.ordinal(), t.getId());
 		assertEquals(0, t.getValue().size());
 	}
 

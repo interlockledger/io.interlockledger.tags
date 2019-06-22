@@ -30,7 +30,7 @@ public class ILBinary32Tag extends ILFixedSizeTag {
 	private float value;
 
 	public ILBinary32Tag() {
-		this(ILStandardTags.TAG_BINARY32);
+		this(ILStandardTags.TAG_BINARY32.ordinal());
 	}
 	
 	public ILBinary32Tag(long id) {

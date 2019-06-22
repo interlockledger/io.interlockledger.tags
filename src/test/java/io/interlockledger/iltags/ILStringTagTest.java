@@ -75,7 +75,7 @@ public class ILStringTagTest {
 	public void testILStringTag() {
 		ILStringTag t = new ILStringTag();
 		
-		assertEquals(ILStandardTags.TAG_STRING, t.getId());
+		assertEquals(ILStandardTags.TAG_STRING.ordinal(), t.getId());
 		assertNull(t.getValue());
 	}
 

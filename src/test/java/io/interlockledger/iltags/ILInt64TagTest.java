@@ -70,7 +70,7 @@ public class ILInt64TagTest {
 	public void testILInt64Tag() {
 		ILInt64Tag t = new ILInt64Tag();
 		
-		assertEquals(ILStandardTags.TAG_INT64, t.getId());
+		assertEquals(ILStandardTags.TAG_INT64.ordinal(), t.getId());
 		assertEquals(0, t.getValue());
 	}
 

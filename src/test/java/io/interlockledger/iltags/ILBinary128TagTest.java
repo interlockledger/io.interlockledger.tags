@@ -69,7 +69,7 @@ public class ILBinary128TagTest {
 	@Test
 	public void testILBinary128Tag() {
 		ILBinary128Tag t = new ILBinary128Tag();
-		assertEquals(ILStandardTags.TAG_BINARY128, t.getId());
+		assertEquals(ILStandardTags.TAG_BINARY128.ordinal(), t.getId());
 		assertArrayEquals(new byte[16], t.getValue());
 	}
 

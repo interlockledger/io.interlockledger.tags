@@ -69,7 +69,7 @@ public class ILInt8TagTest {
 	public void testILInt8Tag() {
 		ILInt8Tag t = new ILInt8Tag();
 		
-		assertEquals(ILStandardTags.TAG_INT8, t.getId());
+		assertEquals(ILStandardTags.TAG_INT8.ordinal(), t.getId());
 		assertEquals(0, t.getValue());
 	}
 

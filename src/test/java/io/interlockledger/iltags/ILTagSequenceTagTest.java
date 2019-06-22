@@ -117,7 +117,7 @@ public class ILTagSequenceTagTest {
 	public void testILTagSequenceTag() {
 		ILTagSequenceTag t = new ILTagSequenceTag();
 
-		assertEquals(ILStandardTags.TAG_ILTAG_SEQ, t.getId());
+		assertEquals(ILStandardTags.TAG_ILTAG_SEQ.ordinal(), t.getId());
 		assertEquals(0, t.getValue().size());
 	}
 

@@ -37,58 +37,7 @@ public class ILTagFactory {
 	 * @return The new tag instance or null if the tag is unknown.
 	 */
 	public ILTag create(long tagId) {
-		// TODO Add unimplemented standard tags.
-		if (tagId == ILStandardTags.TAG_NULL) {
-			return ILNullTag.NULL;
-		} else if (tagId == ILStandardTags.TAG_BOOL) {
-			return new ILBooleanTag();
-		} else if (tagId == ILStandardTags.TAG_INT8) {
-			return new ILInt8Tag();
-		} else if (tagId == ILStandardTags.TAG_UINT8) {
-			return new ILUInt8Tag();
-		} else if (tagId == ILStandardTags.TAG_INT16) {
-			return new ILInt16Tag();
-		} else if (tagId == ILStandardTags.TAG_UINT16) {
-			return new ILUInt16Tag();
-		} else if (tagId == ILStandardTags.TAG_INT32) {
-			return new ILInt32Tag();
-		} else if (tagId == ILStandardTags.TAG_UINT32) {
-			return new ILUInt32Tag();
-		} else if (tagId == ILStandardTags.TAG_INT64) {
-			return new ILInt64Tag();
-		} else if (tagId == ILStandardTags.TAG_UINT64) {
-			return new ILUInt64Tag();
-		} else if (tagId == ILStandardTags.TAG_ILINT64) {
-			return new ILILIntTag();
-		} else if (tagId == ILStandardTags.TAG_BINARY32) {
-			return new ILBinary32Tag();
-		} else if (tagId == ILStandardTags.TAG_BINARY64) {
-			return new ILBinary64Tag();
-		} else if (tagId == ILStandardTags.TAG_BINARY128) {
-			return new ILBinary128Tag();
-		} else if (tagId == ILStandardTags.TAG_BYTE_ARRAY) {
-			return new ILByteArrayTag();
-		} else if (tagId == ILStandardTags.TAG_STRING) {
-			return new ILStringTag();
-		} else if (tagId == ILStandardTags.TAG_BINT) {
-			return new ILBigIntTag();
-		} else if (tagId == ILStandardTags.TAG_BDEC) {
-			return new ILBigDecimalTag();
-		} else if (tagId == ILStandardTags.TAG_ILINT64_ARRAY) {
-			return new ILILIntArrayTag();
-		} else if (tagId == ILStandardTags.TAG_ILTAG_ARRAY) {
-			return new ILTagArrayTag();
-		} else if (tagId == ILStandardTags.TAG_ILTAG_SEQ) {
-			return new ILTagSequenceTag();
-		} else if (tagId == ILStandardTags.TAG_RANGE) {
-			return new ILRangeTag();
-		} else if (tagId == ILStandardTags.TAG_VERSION) {
-			return new ILVersionTag();
-		} else if (tagId == ILStandardTags.TAG_OID) {
-			return new ILOIDTag();
-		} else {
-			return null;
-		}
+		return createStandard(ILStandardTags.parseId(tagId));
 	}
 	
 	/**
@@ -153,5 +102,67 @@ public class ILTagFactory {
 	 */
 	public void setStrictMode(boolean strictMode) {
 		this.strictMode = strictMode;		
+	}
+	
+	/**
+	 * Creates a new standard tag if it is supported.
+	 * 
+	 * @param id The tag id.
+	 * @return The standard tag or null if the tag is not supported.
+	 * @since 2019.06.22
+	 */
+	public static ILTag createStandard(ILStandardTags tag) {
+		switch (tag) {
+		case TAG_NULL:
+			return ILNullTag.NULL;
+		case TAG_BOOL:
+			return new ILBooleanTag();
+		case TAG_INT8:
+			return new ILInt8Tag();
+		case TAG_UINT8:
+			return new ILUInt8Tag();
+		case TAG_INT16:
+			return new ILInt16Tag();
+		case TAG_UINT16:
+			return new ILUInt16Tag();
+		case TAG_INT32:
+			return new ILInt32Tag();
+		case TAG_UINT32:
+			return new ILUInt32Tag();
+		case TAG_INT64:
+			return new ILInt64Tag();
+		case TAG_UINT64:
+			return new ILUInt64Tag();
+		case TAG_ILINT64:
+			return new ILILIntTag();
+		case TAG_BINARY32:
+			return new ILBinary32Tag();
+		case TAG_BINARY64:
+			return new ILBinary64Tag();
+		case TAG_BINARY128:
+			return new ILBinary128Tag();
+		case TAG_BYTE_ARRAY:
+			return new ILByteArrayTag();
+		case TAG_STRING:
+			return new ILStringTag();
+		case TAG_BINT:
+			return new ILBigIntTag();
+		case TAG_BDEC:
+			return new ILBigDecimalTag();
+		case TAG_ILINT64_ARRAY:
+			return new ILILIntArrayTag();
+		case TAG_ILTAG_ARRAY:
+			return new ILTagArrayTag();
+		case TAG_ILTAG_SEQ:
+			return new ILTagSequenceTag();
+		case TAG_RANGE:
+			return new ILRangeTag();
+		case TAG_VERSION:
+			return new ILVersionTag();
+		case TAG_OID:
+			return new ILOIDTag();
+		default:
+			return null;
+		}
 	}
 }

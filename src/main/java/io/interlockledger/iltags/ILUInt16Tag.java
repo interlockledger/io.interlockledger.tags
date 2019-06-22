@@ -24,7 +24,7 @@ package io.interlockledger.iltags;
 public class ILUInt16Tag extends ILInt16Tag {
 	
 	public ILUInt16Tag() {
-		super(ILStandardTags.TAG_UINT16);
+		super(ILStandardTags.TAG_UINT16.ordinal());
 	}
 	
 	public ILUInt16Tag(long id) {

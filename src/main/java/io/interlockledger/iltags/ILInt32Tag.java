@@ -33,7 +33,7 @@ public class ILInt32Tag extends ILFixedSizeTag {
 	}
 	
 	public ILInt32Tag() {
-		this(ILStandardTags.TAG_INT32);
+		this(ILStandardTags.TAG_INT32.ordinal());
 	}
 
 	@Override

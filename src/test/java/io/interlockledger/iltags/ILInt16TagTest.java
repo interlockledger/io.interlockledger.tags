@@ -69,7 +69,7 @@ public class ILInt16TagTest {
 	public void testILInt16Tag() {
 		ILInt16Tag t = new ILInt16Tag();
 		
-		assertEquals(ILStandardTags.TAG_INT16, t.getId());
+		assertEquals(ILStandardTags.TAG_INT16.ordinal(), t.getId());
 		assertEquals(0, t.getValue());
 	}
 

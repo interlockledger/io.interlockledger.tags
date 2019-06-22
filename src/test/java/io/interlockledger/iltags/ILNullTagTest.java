@@ -28,7 +28,7 @@ public class ILNullTagTest {
 	public void testNULL() {
 		
 		assertNotNull(ILNullTag.NULL);
-		assertEquals(ILStandardTags.TAG_NULL, ILNullTag.NULL.getId());
+		assertEquals(ILStandardTags.TAG_NULL.ordinal(), ILNullTag.NULL.getId());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class ILNullTagTest {
 	public void testILNullTag() {
 		ILNullTag t = new ILNullTag();
 		
-		assertEquals(ILStandardTags.TAG_NULL, t.getId());
+		assertEquals(ILStandardTags.TAG_NULL.ordinal(), t.getId());
 	}
 	
 	@Test

@@ -86,7 +86,7 @@ public class ILByteArrayTagTest {
 	@Test
 	public void testILByteArrayTag() {
 		ILByteArrayTag t = new ILByteArrayTag();
-		assertEquals(ILStandardTags.TAG_BYTE_ARRAY, t.getId());
+		assertEquals(ILStandardTags.TAG_BYTE_ARRAY.ordinal(), t.getId());
 	}
 
 	@Test

@@ -33,7 +33,7 @@ public class ILVersionTag extends ILFixedSizeTag {
 	private int build;
 	
 	public ILVersionTag() {
-		this(ILStandardTags.TAG_VERSION);
+		this(ILStandardTags.TAG_VERSION.ordinal());
 	}
 	
 	public ILVersionTag(long id) {

@@ -73,7 +73,7 @@ public class ILRangeTagTest {
 	public void testILRangeTag() {
 		ILRangeTag t = new ILRangeTag();
 		
-		assertEquals(ILStandardTags.TAG_RANGE, t.getId());
+		assertEquals(ILStandardTags.TAG_RANGE.ordinal(), t.getId());
 		assertEquals(0, t.getStart());
 		assertEquals(0, t.getRange());
 	}

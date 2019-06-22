@@ -34,7 +34,7 @@ public class ILILIntTag extends ILTag {
 	}
 	
 	public ILILIntTag() {
-		super(ILStandardTags.TAG_ILINT64);
+		super(ILStandardTags.TAG_ILINT64.ordinal());
 	}
 
 	@Override

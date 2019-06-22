@@ -24,6 +24,6 @@ public class ILOIDTagTest {
 	@Test
 	public void testILOIDTag() {
 		ILOIDTag t = new ILOIDTag();
-		assertEquals(ILStandardTags.TAG_OID, t.getId());
+		assertEquals(ILStandardTags.TAG_OID.ordinal(), t.getId());
 	}
 }

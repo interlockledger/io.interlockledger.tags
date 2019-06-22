@@ -34,7 +34,7 @@ public class ILTagSequenceTag extends ILTag {
 	protected ArrayList<ILTag> value = new ArrayList<>();
 
 	public ILTagSequenceTag() {
-		this(ILStandardTags.TAG_ILTAG_SEQ);
+		this(ILStandardTags.TAG_ILTAG_SEQ.ordinal());
 	}
 	
 	public ILTagSequenceTag(long id) {

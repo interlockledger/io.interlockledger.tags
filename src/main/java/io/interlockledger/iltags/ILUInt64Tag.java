@@ -24,6 +24,6 @@ package io.interlockledger.iltags;
 public class ILUInt64Tag extends ILInt64Tag {
 	
 	public ILUInt64Tag() {
-		super(ILStandardTags.TAG_UINT64);
+		super(ILStandardTags.TAG_UINT64.ordinal());
 	}
 }

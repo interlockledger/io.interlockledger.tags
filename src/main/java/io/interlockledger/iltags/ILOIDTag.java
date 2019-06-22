@@ -25,6 +25,6 @@ package io.interlockledger.iltags;
 public class ILOIDTag extends ILILIntArrayTag {
 
 	public ILOIDTag() {
-		super(ILStandardTags.TAG_OID);
+		super(ILStandardTags.TAG_OID.ordinal());
 	}
 }

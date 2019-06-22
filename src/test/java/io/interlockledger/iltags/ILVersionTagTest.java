@@ -60,7 +60,7 @@ public class ILVersionTagTest {
 	@Test
 	public void testILVersionTag() {
 		ILVersionTag t = new ILVersionTag();
-		assertEquals(ILStandardTags.TAG_VERSION, t.getId());
+		assertEquals(ILStandardTags.TAG_VERSION.ordinal(), t.getId());
 		assertEquals(16, t.getValueSize());
 		assertEquals(0, t.getMajor());
 		assertEquals(0, t.getMinor());

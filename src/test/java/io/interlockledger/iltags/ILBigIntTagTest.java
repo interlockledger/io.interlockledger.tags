@@ -93,7 +93,7 @@ public class ILBigIntTagTest {
 	@Test
 	public void testILBigIntTag() {
 		ILBigIntTag t = new ILBigIntTag();
-		assertEquals(ILStandardTags.TAG_BINT, t.getId());
+		assertEquals(ILStandardTags.TAG_BINT.ordinal(), t.getId());
 		assertNull(t.getValue());
 	}
 

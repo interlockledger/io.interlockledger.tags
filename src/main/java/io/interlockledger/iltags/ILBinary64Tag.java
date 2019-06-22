@@ -30,7 +30,7 @@ public class ILBinary64Tag extends ILFixedSizeTag {
 	private double value;
 
 	public ILBinary64Tag() {
-		this(ILStandardTags.TAG_BINARY64);
+		this(ILStandardTags.TAG_BINARY64.ordinal());
 	}
 	
 	public ILBinary64Tag(long id) {

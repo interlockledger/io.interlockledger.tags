@@ -34,7 +34,7 @@ public class ILNullTag extends ILTag {
 	public static final ILNullTag NULL = new ILNullTag();
 
 	public ILNullTag() {
-		super(ILStandardTags.TAG_NULL);
+		super(ILStandardTags.TAG_NULL.ordinal());
 	}
 	
 	public ILNullTag(long id) {

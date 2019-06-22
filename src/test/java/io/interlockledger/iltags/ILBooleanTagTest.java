@@ -27,7 +27,7 @@ public class ILBooleanTagTest {
 	public void testSerializeValue() {
 		ILBooleanTag t = new ILBooleanTag();
 		
-		assertEquals(ILStandardTags.TAG_BOOL, t.getId());
+		assertEquals(ILStandardTags.TAG_BOOL.ordinal(), t.getId());
 		assertFalse(t.getValue());
 	}
 
@@ -63,7 +63,7 @@ public class ILBooleanTagTest {
 	public void testILBooleanTag() {
 		ILBooleanTag t = new ILBooleanTag();
 		
-		assertEquals(ILStandardTags.TAG_BOOL, t.getId());
+		assertEquals(ILStandardTags.TAG_BOOL.ordinal(), t.getId());
 		assertFalse(t.getValue());
 	}
 

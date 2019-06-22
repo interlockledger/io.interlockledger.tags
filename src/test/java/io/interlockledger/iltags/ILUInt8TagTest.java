@@ -24,7 +24,7 @@ public class ILUInt8TagTest {
 	@Test
 	public void testILUInt8Tag() {
 		ILUInt8Tag t = new ILUInt8Tag();
-		assertEquals(ILStandardTags.TAG_UINT8, t.getId());
+		assertEquals(ILStandardTags.TAG_UINT8.ordinal(), t.getId());
 	}
 
 	@Test
