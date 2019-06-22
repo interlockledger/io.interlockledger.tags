@@ -23,7 +23,8 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  * 
  * <p>The standard null tag does not have any value and is serialized
  * to a single 0x00 byte. Variants of this class that use other codes will
- * be serialized</p>
+ * be serialized as defined by the ILTag standard using a ILInt to encode
+ * tag ID and a single 0x00 byte to represent the value size.</p>
  *
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
