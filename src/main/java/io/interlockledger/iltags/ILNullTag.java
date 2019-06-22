@@ -25,6 +25,8 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  * @since 2019.06.10
  */
 public class ILNullTag extends ILFixedSizeTag {
+	
+	public static final ILNullTag NULL = new ILNullTag();
 
 	public ILNullTag() {
 		super(ILStandardTags.TAG_NULL, 0);
