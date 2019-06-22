@@ -39,7 +39,7 @@ public class ILTagFactory {
 	public ILTag create(long tagId) {
 		// TODO Add unimplemented standard tags.
 		if (tagId == ILStandardTags.TAG_NULL) {
-			return new ILNullTag();
+			return ILNullTag.NULL;
 		} else if (tagId == ILStandardTags.TAG_BOOL) {
 			return new ILBooleanTag();
 		} else if (tagId == ILStandardTags.TAG_INT8) {
