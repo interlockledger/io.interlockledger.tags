@@ -15,10 +15,6 @@
  */
 package io.interlockledger.iltags;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
@@ -30,9 +26,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
-public class ILTagArrayTag extends ILTag {
-
-	private ArrayList<ILTag> value = new ArrayList<ILTag>();
+public class ILTagArrayTag extends ILTagSequenceTag {
 
 	public ILTagArrayTag() {
 		this(ILStandardTags.TAG_ILTAG_ARRAY);
@@ -45,20 +39,12 @@ public class ILTagArrayTag extends ILTag {
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		out.writeILInt(this.value.size());
-		for (ILTag t: this.value) {
-			t.serialize(out);
-		}
+		super.serializeValue(out);
 	}
 
 	@Override
 	public long getValueSize() {
-		long size;
-		
-		size = ILIntCodec.getEncodedSize(this.value.size());
-		for (ILTag t: this.value) {
-			size += t.getTagSize();
-		}
-		return size;
+		return ILIntCodec.getEncodedSize(this.value.size()) + super.getValueSize();
 	}
 
 	@Override
@@ -66,6 +52,7 @@ public class ILTagArrayTag extends ILTag {
 			throws ILTagException {
 		long count;
 
+		in.pushLimit(tagSize);
 		count = in.readILInt();
 		if (count > Integer.MAX_VALUE) {
 			throw new ILTagException("Unsupported number of entries.");
@@ -74,28 +61,6 @@ public class ILTagArrayTag extends ILTag {
 		for (; count > 0; count--) {
 			this.value.add(factory.deserialize(in));
 		}		
-	}
-
-	public List<ILTag> getValue() {
-		return this.value;
-	}
-	
-	public void setValue(Collection<ILTag> value) {
-		this.value.clear();
-		this.value.addAll(value);
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILTagArrayTag t = (ILTagArrayTag)other;
-		if (this.getValue().size() != t.getValue().size()) {
-			return false;
-		}
-		for (int i = 0; i < this.getValue().size(); i++) {
-			if (!this.getValue().get(i).equals(t.getValue().get(i))) {
-				return false;
-			}
-		}
-		return true;
+		in.popLimit(true);
 	}
 }

@@ -31,7 +31,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILTagSequenceTag extends ILTag {
 
-	private ArrayList<ILTag> value = new ArrayList<ILTag>();
+	protected ArrayList<ILTag> value = new ArrayList<ILTag>();
 
 	public ILTagSequenceTag() {
 		this(ILStandardTags.TAG_ILTAG_SEQ);
@@ -45,7 +45,11 @@ public class ILTagSequenceTag extends ILTag {
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 
 		for (ILTag t: this.value) {
-			t.serialize(out);
+			if (t != null) {
+				t.serialize(out);
+			} else {
+				ILNullTag.NULL.serialize(out);
+			}
 		}
 	}
 
@@ -55,7 +59,11 @@ public class ILTagSequenceTag extends ILTag {
 		
 		size = 0;
 		for (ILTag t: this.value) {
-			size += t.getTagSize();
+			if (t != null) {
+				size += t.getTagSize();
+			} else {
+				size += ILNullTag.NULL.getTagSize();
+			}
 		}
 		return size;
 	}
@@ -64,9 +72,11 @@ public class ILTagSequenceTag extends ILTag {
 	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
 			throws ILTagException {
 		this.value.clear();
+		in.pushLimit(tagSize);
 		while(in.getRemaining() > 0) {
 			this.value.add(factory.deserialize(in));
 		}		
+		in.popLimit(true);
 	}
 
 	public List<ILTag> getValue() {
@@ -81,14 +91,40 @@ public class ILTagSequenceTag extends ILTag {
 	@Override
 	protected boolean sameValue(ILTag other) {
 		ILTagSequenceTag t = (ILTagSequenceTag)other;
-		if (this.getValue().size() != t.getValue().size()) {
+		return equals(this.getValue(), t.getValue());
+	}
+	
+	/**
+	 * Verifies if two list of tags are equal. This method returns true
+	 * if both lists are equal or if both lists are null.
+	 * 
+	 * <p>This method considers that both null and instances of standard 
+	 * ILNullTag are equal.</p>
+	 * 
+	 * @param a List a.
+	 * @param b List b.
+	 * @return true if they are equal or false otherwise.
+	 * @since 2019.06.22
+	 */
+	public static boolean equals(List<ILTag> a, List<ILTag> b) {
+		if (a == b) {
+			return true;
+		}
+		if ((a == null) || (b == null)) {
 			return false;
 		}
-		for (int i = 0; i < this.getValue().size(); i++) {
-			if (!this.getValue().get(i).equals(t.getValue().get(i))) {
-				return false;
+		if (a.size() != b.size()) {
+			return false;
+		}
+		for (int i = 0; i < a.size(); i++) {
+			ILTag ta = (a.get(i) == null)? ILNullTag.NULL: a.get(i);
+			ILTag tb = (b.get(i) == null)? ILNullTag.NULL: b.get(i);
+			if (ta != tb) {
+				if (!ta.equals(tb)) {
+					return false;
+				}					
 			}
 		}
 		return true;
-	}
+	}	
 }

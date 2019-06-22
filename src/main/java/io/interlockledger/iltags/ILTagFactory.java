@@ -120,16 +120,19 @@ public class ILTagFactory {
 			}
 			tag = new ILByteArrayTag(tagId); 
 		}
-		
-		// Deserialize the value
-		if (tagSize >= 0) {
-			in.pushLimit(tagSize);
-			tag.deserializeValue(this, tagSize, in);
-			in.popLimit(true);
-		} else {
-			tag.deserializeValue(this, tagSize, in);
+		try {
+			// Deserialize the value
+			if (tagSize >= 0) {
+				in.pushLimit(tagSize);
+				tag.deserializeValue(this, tagSize, in);
+				in.popLimit(true);
+			} else {
+				tag.deserializeValue(this, tagSize, in);
+			}
+			return tag;
+		} catch (IllegalArgumentException e) {
+			throw new ILTagException(e.getMessage(), e);
 		}
-		return tag;
 	}
 	
 	/**
