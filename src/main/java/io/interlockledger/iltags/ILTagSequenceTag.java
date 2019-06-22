@@ -124,5 +124,15 @@ public class ILTagSequenceTag extends ILTag {
 			}
 		}
 		return true;
-	}	
+	}
+	
+	@Override
+	protected int getValueHashCode() {
+		int code = 0;
+		
+		for (ILTag t: this.getValue()) {
+			code += t.hashCode();
+		}
+		return code;
+	}
 }

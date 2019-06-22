@@ -60,4 +60,9 @@ public class ILInt8Tag extends ILFixedSizeTag {
 		ILInt8Tag t = (ILInt8Tag)other;
 		return this.getValue() == t.getValue();
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return Byte.hashCode(this.getValue());
+	}	
 }

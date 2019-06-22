@@ -66,4 +66,9 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 		ILBinary128Tag t = (ILBinary128Tag)other;
 		return Arrays.equals(this.getValue(), t.getValue());
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return Arrays.hashCode(this.getValue());
+	}	
 }

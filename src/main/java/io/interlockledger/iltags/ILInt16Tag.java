@@ -61,4 +61,8 @@ public class ILInt16Tag extends ILFixedSizeTag {
 		return this.getValue() == t.getValue();
 	}
 
+	@Override
+	protected int getValueHashCode() {
+		return Short.hashCode(this.getValue());
+	}	
 }

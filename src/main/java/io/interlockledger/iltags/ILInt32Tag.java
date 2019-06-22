@@ -60,4 +60,10 @@ public class ILInt32Tag extends ILFixedSizeTag {
 		ILInt32Tag t = (ILInt32Tag)other;
 		return this.getValue() == t.getValue();
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return this.getValue();
+	}	
+
 }

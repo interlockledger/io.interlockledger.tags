@@ -62,4 +62,9 @@ public class ILNullTag extends ILTag {
 			throw new ILTagException("");
 		}
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return 0;
+	}	
 }

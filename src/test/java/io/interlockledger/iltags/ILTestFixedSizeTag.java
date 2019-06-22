@@ -37,4 +37,9 @@ public class ILTestFixedSizeTag extends ILFixedSizeTag {
 		ILTestFixedSizeTag t = (ILTestFixedSizeTag)other;
 		return this.valueSize == t.valueSize;
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return valueSize;
+	}	
 }

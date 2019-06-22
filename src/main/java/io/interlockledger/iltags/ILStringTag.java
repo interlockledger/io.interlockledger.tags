@@ -79,4 +79,13 @@ public class ILStringTag extends ILTag {
 		}
 		return this.getValue().equals(t.getValue());
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return this.getValue().hashCode();
+		} else {
+			return 0;
+		}
+	}
 }

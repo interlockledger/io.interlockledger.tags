@@ -77,4 +77,13 @@ public class ILBigDecimalTag extends ILTag {
 		ILBigDecimalTag t = (ILBigDecimalTag)other;
 		return this.getValue().equals(t.getValue());
 	}
+
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return this.getValue().hashCode();
+		} else {
+			return 0;
+		}
+	}
 }

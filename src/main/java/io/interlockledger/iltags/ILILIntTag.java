@@ -25,9 +25,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class ILILIntTag extends ILTag {
-
-	protected long value;
+public class ILILIntTag extends ILInt64Tag {
 
 	public ILILIntTag(long id) {
 		super(id);
@@ -54,19 +52,5 @@ public class ILILIntTag extends ILTag {
 			throw new ILTagException("Invalid value.");
 		}
 		this.value = in.readILInt();
-	}
-
-	public long getValue() {
-		return value;
-	}
-
-	public void setValue(long value) {
-		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILILIntTag t = (ILILIntTag)other;
-		return this.getValue() == t.getValue();
 	}
 }

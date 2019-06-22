@@ -103,4 +103,12 @@ public class ILVersionTag extends ILFixedSizeTag {
 				(this.getRevision() == t.getRevision()) &&
 				(this.getBuild() == t.getBuild());
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return (this.getMajor() << 24) + 
+				(this.getMinor() << 16) +
+				(this.getRevision() << 8) +
+				this.getBuild();
+	}
 }

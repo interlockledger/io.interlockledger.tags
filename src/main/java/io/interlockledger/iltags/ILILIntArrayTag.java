@@ -87,4 +87,14 @@ public class ILILIntArrayTag extends ILTag {
 		}
 		return true;
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		long code = 0;
+		
+		for (Long l: this.getValue()) {
+			code += l;
+		}
+		return Long.hashCode(code);
+	}	
 }

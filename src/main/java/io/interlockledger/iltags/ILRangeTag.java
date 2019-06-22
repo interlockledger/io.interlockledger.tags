@@ -70,6 +70,12 @@ public class ILRangeTag extends ILTag {
 		return range;
 	}
 
+	/**
+	 * Sets the range.
+	 *  
+	 * @param range The range. It must be a value between 0 and 65535.
+	 * @throws IllegalArgumentException if range is invalid.
+	 */
 	public void setRange(int range) {
 		if ((range < 0) || (range > 0xFFFF)) {
 			throw new IllegalArgumentException("The range must be avalue between 0 and 65535.");
@@ -89,13 +95,20 @@ public class ILRangeTag extends ILTag {
 	}
 	
 	/**
+	 * Sets the value of this tag.
 	 * 
-	 * @param start
-	 * @param range
+	 * @param start The Start value.
+	 * @param range The range. It must be a value between 0 and 65535.
 	 * @since 2019.06.22
+	 * @throws IllegalArgumentException if range is invalid.
 	 */
 	public void setValue(long start, int range) {
 		this.setStart(start);
 		this.setRange(range);
+	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return (int)(this.getStart() + this.getRange());
 	}
 }

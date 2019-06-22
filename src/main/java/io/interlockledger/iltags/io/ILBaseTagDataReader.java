@@ -193,7 +193,7 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 	@Override
 	public void popLimit(boolean checkRemaining) throws ILTagException {
 		
-		if (this.limits.size() == 0) {
+		if (this.limits.isEmpty()) {
 			throw new IllegalStateException("No limits to pop.");
 		}
 		if ((checkRemaining) && (this.getRemaining() > 0)) {

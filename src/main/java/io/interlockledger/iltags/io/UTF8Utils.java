@@ -157,7 +157,7 @@ public class UTF8Utils {
 	 * @since 2018.06.20
 	 * @throws IllegalArgumentException In case of error.
 	 */
-	public static int toCodepoint(byte b [], int size) {
+	public static int toCodepoint(byte [] b, int size) {
 		
 		int cp = b[0] & UTF8_1ST_CLEAR_MASK[size - 1];
 		for (int i = 1; i < size; i++) {

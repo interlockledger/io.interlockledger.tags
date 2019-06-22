@@ -78,4 +78,13 @@ public class ILByteArrayTag extends ILTag {
 		ILByteArrayTag t = (ILByteArrayTag)other;
 		return Arrays.equals(this.getValue(), t.getValue());
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return Arrays.hashCode(this.getValue());
+		} else {
+			return 0;
+		}
+	}	
 }

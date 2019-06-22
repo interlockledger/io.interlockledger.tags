@@ -60,4 +60,9 @@ public class ILBinary32Tag extends ILFixedSizeTag {
 		ILBinary32Tag t = (ILBinary32Tag)other;
 		return this.getValue() == t.getValue();
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return Float.floatToIntBits(this.getValue());
+	}
 }

@@ -255,4 +255,19 @@ public abstract class ILTag {
 	 * @since 2019.06.21 
 	 */
 	protected abstract boolean sameValue(ILTag other);
+	
+	@Override
+	public int hashCode() {
+		return Long.hashCode(getId() + getValueHashCode());
+	}
+	
+	/**
+	 * Computes the hash code of the value of this tag. It is called
+	 * by this implementation of hashCode() to be combined with the 
+	 * the Id of the tag.
+	 * 
+	 * @return The value hash code.
+	 * @since 2019.06.22
+	 */
+	protected abstract int getValueHashCode();
 }

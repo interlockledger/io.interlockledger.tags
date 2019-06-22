@@ -68,4 +68,13 @@ public class ILBooleanTag extends ILFixedSizeTag {
 		ILBooleanTag t = (ILBooleanTag)other;
 		return this.getValue() == t.getValue();
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue()) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}		
 }

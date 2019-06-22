@@ -51,4 +51,9 @@ public class ILTestTag extends ILTag {
 		ILTestTag t = (ILTestTag)other;
 		return this.valueSize == t.valueSize;
 	}
+	
+	@Override
+	protected int getValueHashCode() {
+		return 0;
+	}	
 }
