@@ -25,6 +25,13 @@ import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 public class ILNullTagTest {
 
 	@Test
+	public void testNULL() {
+		
+		assertNotNull(ILNullTag.NULL);
+		assertEquals(ILStandardTags.TAG_NULL, ILNullTag.NULL.getId());
+	}
+
+	@Test
 	public void testSerializeValue() throws Exception {
 		ILNullTag t = new ILNullTag();
 		ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
@@ -46,6 +53,13 @@ public class ILNullTagTest {
 		
 		t.deserializeValue(null, 0, new ILMemoryTagDataReader(new byte[0]));
 	}
+	
+	@Test(expected = ILTagException.class)
+	public void testDeserializeValueFail() throws Exception {
+		ILNullTag t = new ILNullTag();
+		
+		t.deserializeValue(null, 1, new ILMemoryTagDataReader(new byte[0]));
+	}	
 
 	@Test
 	public void testILNullTag() {

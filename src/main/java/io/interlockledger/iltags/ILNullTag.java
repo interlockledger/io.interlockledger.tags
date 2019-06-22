@@ -19,33 +19,45 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the Null ILTag.
+ * This class implements the standard null ILTag or any other variant.
+ * 
+ * <p>The standard null tag does not have any value and is serialized
+ * to a single 0x00 byte. Variants of this class that use other codes will
+ * be serialized</p>
  *
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class ILNullTag extends ILFixedSizeTag {
+public class ILNullTag extends ILTag {
 	
 	public static final ILNullTag NULL = new ILNullTag();
 
 	public ILNullTag() {
-		super(ILStandardTags.TAG_NULL, 0);
+		super(ILStandardTags.TAG_NULL);
 	}
 	
 	public ILNullTag(long id) {
-		super(id, 0);
+		super(id);
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-	}
-
-	@Override
-	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
+	protected final void serializeValue(ILTagDataWriter out) throws ILTagException {
 	}
 	
 	@Override
-	protected boolean sameValue(ILTag other) {
+	protected final boolean sameValue(ILTag other) {
 		return true;
+	}
+
+	@Override
+	public final long getValueSize() {
+		return 0;
+	}
+
+	@Override
+	public final void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		if (tagSize != 0) {
+			throw new ILTagException("");
+		}
 	}
 }
