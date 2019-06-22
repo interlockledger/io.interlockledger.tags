@@ -18,6 +18,8 @@ package io.interlockledger.iltags.io;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 import io.interlockledger.iltags.ILTagException;
@@ -36,7 +38,7 @@ public abstract class ILBaseTagDataReader implements ILTagDataReader {
 
 	private final ByteBuffer tmp;
 	
-	private final Stack<Long> limits = new Stack<Long>();
+	private final Deque<Long> limits = new ArrayDeque<>();
 	
 	private long offset = 0;
 	
