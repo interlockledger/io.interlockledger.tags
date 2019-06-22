@@ -34,7 +34,7 @@ public class ILBinary64Tag extends ILFixedSizeTag {
 	}
 	
 	public ILBinary64Tag(long id) {
-		super(id, 4);
+		super(id, 8);
 	}
 
 	@Override
