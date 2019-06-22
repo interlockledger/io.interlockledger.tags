@@ -17,6 +17,9 @@ package io.interlockledger.iltags;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.junit.Test;
 
 import io.interlockledger.iltags.io.ILMemoryTagDataReader;
@@ -250,6 +253,99 @@ public class ILTagFactoryTest {
 		serializeAndDeserialize(src, ILILIntTag.class);
 	}	
 	
+	@Test
+	public void testDeserializeILBinary32Tag() throws Exception {
+		ILBinary32Tag src = new ILBinary32Tag();
+		src.setValue(1.1f);
+		serializeAndDeserialize(src, ILBinary32Tag.class);
+	}
+	
+	@Test
+	public void testDeserializeILBinary64Tag() throws Exception {
+		ILBinary64Tag src = new ILBinary64Tag();
+		src.setValue(1.1d);
+		serializeAndDeserialize(src, ILBinary64Tag.class);
+	}
+	
+	@Test
+	public void testDeserializeILBinary128Tag() throws Exception {
+		ILBinary128Tag src = new ILBinary128Tag();
+		TestUtils.fillSampleByteArray(src.getValue(), 0, 16);
+		serializeAndDeserialize(src, ILBinary128Tag.class);
+	}
+	
+	@Test
+	public void testDeserializeILByteArrayTag() throws Exception {
+		ILByteArrayTag src = new ILByteArrayTag();
+		src.setValue(TestUtils.createSampleByteArray(15));
+		serializeAndDeserialize(src, ILByteArrayTag.class);
+	}
+	
+	@Test
+	public void testDeserializeILStringTag() throws Exception {
+		ILStringTag src = new ILStringTag();
+		src.setValue("This is just a test!");
+		serializeAndDeserialize(src, ILStringTag.class);
+	}
+
+	@Test
+	public void testDeserializeILBigIntTag() throws Exception {
+		ILBigIntTag src = new ILBigIntTag();
+		src.setValue(BigInteger.TEN);
+		serializeAndDeserialize(src, ILBigIntTag.class);
+	}
+
+	@Test
+	public void testDeserializeILBigDecimalTag() throws Exception {
+		ILBigDecimalTag src = new ILBigDecimalTag();
+		src.setValue(BigDecimal.TEN.setScale(1));
+		serializeAndDeserialize(src, ILBigDecimalTag.class);
+	}
+
+	@Test
+	public void testDeserializeILILIntArrayTag() throws Exception {
+		ILILIntArrayTag src = new ILILIntArrayTag();
+		src.getValue().add(1l);
+		src.getValue().add(2l);
+		src.getValue().add(3l);
+		serializeAndDeserialize(src, ILILIntArrayTag.class);
+	}
+	
+	@Test
+	public void testDeserializeILTagArrayTag() throws Exception {
+		ILTagArrayTag src = new ILTagArrayTag();
+		src.getValue().add(new ILNullTag());
+		src.getValue().add(new ILBooleanTag());
+		src.getValue().add(new ILBinary32Tag());
+		
+		ILTagArrayTag sub = new ILTagArrayTag();
+		src.getValue().add(sub);
+		sub.getValue().add(new ILBinary32Tag());
+		
+		serializeAndDeserialize(src, ILTagArrayTag.class);
+	}
+	
+	@Test
+	public void testDeserializeILTagSequenceTag() throws Exception {
+		ILTagSequenceTag src = new ILTagSequenceTag();
+		src.getValue().add(new ILNullTag());
+		src.getValue().add(new ILBooleanTag());
+		src.getValue().add(new ILBinary32Tag());
+		
+		ILTagSequenceTag sub = new ILTagSequenceTag();
+		src.getValue().add(sub);
+		sub.getValue().add(new ILBinary32Tag());
+		
+		serializeAndDeserialize(src, ILTagSequenceTag.class);
+	}
+
+	@Test
+	public void testDeserializeILRangeTag() throws Exception {
+		ILRangeTag src = new ILRangeTag();
+		src.setValue(1, 2);
+		
+		serializeAndDeserialize(src, ILRangeTag.class);
+	}
 	
 	@Test
 	public void testILTagFactory() {
