@@ -66,6 +66,11 @@ public abstract class ILTag {
 	 */
 	protected abstract void serializeValue(ILTagDataWriter out) throws ILTagException;
 
+	/**
+	 * Returns the size of the serialized value in bytes.
+	 * 
+	 * @return The size of the serialized value in bytes.
+	 */
 	public abstract long getValueSize();
 	
 	/**
