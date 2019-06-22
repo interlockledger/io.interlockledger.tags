@@ -42,7 +42,8 @@ public class ILNullTag extends ILTag {
 	}
 
 	@Override
-	protected final void serializeValue(ILTagDataWriter out) throws ILTagException {
+	protected final void serializeValue(ILTagDataWriter out) {
+		// No value to serialize
 	}
 	
 	@Override

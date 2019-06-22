@@ -28,7 +28,7 @@ import io.interlockledger.iltags.io.ILTagNotEnoughDataException;
  */
 public abstract class ILTag { 
 	
-	private static long [] STANDARD_SIZES = {
+	private static final long [] STANDARD_SIZES = {
 			0,  // TAG_NULL
 			1,  // TAG_BOOL
 			1,  // TAG_INT8
@@ -225,12 +225,12 @@ public abstract class ILTag {
 		if (this == other) {
 			return true;
 		}
-		if (this.getId() == other.getId()) {
-			if (this.getClass().equals(other.getClass())) {
-				return sameValue(other);
-			}
+		if (this.getId() == other.getId() && 
+				(this.getClass().equals(other.getClass()))) {
+			return sameValue(other);
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
 	@Override

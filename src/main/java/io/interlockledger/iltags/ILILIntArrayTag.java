@@ -31,7 +31,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILILIntArrayTag extends ILTag {
 
-	private ArrayList<Long> value = new ArrayList<Long>();
+	private ArrayList<Long> value = new ArrayList<>();
 	
 	public ILILIntArrayTag() {
 		this(ILStandardTags.TAG_ILINT64_ARRAY);

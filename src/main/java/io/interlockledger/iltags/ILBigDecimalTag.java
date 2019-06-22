@@ -54,7 +54,7 @@ public class ILBigDecimalTag extends ILTag {
 		if (this.value == null) {
 			throw new IllegalStateException("Value not set.");	
 		}
-		return 4 + ILBigIntTag.getBigIntegerSize(this.value.unscaledValue());
+		return 4l + ILBigIntTag.getBigIntegerSize(this.value.unscaledValue());
 	}
 
 	@Override

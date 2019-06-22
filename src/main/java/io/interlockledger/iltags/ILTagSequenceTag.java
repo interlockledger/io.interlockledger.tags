@@ -31,7 +31,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILTagSequenceTag extends ILTag {
 
-	protected ArrayList<ILTag> value = new ArrayList<ILTag>();
+	protected ArrayList<ILTag> value = new ArrayList<>();
 
 	public ILTagSequenceTag() {
 		this(ILStandardTags.TAG_ILTAG_SEQ);

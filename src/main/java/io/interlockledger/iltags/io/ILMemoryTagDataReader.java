@@ -86,7 +86,7 @@ public class ILMemoryTagDataReader extends ILBaseTagDataReader {
 			throw new IllegalArgumentException("Invalid n.");
 		}
 		
-		long maxOffset = this.buffer.position() + this.buffer.remaining();
+		long maxOffset = (long)this.buffer.position() + this.buffer.remaining();
 		long newOffset = this.buffer.position() + n;
 		if (newOffset > maxOffset) {
 			throw new ILTagNotEnoughDataException("Not enough bytes to skip.");

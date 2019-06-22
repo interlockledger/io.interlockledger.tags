@@ -26,7 +26,7 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILBooleanTag extends ILFixedSizeTag {
 
-	public boolean value;
+	protected boolean value;
 
 	public ILBooleanTag() {
 		this(ILStandardTags.TAG_BOOL);

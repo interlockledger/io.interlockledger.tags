@@ -49,7 +49,7 @@ public class ILRangeTag extends ILTag {
 
 	@Override
 	public long getValueSize() {
-		return ILIntCodec.getEncodedSize(this.getStart()) + 2;
+		return ILIntCodec.getEncodedSize(this.getStart()) + 2l;
 	}
 
 	@Override

@@ -25,11 +25,8 @@ public class ILUnknownTagException extends ILTagException {
 
 	private static final long serialVersionUID = 1L;
 	
-	private long tagId;
+	private final long tagId;
 
-	public ILUnknownTagException() {
-	}
-	
 	public ILUnknownTagException(long tagId) {
 		super(String.format("Unknown tag %1$X.", tagId));
 		this.tagId = tagId;

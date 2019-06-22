@@ -27,7 +27,7 @@ import io.interlockledger.iltags.io.UTF8Utils;
  */
 public class ILStringTag extends ILTag {
 
-	public String value;
+	protected String value;
 	
 	public ILStringTag() {
 		this(ILStandardTags.TAG_STRING);
