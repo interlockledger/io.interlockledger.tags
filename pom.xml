@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.interlockledger.iltags</groupId>
 	<artifactId>iltags</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPTSHOT</version>
 	<name>iltags</name>
 	<description>Java implementation of the ILInt and ILTags standard.</description>
 	<url>https://github.com/interlockledger/jiltags</url>
