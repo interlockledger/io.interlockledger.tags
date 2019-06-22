@@ -148,5 +148,27 @@ public class ILRangeTagTest {
 		assertFalse(t1.equals(t4));
 		assertFalse(t1.equals(t5));
 	}
+	
+	@Test
+	public void testSetValue() {
+		ILRangeTag t = new ILRangeTag();
 
+		t.setValue(1, 2);
+		assertEquals(1, t.getStart());
+		assertEquals(2, t.getRange());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetValueFailedNegativeRange() {
+		ILRangeTag t = new ILRangeTag();
+
+		t.setValue(1, -1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetValueFailedLargeRange() {
+		ILRangeTag t = new ILRangeTag();
+
+		t.setValue(1, 0x10000);
+	}
 }

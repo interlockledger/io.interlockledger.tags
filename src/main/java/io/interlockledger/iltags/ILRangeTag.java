@@ -65,7 +65,7 @@ public class ILRangeTag extends ILTag {
 	public void setStart(long start) {
 		this.start = start;
 	}
-
+	
 	public int getRange() {
 		return range;
 	}
@@ -86,5 +86,16 @@ public class ILRangeTag extends ILTag {
 		ILRangeTag t = (ILRangeTag)other;
 		return (this.getStart() == t.getStart()) &&
 				(this.getRange() == t.getRange());
+	}
+	
+	/**
+	 * 
+	 * @param start
+	 * @param range
+	 * @since 2019.06.22
+	 */
+	public void setValue(long start, int range) {
+		this.setStart(start);
+		this.setRange(range);
 	}
 }
