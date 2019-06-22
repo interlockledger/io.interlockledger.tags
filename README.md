@@ -13,6 +13,8 @@ purpose without restrictions.
 
 ## Version history
 
+    1.0.0:
+        First production ready implementation.
     0.0.1:
         Initial version. Ported from the C++ reference implementation.
 
