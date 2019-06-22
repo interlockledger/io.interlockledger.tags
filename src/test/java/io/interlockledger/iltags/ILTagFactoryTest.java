@@ -348,6 +348,23 @@ public class ILTagFactoryTest {
 	}
 	
 	@Test
+	public void testDeserializeILVersionTag() throws Exception {
+		ILVersionTag src = new ILVersionTag();
+		src.setValue(1, 2, 3, 4);
+		
+		serializeAndDeserialize(src, ILVersionTag.class);
+	}
+	
+	@Test
+	public void testDeserializeILOIDTag() throws Exception {
+		ILOIDTag src = new ILOIDTag();
+		src.getValue().add(123l);
+		src.getValue().add(456l);
+		src.getValue().add(789l);
+		serializeAndDeserialize(src, ILOIDTag.class);
+	}
+	
+	@Test
 	public void testILTagFactory() {
 		ILTagFactory f = new ILTagFactory();
 		assertFalse(f.isStrictMode());
