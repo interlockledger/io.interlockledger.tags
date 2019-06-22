@@ -44,7 +44,7 @@ public class ILTagArrayTag extends ILTag {
 
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeILInt(this.getValueSize());
+		out.writeILInt(this.value.size());
 		for (ILTag t: this.value) {
 			t.serialize(out);
 		}
