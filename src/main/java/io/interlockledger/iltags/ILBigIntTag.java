@@ -21,38 +21,39 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard big integer tag but can also be
- * used to implement other variants.
+ * This class implements the standard big integer tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.17
  */
 public class ILBigIntTag extends ILTag {
 
+	/**
+	 * Returns the size of a BigInteger in bytes.
+	 * 
+	 * @param value The value.
+	 * @return The size of the BigInteger in bytes when represented as a complement
+	 *         of 2.
+	 * @since 2019.06.18
+	 */
+	public static int getBigIntegerSize(BigInteger value) {
+
+		return (value.bitLength() + 8) / 8;
+	}
+
+	public static byte[] serializeBigInteger(BigInteger value) {
+		return value.toByteArray();
+	}
+
 	private BigInteger value;
-	
+
 	public ILBigIntTag() {
 		this(ILStandardTags.TAG_BINT.ordinal());
 	}
-	
+
 	public ILBigIntTag(long id) {
 		super(id);
-	}
-
-	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		if (this.value == null) {
-			throw new IllegalStateException("Value not set.");
-		}
-		out.writeBytes(this.value.toByteArray());
-	}
-
-	@Override
-	public long getValueSize() {
-		if (this.value == null) {
-			throw new IllegalStateException("Value not set.");	
-		}
-		return getBigIntegerSize(this.value);
 	}
 
 	@Override
@@ -64,34 +65,6 @@ public class ILBigIntTag extends ILTag {
 		return value;
 	}
 
-	public void setValue(BigInteger value) {
-		this.value = value;
-	}
-	
-	/**
-	 * Returns the size of a BigInteger in bytes.
-	 * 
-	 * @param value The value.
-	 * @return The size of the BigInteger in bytes when represented as
-	 * a complement of 2.
-	 * @since 2019.06.18
-     */
-	public static int getBigIntegerSize(BigInteger value) {
-
-		return (value.bitLength() + 8) / 8;
-	}
-	
-	
-	public static byte [] serializeBigInteger(BigInteger value) {
-		return value.toByteArray();
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBigIntTag t = (ILBigIntTag)other;
-		return this.getValue().equals(t.getValue());
-	}
-	
 	@Override
 	protected int getValueHashCode() {
 		if (this.getValue() != null) {
@@ -99,5 +72,31 @@ public class ILBigIntTag extends ILTag {
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public long getValueSize() {
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
+		}
+		return getBigIntegerSize(this.value);
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBigIntTag t = (ILBigIntTag) other;
+		return this.getValue().equals(t.getValue());
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
+		}
+		out.writeBytes(this.value.toByteArray());
+	}
+
+	public void setValue(BigInteger value) {
+		this.value = value;
 	}
 }

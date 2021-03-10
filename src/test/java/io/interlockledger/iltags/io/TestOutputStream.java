@@ -28,39 +28,21 @@ import java.io.OutputStream;
 public class TestOutputStream extends FilterOutputStream {
 
 	private boolean closeUsed;
-	
+
 	private boolean forError;
-	
+
 	private boolean flushUsed;
-	
+
 	public TestOutputStream(OutputStream out) {
 		super(out);
 	}
 
 	@Override
-	public void write(byte[] b) throws IOException {
-		if (this.forError) {
-			throw new IOException();
-		}
-		super.write(b);
+	public void close() throws IOException {
+		this.closeUsed = true;
+		super.close();
 	}
-	
-	@Override
-	public void write(int b) throws IOException {
-		if (this.forError) {
-			throw new IOException();
-		}
-		super.write(b);
-	}
-	
-	@Override
-	public void write(byte[] b, int off, int len) throws IOException {
-		if (this.forError) {
-			throw new IOException();
-		}
-		super.write(b, off, len);
-	}
-	
+
 	@Override
 	public void flush() throws IOException {
 		if (this.forError) {
@@ -70,21 +52,39 @@ public class TestOutputStream extends FilterOutputStream {
 		super.flush();
 	}
 
-	@Override
-	public void close() throws IOException {
-		this.closeUsed = true;
-		super.close();
-	}
-	
-	public void setForError(boolean forError) {
-		this.forError = forError;
-	}
-
 	public boolean isCloseUsed() {
 		return closeUsed;
 	}
 
 	public boolean isFlushUsed() {
 		return flushUsed;
+	}
+
+	public void setForError(boolean forError) {
+		this.forError = forError;
+	}
+
+	@Override
+	public void write(byte[] b) throws IOException {
+		if (this.forError) {
+			throw new IOException();
+		}
+		super.write(b);
+	}
+
+	@Override
+	public void write(byte[] b, int off, int len) throws IOException {
+		if (this.forError) {
+			throw new IOException();
+		}
+		super.write(b, off, len);
+	}
+
+	@Override
+	public void write(int b) throws IOException {
+		if (this.forError) {
+			throw new IOException();
+		}
+		super.write(b);
 	}
 }

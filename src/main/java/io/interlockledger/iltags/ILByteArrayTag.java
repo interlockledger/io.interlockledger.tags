@@ -21,31 +21,39 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard byte array tag but can also be
- * used to implement other variants.
+ * This class implements the standard byte array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.12
  */
 public class ILByteArrayTag extends ILTag {
-	
-	private byte [] value;
 
-	public ILByteArrayTag(long id) {
-		super(id);
-	}
+	private byte[] value;
 
 	public ILByteArrayTag() {
 		this(ILStandardTags.TAG_BYTE_ARRAY.ordinal());
 	}
 
+	public ILByteArrayTag(long id) {
+		super(id);
+	}
+
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		
-		if (value != null) {
-			out.writeBytes(this.value);
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		this.value = readRawBytes(tagSize, in);
+	}
+
+	public byte[] getValue() {
+		return value;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return Arrays.hashCode(this.getValue());
 		} else {
-			throw new IllegalStateException("Value not set.");
+			return 0;
 		}
 	}
 
@@ -60,31 +68,22 @@ public class ILByteArrayTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
-		this.value = readRawBytes(tagSize, in);
+	protected boolean sameValue(ILTag other) {
+		ILByteArrayTag t = (ILByteArrayTag) other;
+		return Arrays.equals(this.getValue(), t.getValue());
 	}
 
-	public byte[] getValue() {
-		return value;
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+
+		if (value != null) {
+			out.writeBytes(this.value);
+		} else {
+			throw new IllegalStateException("Value not set.");
+		}
 	}
 
 	public void setValue(byte[] value) {
 		this.value = value;
-	}	
-
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILByteArrayTag t = (ILByteArrayTag)other;
-		return Arrays.equals(this.getValue(), t.getValue());
 	}
-	
-	@Override
-	protected int getValueHashCode() {
-		if (this.getValue() != null) {
-			return Arrays.hashCode(this.getValue());
-		} else {
-			return 0;
-		}
-	}	
 }

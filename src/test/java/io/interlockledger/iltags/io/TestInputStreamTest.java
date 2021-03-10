@@ -15,7 +15,9 @@
  */
 package io.interlockledger.iltags.io;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 
@@ -26,19 +28,19 @@ public class TestInputStreamTest {
 	@Test
 	public void testIsCloseUsed() throws Exception {
 		TestInputStream in = new TestInputStream(new ByteArrayInputStream(new byte[0]));
-		
+
 		assertFalse(in.isCloseUsed());
 		in.close();
 		assertTrue(in.isCloseUsed());
 	}
-	
+
 	@Test
 	public void testSkip() throws Exception {
 		TestInputStream in = new TestInputStream(new ByteArrayInputStream(new byte[100]));
-		
+
 		for (int i = 0; i < 100; i++) {
-			assertEquals(0, in .skip(i));
+			assertEquals(0, in.skip(i));
 		}
-		in.close();		
-	}	
+		in.close();
+	}
 }

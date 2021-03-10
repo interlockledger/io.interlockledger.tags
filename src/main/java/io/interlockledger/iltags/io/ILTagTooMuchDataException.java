@@ -32,10 +32,6 @@ public class ILTagTooMuchDataException extends ILTagException {
 		super(message);
 	}
 
-	public ILTagTooMuchDataException(Throwable cause) {
-		super(cause);
-	}
-
 	public ILTagTooMuchDataException(String message, Throwable cause) {
 		super(message, cause);
 	}
@@ -43,5 +39,9 @@ public class ILTagTooMuchDataException extends ILTagException {
 	public ILTagTooMuchDataException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ILTagTooMuchDataException(Throwable cause) {
+		super(cause);
 	}
 }

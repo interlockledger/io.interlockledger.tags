@@ -23,83 +23,22 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard tag array tag but can also be
- * used to implement other variants.
+ * This class implements the standard tag array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
 public class ILTagSequenceTag extends ILTag {
 
-	protected ArrayList<ILTag> value = new ArrayList<>();
-
-	public ILTagSequenceTag() {
-		this(ILStandardTags.TAG_ILTAG_SEQ.ordinal());
-	}
-	
-	public ILTagSequenceTag(long id) {
-		super(id);
-	}
-
-	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-
-		for (ILTag t: this.value) {
-			if (t != null) {
-				t.serialize(out);
-			} else {
-				ILNullTag.NULL.serialize(out);
-			}
-		}
-	}
-
-	@Override
-	public long getValueSize() {
-		long size;
-		
-		size = 0;
-		for (ILTag t: this.value) {
-			if (t != null) {
-				size += t.getTagSize();
-			} else {
-				size += ILNullTag.NULL.getTagSize();
-			}
-		}
-		return size;
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
-		this.value.clear();
-		in.pushLimit(tagSize);
-		while(in.getRemaining() > 0) {
-			this.value.add(factory.deserialize(in));
-		}		
-		in.popLimit(true);
-	}
-
-	public List<ILTag> getValue() {
-		return this.value;
-	}
-	
-	public void setValue(Collection<ILTag> value) {
-		this.value.clear();
-		this.value.addAll(value);
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILTagSequenceTag t = (ILTagSequenceTag)other;
-		return equals(this.getValue(), t.getValue());
-	}
-	
 	/**
-	 * Verifies if two list of tags are equal. This method returns true
-	 * if both lists are equal or if both lists are null.
+	 * Verifies if two list of tags are equal. This method returns true if both
+	 * lists are equal or if both lists are null.
 	 * 
-	 * <p>This method considers that both null and instances of standard 
-	 * ILNullTag are equal.</p>
+	 * <p>
+	 * This method considers that both null and instances of standard ILNullTag are
+	 * equal.
+	 * </p>
 	 * 
 	 * @param a List a.
 	 * @param b List b.
@@ -117,22 +56,84 @@ public class ILTagSequenceTag extends ILTag {
 			return false;
 		}
 		for (int i = 0; i < a.size(); i++) {
-			ILTag ta = (a.get(i) == null)? ILNullTag.NULL: a.get(i);
-			ILTag tb = (b.get(i) == null)? ILNullTag.NULL: b.get(i);
+			ILTag ta = (a.get(i) == null) ? ILNullTag.NULL : a.get(i);
+			ILTag tb = (b.get(i) == null) ? ILNullTag.NULL : b.get(i);
 			if ((ta != tb) && (!ta.equals(tb))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
+	protected ArrayList<ILTag> value = new ArrayList<>();
+
+	public ILTagSequenceTag() {
+		this(ILStandardTags.TAG_ILTAG_SEQ.ordinal());
+	}
+
+	public ILTagSequenceTag(long id) {
+		super(id);
+	}
+
+	@Override
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		this.value.clear();
+		in.pushLimit(tagSize);
+		while (in.getRemaining() > 0) {
+			this.value.add(factory.deserialize(in));
+		}
+		in.popLimit(true);
+	}
+
+	public List<ILTag> getValue() {
+		return this.value;
+	}
+
 	@Override
 	protected int getValueHashCode() {
 		int code = 0;
-		
-		for (ILTag t: this.getValue()) {
+
+		for (ILTag t : this.getValue()) {
 			code += t.hashCode();
 		}
 		return code;
+	}
+
+	@Override
+	public long getValueSize() {
+		long size;
+
+		size = 0;
+		for (ILTag t : this.value) {
+			if (t != null) {
+				size += t.getTagSize();
+			} else {
+				size += ILNullTag.NULL.getTagSize();
+			}
+		}
+		return size;
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILTagSequenceTag t = (ILTagSequenceTag) other;
+		return equals(this.getValue(), t.getValue());
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+
+		for (ILTag t : this.value) {
+			if (t != null) {
+				t.serialize(out);
+			} else {
+				ILNullTag.NULL.serialize(out);
+			}
+		}
+	}
+
+	public void setValue(Collection<ILTag> value) {
+		this.value.clear();
+		this.value.addAll(value);
 	}
 }

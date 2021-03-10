@@ -24,19 +24,19 @@ import java.io.OutputStream;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class OutputStreamHandler implements ILIntCodec.OutputHandler<OutputStream>{
+public class OutputStreamHandler implements ILIntCodec.OutputHandler<OutputStream> {
 
 	/**
 	 * Preallocated instance of this class.
 	 */
-	public static final OutputStreamHandler INSTANCE = new OutputStreamHandler(); 
+	public static final OutputStreamHandler INSTANCE = new OutputStreamHandler();
 
 	@Override
 	public void write(int b, OutputStream out) throws ILIntException {
 		try {
 			out.write(b);
 		} catch (IOException e) {
-			throw new ILIntException(e); 
+			throw new ILIntException(e);
 		}
 	}
 }

@@ -15,7 +15,9 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -48,7 +50,7 @@ public class ILStandardTagsTest {
 		assertEquals(24, ILStandardTags.TAG_VERSION.ordinal());
 		assertEquals(25, ILStandardTags.TAG_OID.ordinal());
 	}
-	
+
 	@Test
 	@SuppressWarnings("deprecation")
 	public void testConstantsDeprecated() {
@@ -61,23 +63,23 @@ public class ILStandardTagsTest {
 		assertEquals(30, ILStandardTags.RESERVED_30.ordinal());
 		assertEquals(31, ILStandardTags.RESERVED_31.ordinal());
 	}
-	
+
 	@Test
 	public void testIsStandard() {
-		
+
 		assertFalse(ILStandardTags.isStandard(-1));
 		for (long id = 0; id < 32; id++) {
 			assertTrue(ILStandardTags.isStandard(id));
 		}
 		assertFalse(ILStandardTags.isStandard(32));
 	}
-	
+
 	@Test
 	public void testParseId() {
-		
+
 		assertEquals(ILStandardTags.NON_STANDARD_TAG, ILStandardTags.parseId(-1));
 		for (long id = 0; id < 32; id++) {
-			assertEquals(ILStandardTags.values()[(int)id], ILStandardTags.parseId(id));
+			assertEquals(ILStandardTags.values()[(int) id], ILStandardTags.parseId(id));
 		}
 		assertEquals(ILStandardTags.NON_STANDARD_TAG, ILStandardTags.parseId(32));
 	}

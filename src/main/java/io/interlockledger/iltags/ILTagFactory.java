@@ -18,92 +18,13 @@ package io.interlockledger.iltags;
 import io.interlockledger.iltags.io.ILTagDataReader;
 
 /**
- * This is the basic tag factories implementation. It can only
- * handle standard tags. Factories with support for the new tags 
- * must extend this class.
+ * This is the basic tag factories implementation. It can only handle standard
+ * tags. Factories with support for the new tags must extend this class.
  * 
  * @author Fabio Jun Takada Chino
  */
 public class ILTagFactory {
-	
-	private boolean strictMode;
-	
-	/**
-	 * Creates a new tag based on a give id. The default implementation
-	 * handles all defined standard classes. Override this method to add
-	 * more tags whenever necessary.
-	 * 
-	 * @param tagId The tag ID.
-	 * @return The new tag instance or null if the tag is unknown.
-	 */
-	public ILTag create(long tagId) {
-		return createStandard(ILStandardTags.parseId(tagId));
-	}
-	
-	/**
-	 * Deserializes the first ILTag found inside the input. It uses create 
-	 *
-	 * @param[in] The input buffer.
-	 * @return The extracted tag.
-	 */
-	public ILTag deserialize(ILTagDataReader in) throws ILTagException {
-		long tagId;
-		long tagSize;
-		
-		// Read the basic tag info
-		tagId = in.readILInt();
-		if (ILTag.isImplicity(tagId)) {
-			tagSize = ILTag.getImplicitValueSize(tagId);
-		} else {
-			tagSize = in.readILInt();
-		}
 
-		// Create the tag and handle unknown tags if any.
-		ILTag tag = create(tagId);
-		if (tag == null) {
-			if (this.isStrictMode()) {
-				throw new ILUnknownTagException(tagId); 
-			}
-			if (tagSize < 0) {
-				throw new ILTagException(String.format("Cannot handle unknown implicit tag %1$X.", tagId));
-			}
-			tag = new ILByteArrayTag(tagId); 
-		}
-		try {
-			// Deserialize the value
-			if (tagSize >= 0) {
-				in.pushLimit(tagSize);
-				tag.deserializeValue(this, tagSize, in);
-				in.popLimit(true);
-			} else {
-				tag.deserializeValue(this, tagSize, in);
-			}
-			return tag;
-		} catch (IllegalArgumentException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
-	}
-	
-	/**
-	 * Determines if this factory will or will not handle unknown tags.
-	 * @return true if unknown tags generate errors or false otherwise.
-	 */
-	public boolean isStrictMode() {
-		return strictMode;
-	}
-	
-	/**
-	 * Sets how this factory will handle unknown tags. If strict mode is
-	 * set to true, unknown classes will generate errors. Otherwise,
-	 * they will be created as instances of ILTagArrayTag with the
-	 * corresponding tagId.
-	 * 
-	 * @param strictMode true to activate the strict mode or false otherwise. 
-	 */
-	public void setStrictMode(boolean strictMode) {
-		this.strictMode = strictMode;		
-	}
-	
 	/**
 	 * Creates a new standard tag if it is supported.
 	 * 
@@ -164,5 +85,83 @@ public class ILTagFactory {
 		default:
 			return null;
 		}
+	}
+
+	private boolean strictMode;
+
+	/**
+	 * Creates a new tag based on a give id. The default implementation handles all
+	 * defined standard classes. Override this method to add more tags whenever
+	 * necessary.
+	 * 
+	 * @param tagId The tag ID.
+	 * @return The new tag instance or null if the tag is unknown.
+	 */
+	public ILTag create(long tagId) {
+		return createStandard(ILStandardTags.parseId(tagId));
+	}
+
+	/**
+	 * Deserializes the first ILTag found inside the input. It uses create
+	 *
+	 * @param[in] The input buffer.
+	 * @return The extracted tag.
+	 */
+	public ILTag deserialize(ILTagDataReader in) throws ILTagException {
+		long tagId;
+		long tagSize;
+
+		// Read the basic tag info
+		tagId = in.readILInt();
+		if (ILTag.isImplicity(tagId)) {
+			tagSize = ILTag.getImplicitValueSize(tagId);
+		} else {
+			tagSize = in.readILInt();
+		}
+
+		// Create the tag and handle unknown tags if any.
+		ILTag tag = create(tagId);
+		if (tag == null) {
+			if (this.isStrictMode()) {
+				throw new ILUnknownTagException(tagId);
+			}
+			if (tagSize < 0) {
+				throw new ILTagException(String.format("Cannot handle unknown implicit tag %1$X.", tagId));
+			}
+			tag = new ILByteArrayTag(tagId);
+		}
+		try {
+			// Deserialize the value
+			if (tagSize >= 0) {
+				in.pushLimit(tagSize);
+				tag.deserializeValue(this, tagSize, in);
+				in.popLimit(true);
+			} else {
+				tag.deserializeValue(this, tagSize, in);
+			}
+			return tag;
+		} catch (IllegalArgumentException e) {
+			throw new ILTagException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Determines if this factory will or will not handle unknown tags.
+	 * 
+	 * @return true if unknown tags generate errors or false otherwise.
+	 */
+	public boolean isStrictMode() {
+		return strictMode;
+	}
+
+	/**
+	 * Sets how this factory will handle unknown tags. If strict mode is set to
+	 * true, unknown classes will generate errors. Otherwise, they will be created
+	 * as instances of ILTagArrayTag with the corresponding tagId.
+	 * 
+	 * @param strictMode true to activate the strict mode or false otherwise.
+	 */
+	public void setStrictMode(boolean strictMode) {
+		this.strictMode = strictMode;
 	}
 }

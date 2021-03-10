@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 class TestInputStream extends FilterInputStream {
-	
+
 	private boolean closeUsed;
 
 	public TestInputStream(InputStream in) {
@@ -39,7 +39,7 @@ class TestInputStream extends FilterInputStream {
 	public boolean isCloseUsed() {
 		return closeUsed;
 	}
-	
+
 	/**
 	 * This implementation never skips.
 	 */

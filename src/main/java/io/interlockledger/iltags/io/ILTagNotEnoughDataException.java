@@ -32,10 +32,6 @@ public class ILTagNotEnoughDataException extends ILTagException {
 		super(message);
 	}
 
-	public ILTagNotEnoughDataException(Throwable cause) {
-		super(cause);
-	}
-
 	public ILTagNotEnoughDataException(String message, Throwable cause) {
 		super(message, cause);
 	}
@@ -43,5 +39,9 @@ public class ILTagNotEnoughDataException extends ILTagException {
 	public ILTagNotEnoughDataException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ILTagNotEnoughDataException(Throwable cause) {
+		super(cause);
 	}
 }

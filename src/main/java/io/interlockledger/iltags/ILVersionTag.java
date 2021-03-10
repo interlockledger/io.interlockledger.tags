@@ -19,8 +19,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard version tag but can also be
- * used to implement other variants.
+ * This class implements the standard version tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.18
@@ -31,13 +31,49 @@ public class ILVersionTag extends ILFixedSizeTag {
 	private int minor;
 	private int revision;
 	private int build;
-	
+
 	public ILVersionTag() {
 		this(ILStandardTags.TAG_VERSION.ordinal());
 	}
-	
+
 	public ILVersionTag(long id) {
 		super(id, 4 * 4);
+	}
+
+	@Override
+	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
+		this.major = in.readInt();
+		this.minor = in.readInt();
+		this.revision = in.readInt();
+		this.build = in.readInt();
+	}
+
+	public int getBuild() {
+		return build;
+	}
+
+	public int getMajor() {
+		return major;
+	}
+
+	public int getMinor() {
+		return minor;
+	}
+
+	public int getRevision() {
+		return revision;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return (this.getMajor() << 24) + (this.getMinor() << 16) + (this.getRevision() << 8) + this.getBuild();
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILVersionTag t = (ILVersionTag) other;
+		return (this.getMajor() == t.getMajor()) && (this.getMinor() == t.getMinor())
+				&& (this.getRevision() == t.getRevision()) && (this.getBuild() == t.getBuild());
 	}
 
 	@Override
@@ -48,67 +84,26 @@ public class ILVersionTag extends ILFixedSizeTag {
 		out.writeInt(this.build);
 	}
 
-	@Override
-	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
-		this.major = in.readInt();
-		this.minor = in.readInt();
-		this.revision = in.readInt();
-		this.build = in.readInt();
-	}
-	
-	public void setValue(int major, int minor, int revision, int build) {
-		this.major = major;
-		this.minor = minor;
-		this.revision = revision;
+	public void setBuild(int build) {
 		this.build = build;
-	}
-
-	public int getMajor() {
-		return major;
 	}
 
 	public void setMajor(int major) {
 		this.major = major;
 	}
 
-	public int getMinor() {
-		return minor;
-	}
-
 	public void setMinor(int minor) {
 		this.minor = minor;
-	}
-
-	public int getRevision() {
-		return revision;
 	}
 
 	public void setRevision(int revision) {
 		this.revision = revision;
 	}
 
-	public int getBuild() {
-		return build;
-	}
-
-	public void setBuild(int build) {
+	public void setValue(int major, int minor, int revision, int build) {
+		this.major = major;
+		this.minor = minor;
+		this.revision = revision;
 		this.build = build;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILVersionTag t = (ILVersionTag)other;
-		return (this.getMajor() == t.getMajor()) &&
-				(this.getMinor() == t.getMinor()) &&
-				(this.getRevision() == t.getRevision()) &&
-				(this.getBuild() == t.getBuild());
-	}
-	
-	@Override
-	protected int getValueHashCode() {
-		return (this.getMajor() << 24) + 
-				(this.getMinor() << 16) +
-				(this.getRevision() << 8) +
-				this.getBuild();
 	}
 }

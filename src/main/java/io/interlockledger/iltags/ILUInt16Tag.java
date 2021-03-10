@@ -22,16 +22,16 @@ package io.interlockledger.iltags;
  * @since 2019.06.12
  */
 public class ILUInt16Tag extends ILInt16Tag {
-	
+
 	public ILUInt16Tag() {
 		super(ILStandardTags.TAG_UINT16.ordinal());
 	}
-	
+
 	public ILUInt16Tag(long id) {
 		super(id);
 	}
-	
+
 	public int getUnsignedValue() {
 		return this.value & 0xFFFF;
-	}	
+	}
 }

@@ -29,17 +29,17 @@ public class ILTestFixedSizeTag extends ILFixedSizeTag {
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILTestFixedSizeTag t = (ILTestFixedSizeTag)other;
-		return this.valueSize == t.valueSize;
-	}
-	
-	@Override
 	protected int getValueHashCode() {
 		return valueSize;
-	}	
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILTestFixedSizeTag t = (ILTestFixedSizeTag) other;
+		return this.valueSize == t.valueSize;
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+	}
 }

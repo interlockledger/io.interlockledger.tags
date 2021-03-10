@@ -32,36 +32,36 @@ public class ILMemoryTagDataReader extends ILBaseTagDataReader {
 	/**
 	 * Creates a new instance of this class.
 	 * 
-	 * @param buff The input buffer. It will share the same underlying
-	 * bytes but the position and limits will be independent.
-	 */
-	public ILMemoryTagDataReader(ByteBuffer buff) {
-		this.buffer = buff.duplicate();
-	}
-	
-	/**
-	 * Creates a new instance of this class. 
-	 * 
 	 * @param data The input buffer.
 	 */
-	public ILMemoryTagDataReader(byte [] data) {
+	public ILMemoryTagDataReader(byte[] data) {
 		this(data, 0, data.length);
 	}
-	
+
 	/**
-	 * Creates a new instance of this class. 
+	 * Creates a new instance of this class.
 	 * 
 	 * @param data The input buffer.
 	 * @param offs The initial offset.
 	 * @param size The number of bytes.
 	 */
-	public ILMemoryTagDataReader(byte [] data, int offs, int size) {
-		this.buffer = ByteBuffer.wrap(data, offs, size);		
+	public ILMemoryTagDataReader(byte[] data, int offs, int size) {
+		this.buffer = ByteBuffer.wrap(data, offs, size);
+	}
+
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param buff The input buffer. It will share the same underlying bytes but the
+	 *             position and limits will be independent.
+	 */
+	public ILMemoryTagDataReader(ByteBuffer buff) {
+		this.buffer = buff.duplicate();
 	}
 
 	@Override
 	protected byte readByteCore() throws ILTagException {
-		
+
 		if (this.buffer.hasRemaining()) {
 			return this.buffer.get();
 		} else {
@@ -81,16 +81,16 @@ public class ILMemoryTagDataReader extends ILBaseTagDataReader {
 
 	@Override
 	protected void skipCore(long n) throws ILTagException {
-		
+
 		if (n < 0) {
 			throw new IllegalArgumentException("Invalid n.");
 		}
-		
-		long maxOffset = (long)this.buffer.position() + this.buffer.remaining();
+
+		long maxOffset = (long) this.buffer.position() + this.buffer.remaining();
 		long newOffset = this.buffer.position() + n;
 		if (newOffset > maxOffset) {
 			throw new ILTagNotEnoughDataException("Not enough bytes to skip.");
 		}
-		this.buffer.position((int)(this.buffer.position() + n));
+		this.buffer.position((int) (this.buffer.position() + n));
 	}
 }

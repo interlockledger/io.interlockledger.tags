@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.interlockledger.iltags</groupId>
 	<artifactId>iltags</artifactId>
-	<version>1.0.1-SNAPTSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>iltags</name>
 	<description>Java implementation of the ILInt and ILTags standard.</description>
 	<url>https://github.com/interlockledger/jiltags</url>
@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

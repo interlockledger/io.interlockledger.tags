@@ -15,11 +15,25 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class ILUInt32TagTest {
+	@Test
+	public void testGetUnsignedValue() {
+		ILUInt32Tag t = new ILUInt32Tag();
+
+		t.setValue(0);
+		assertEquals(0, t.getUnsignedValue());
+
+		t.setValue(0x80000000);
+		assertEquals(0x80000000l, t.getUnsignedValue());
+
+		t.setValue(-1);
+		assertEquals(0xFFFFFFFFl, t.getUnsignedValue());
+	}
+
 	@Test
 	public void testILUInt32Tag() {
 		ILUInt32Tag t = new ILUInt32Tag();
@@ -30,19 +44,5 @@ public class ILUInt32TagTest {
 	public void testILUInt32TagLong() {
 		ILUInt32Tag t = new ILUInt32Tag(123);
 		assertEquals(123, t.getId());
-	}
-
-	@Test
-	public void testGetUnsignedValue() {
-		ILUInt32Tag t = new ILUInt32Tag();
-		
-		t.setValue(0);
-		assertEquals(0, t.getUnsignedValue());
-		
-		t.setValue(0x80000000);
-		assertEquals(0x80000000l, t.getUnsignedValue());
-		
-		t.setValue(-1);
-		assertEquals(0xFFFFFFFFl, t.getUnsignedValue());
 	}
 }

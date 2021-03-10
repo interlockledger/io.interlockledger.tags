@@ -37,11 +37,6 @@ public class ILBooleanTag extends ILFixedSizeTag {
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeByte((byte) (this.value ? 1 : 0));
-	}
-
-	@Override
 	protected void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
 		switch (in.readByte()) {
 		case 0:
@@ -59,16 +54,6 @@ public class ILBooleanTag extends ILFixedSizeTag {
 		return value;
 	}
 
-	public void setValue(boolean value) {
-		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBooleanTag t = (ILBooleanTag)other;
-		return this.getValue() == t.getValue();
-	}
-	
 	@Override
 	protected int getValueHashCode() {
 		if (this.getValue()) {
@@ -76,5 +61,20 @@ public class ILBooleanTag extends ILFixedSizeTag {
 		} else {
 			return 0;
 		}
-	}		
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBooleanTag t = (ILBooleanTag) other;
+		return this.getValue() == t.getValue();
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeByte((byte) (this.value ? 1 : 0));
+	}
+
+	public void setValue(boolean value) {
+		this.value = value;
+	}
 }

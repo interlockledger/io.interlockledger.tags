@@ -24,19 +24,19 @@ import java.io.InputStream;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
-public class InputStreamHandler implements ILIntCodec.InputHandler<InputStream>{
+public class InputStreamHandler implements ILIntCodec.InputHandler<InputStream> {
 
 	/**
 	 * Preallocated instance of this class.
 	 */
 	public static final InputStreamHandler INSTANCE = new InputStreamHandler();
-	
+
 	@Override
 	public int get(InputStream in) throws ILIntException {
 		try {
 			int r = in.read();
 			if (r < 0) {
-				throw new ILIntException("Premature end of stream."); 
+				throw new ILIntException("Premature end of stream.");
 			}
 			return r;
 		} catch (IOException e) {

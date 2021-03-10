@@ -15,7 +15,10 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.ByteBuffer;
 
@@ -27,23 +30,10 @@ import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 public class ILInt64TagTest {
 
 	@Test
-	public void testSerializeValue() throws Exception {
-		ILInt64Tag t = new ILInt64Tag();
-		ByteBuffer b = 	ByteBuffer.wrap(new byte[8]); 
-		
-		long v = 0x0123456789ABCDEFl;
-		b.putLong(v);
-		t.setValue(v);
-		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
-		t.serializeValue(w);
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-
-	@Test
 	public void testDeserializeValueCore() throws Exception {
 		ILInt64Tag t = new ILInt64Tag();
-		ByteBuffer b = 	ByteBuffer.wrap(new byte[8]); 
-		
+		ByteBuffer b = ByteBuffer.wrap(new byte[8]);
+
 		long v = 0x0123456789ABCDEFl;
 		b.putLong(v);
 		t.deserializeValueCore(null, new ILMemoryTagDataReader(b.array()));
@@ -53,48 +43,60 @@ public class ILInt64TagTest {
 	@Test(expected = ILTagException.class)
 	public void testDeserializeValueCoreFail() throws Exception {
 		ILInt64Tag t = new ILInt64Tag();
-		
+
 		t.deserializeValueCore(null, new ILMemoryTagDataReader(new byte[7]));
 	}
 
-	
-	@Test
-	public void testILInt64TagLong() {
-		ILInt64Tag t = new ILInt64Tag(123);
-		
-		assertEquals(123, t.getId());
-		assertEquals(0, t.getValue());
-	}
-
-	@Test
-	public void testILInt64Tag() {
-		ILInt64Tag t = new ILInt64Tag();
-		
-		assertEquals(ILStandardTags.TAG_INT64.ordinal(), t.getId());
-		assertEquals(0, t.getValue());
-	}
-
-	@Test
-	public void testGetSetValue() {
-		ILInt64Tag t = new ILInt64Tag();
-		
-		assertEquals(0, t.getValue());
-		t.setValue(113);
-		assertEquals(113, t.getValue());
-	}
-	
 	@Test
 	public void testEquals() {
 		ILInt64Tag t1 = new ILInt64Tag();
 		ILInt64Tag t2 = new ILInt64Tag();
 		ILInt64Tag t3 = new ILInt64Tag();
-		t3.setValue((short)1);
+		t3.setValue((short) 1);
 		ILInt64Tag t4 = new ILInt64Tag(15);
-		
+
 		assertTrue(t1.equals(t1));
 		assertTrue(t1.equals(t2));
 		assertFalse(t1.equals(null));
 		assertFalse(t1.equals(t3));
 		assertFalse(t1.equals(t4));
+	}
+
+	@Test
+	public void testGetSetValue() {
+		ILInt64Tag t = new ILInt64Tag();
+
+		assertEquals(0, t.getValue());
+		t.setValue(113);
+		assertEquals(113, t.getValue());
+	}
+
+	@Test
+	public void testILInt64Tag() {
+		ILInt64Tag t = new ILInt64Tag();
+
+		assertEquals(ILStandardTags.TAG_INT64.ordinal(), t.getId());
+		assertEquals(0, t.getValue());
+	}
+
+	@Test
+	public void testILInt64TagLong() {
+		ILInt64Tag t = new ILInt64Tag(123);
+
+		assertEquals(123, t.getId());
+		assertEquals(0, t.getValue());
+	}
+
+	@Test
+	public void testSerializeValue() throws Exception {
+		ILInt64Tag t = new ILInt64Tag();
+		ByteBuffer b = ByteBuffer.wrap(new byte[8]);
+
+		long v = 0x0123456789ABCDEFl;
+		b.putLong(v);
+		t.setValue(v);
+		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
+		t.serializeValue(w);
+		assertArrayEquals(b.array(), w.toByteArray());
 	}
 }

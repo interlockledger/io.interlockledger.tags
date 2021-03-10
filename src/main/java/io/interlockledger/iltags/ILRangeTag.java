@@ -15,22 +15,21 @@
  */
 package io.interlockledger.iltags;
 
-
 import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard range tag but can also be
- * used to implement other variants.
+ * This class implements the standard range tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.18
  */
 public class ILRangeTag extends ILTag {
-	
+
 	private long start;
-	
+
 	private int range;
 
 	public ILRangeTag() {
@@ -42,9 +41,26 @@ public class ILRangeTag extends ILTag {
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeILInt(this.getStart());
-		out.writeShort((short)this.getRange());
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		this.start = in.readILInt();
+		this.range = in.readShort() & 0xFFFF;
+	}
+
+	public long getEnd() {
+		return this.start + this.range;
+	}
+
+	public int getRange() {
+		return range;
+	}
+
+	public long getStart() {
+		return start;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return (int) (this.getStart() + this.getRange());
 	}
 
 	@Override
@@ -53,26 +69,20 @@ public class ILRangeTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
-		this.start = in.readILInt();
-		this.range = in.readShort() & 0xFFFF;		
+	protected boolean sameValue(ILTag other) {
+		ILRangeTag t = (ILRangeTag) other;
+		return (this.getStart() == t.getStart()) && (this.getRange() == t.getRange());
 	}
 
-	public long getStart() {
-		return start;
-	}
-
-	public void setStart(long start) {
-		this.start = start;
-	}
-	
-	public int getRange() {
-		return range;
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeILInt(this.getStart());
+		out.writeShort((short) this.getRange());
 	}
 
 	/**
 	 * Sets the range.
-	 *  
+	 * 
 	 * @param range The range. It must be a value between 0 and 65535.
 	 * @throws IllegalArgumentException if range is invalid.
 	 */
@@ -82,18 +92,11 @@ public class ILRangeTag extends ILTag {
 		}
 		this.range = range;
 	}
-	
-	public long getEnd() {
-		return this.start + this.range;
+
+	public void setStart(long start) {
+		this.start = start;
 	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILRangeTag t = (ILRangeTag)other;
-		return (this.getStart() == t.getStart()) &&
-				(this.getRange() == t.getRange());
-	}
-	
+
 	/**
 	 * Sets the value of this tag.
 	 * 
@@ -105,10 +108,5 @@ public class ILRangeTag extends ILTag {
 	public void setValue(long start, int range) {
 		this.setStart(start);
 		this.setRange(range);
-	}
-	
-	@Override
-	protected int getValueHashCode() {
-		return (int)(this.getStart() + this.getRange());
 	}
 }

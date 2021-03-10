@@ -23,8 +23,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard ILInt array tag but can also be
- * used to implement other variants.
+ * This class implements the standard ILInt array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.18
@@ -32,32 +32,13 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
 public class ILILIntArrayTag extends ILTag {
 
 	private ArrayList<Long> value = new ArrayList<>();
-	
+
 	public ILILIntArrayTag() {
 		this(ILStandardTags.TAG_ILINT64_ARRAY.ordinal());
 	}
-	
+
 	public ILILIntArrayTag(long id) {
 		super(id);
-	}
-
-	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-
-		out.writeILInt(this.value.size());
-		for (Long v: this.value) {
-			out.writeILInt(v);
-		}		
-	}
-
-	@Override
-	public long getValueSize() {
-
-		long size = ILIntCodec.getEncodedSize(this.value.size());
-		for (Long v: this.value) {
-			size += ILIntCodec.getEncodedSize(v);
-		}
-		return size;
 	}
 
 	@Override
@@ -65,7 +46,7 @@ public class ILILIntArrayTag extends ILTag {
 
 		long count = in.readILInt();
 		this.value.clear();
-		for (;count > 0; count--) {
+		for (; count > 0; count--) {
 			this.value.add(in.readILInt());
 		}
 	}
@@ -73,10 +54,30 @@ public class ILILIntArrayTag extends ILTag {
 	public List<Long> getValue() {
 		return value;
 	}
-	
+
+	@Override
+	protected int getValueHashCode() {
+		long code = 0;
+
+		for (Long l : this.getValue()) {
+			code += l;
+		}
+		return Long.hashCode(code);
+	}
+
+	@Override
+	public long getValueSize() {
+
+		long size = ILIntCodec.getEncodedSize(this.value.size());
+		for (Long v : this.value) {
+			size += ILIntCodec.getEncodedSize(v);
+		}
+		return size;
+	}
+
 	@Override
 	protected boolean sameValue(ILTag other) {
-		ILILIntArrayTag t = (ILILIntArrayTag)other;
+		ILILIntArrayTag t = (ILILIntArrayTag) other;
 		if (this.getValue().size() != t.getValue().size()) {
 			return false;
 		}
@@ -87,14 +88,13 @@ public class ILILIntArrayTag extends ILTag {
 		}
 		return true;
 	}
-	
+
 	@Override
-	protected int getValueHashCode() {
-		long code = 0;
-		
-		for (Long l: this.getValue()) {
-			code += l;
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+
+		out.writeILInt(this.value.size());
+		for (Long v : this.value) {
+			out.writeILInt(v);
 		}
-		return Long.hashCode(code);
-	}	
+	}
 }

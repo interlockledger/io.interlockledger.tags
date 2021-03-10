@@ -22,8 +22,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard big integer tag but can also be
- * used to implement other variants.
+ * This class implements the standard big integer tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.17
@@ -31,13 +31,47 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
 public class ILBigDecimalTag extends ILTag {
 
 	private BigDecimal value;
-	
+
 	public ILBigDecimalTag() {
 		this(ILStandardTags.TAG_BDEC.ordinal());
 	}
-	
+
 	public ILBigDecimalTag(long id) {
 		super(id);
+	}
+
+	@Override
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		int scale = in.readInt();
+		byte[] unscaled = readRawBytes(tagSize - 4, in);
+		this.value = new BigDecimal(new BigInteger(unscaled), scale);
+	}
+
+	public BigDecimal getValue() {
+		return value;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return this.getValue().hashCode();
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public long getValueSize() {
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
+		}
+		return 4l + ILBigIntTag.getBigIntegerSize(this.value.unscaledValue());
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBigDecimalTag t = (ILBigDecimalTag) other;
+		return this.getValue().equals(t.getValue());
 	}
 
 	@Override
@@ -49,41 +83,7 @@ public class ILBigDecimalTag extends ILTag {
 		out.writeBytes(ILBigIntTag.serializeBigInteger(this.value.unscaledValue()));
 	}
 
-	@Override
-	public long getValueSize() {
-		if (this.value == null) {
-			throw new IllegalStateException("Value not set.");	
-		}
-		return 4l + ILBigIntTag.getBigIntegerSize(this.value.unscaledValue());
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
-		int scale = in.readInt();
-		byte [] unscaled = readRawBytes(tagSize - 4, in);
-		this.value = new BigDecimal(new BigInteger(unscaled), scale);	
-	}
-
-	public BigDecimal getValue() {
-		return value;
-	}
-
 	public void setValue(BigDecimal value) {
 		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBigDecimalTag t = (ILBigDecimalTag)other;
-		return this.getValue().equals(t.getValue());
-	}
-
-	@Override
-	protected int getValueHashCode() {
-		if (this.getValue() != null) {
-			return this.getValue().hashCode();
-		} else {
-			return 0;
-		}
 	}
 }

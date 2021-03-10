@@ -16,8 +16,8 @@
 package io.interlockledger.iltags;
 
 /**
- * This class implements the standard OID tag but can also be
- * used to implement other variants.
+ * This class implements the standard OID tag but can also be used to implement
+ * other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.18

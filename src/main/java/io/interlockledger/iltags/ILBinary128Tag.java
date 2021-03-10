@@ -21,23 +21,23 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard float 128 array tag but can also be
- * used to implement other variants.
+ * This class implements the standard float 128 array tag but can also be used
+ * to implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
 public class ILBinary128Tag extends ILFixedSizeTag {
 
-	private byte [] value;
+	private byte[] value;
 
 	public ILBinary128Tag() {
 		this(ILStandardTags.TAG_BINARY128.ordinal());
 	}
-	
+
 	public ILBinary128Tag(long id) {
 		super(id, 16);
-		this.value = new byte[16]; 
+		this.value = new byte[16];
 	}
 
 	@Override
@@ -45,30 +45,30 @@ public class ILBinary128Tag extends ILFixedSizeTag {
 		in.readBytes(this.value);
 	}
 
+	public byte[] getValue() {
+		return value;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return Arrays.hashCode(this.getValue());
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBinary128Tag t = (ILBinary128Tag) other;
+		return Arrays.equals(this.getValue(), t.getValue());
+	}
+
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		out.writeBytes(this.value);
 	}
 
-	public byte [] getValue() {
-		return value;
-	}
-
-	public void setValue(byte [] value) {
+	public void setValue(byte[] value) {
 		if (value.length != this.value.length) {
 			throw new IllegalArgumentException("value must have 16 bytes.");
 		}
 		System.arraycopy(value, 0, this.value, 0, this.value.length);
 	}
-
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBinary128Tag t = (ILBinary128Tag)other;
-		return Arrays.equals(this.getValue(), t.getValue());
-	}
-	
-	@Override
-	protected int getValueHashCode() {
-		return Arrays.hashCode(this.getValue());
-	}	
 }

@@ -25,9 +25,9 @@ import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
- * Base class for ILTagDataWriter implementations. It provides
- * the implementation for most of the methods of the interface, simplifying
- * the implementation of the subclasses.
+ * Base class for ILTagDataWriter implementations. It provides the
+ * implementation for most of the methods of the interface, simplifying the
+ * implementation of the subclasses.
  *
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
@@ -35,9 +35,9 @@ import io.interlockledger.iltags.ilint.ILIntException;
 public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 
 	private final ByteBuffer tmp;
-	
+
 	private long offset = 0;
-	
+
 	/**
 	 * Creates a new instance of this class.
 	 */
@@ -45,7 +45,12 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 		tmp = ByteBuffer.allocate(9);
 		tmp.order(ByteOrder.BIG_ENDIAN);
 	}
-	
+
+	@Override
+	public long getOffset() {
+		return offset;
+	}
+
 	/**
 	 * Updates the current offset.
 	 * 
@@ -54,27 +59,73 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	protected void updateOffset(int size) {
 		this.offset += size;
 	}
-	
+
 	@Override
 	public void writeByte(byte v) throws ILTagException {
 		writeByteCore(v);
 		updateOffset(1);
 	}
-	
+
 	/**
-	 * Writes a byte. This method is called by writeByte(byte) before
-	 * the update of the offset.
+	 * Writes a byte. This method is called by writeByte(byte) before the update of
+	 * the offset.
 	 * 
 	 * @param v The value to be written.
 	 * @throws ILTagException In case of error.
 	 */
 	protected abstract void writeByteCore(byte v) throws ILTagException;
-	
+
 	@Override
-	public void writeShort(short v) throws ILTagException {
+	public void writeBytes(byte[] v) throws ILTagException {
+		this.writeBytes(v, 0, v.length);
+	}
+
+	@Override
+	public void writeBytes(byte[] v, int off, int size) throws ILTagException {
+		this.writeBytesCore(v, off, size);
+		this.updateOffset(size);
+	}
+
+	private void writeBytes(ByteBuffer tmp) throws ILTagException {
+		this.writeBytes(tmp.array(), 0, tmp.position());
+	}
+
+	/**
+	 * Writes bytes. This method is called by writeBytes(byte,int,int) before the
+	 * update of the offset.
+	 * 
+	 * @param v    The value to be written.
+	 * @param off  The offset.
+	 * @param size The size.
+	 * @throws ILTagException In case of error.
+	 */
+	protected abstract void writeBytesCore(byte[] v, int off, int size) throws ILTagException;
+
+	@Override
+	public void writeDouble(double v) throws ILTagException {
 		tmp.rewind();
-		tmp.putShort(v);
+		tmp.putDouble(v);
 		this.writeBytes(tmp);
+	}
+
+	@Override
+	public void writeFloat(float v) throws ILTagException {
+		tmp.rewind();
+		tmp.putFloat(v);
+		this.writeBytes(tmp);
+
+	}
+
+	@Override
+	public void writeILInt(long v) throws ILTagException {
+
+		tmp.rewind();
+		try {
+			ILIntCodec.encode(v, tmp);
+			this.writeBytes(tmp);
+		} catch (ILIntException e) {
+			throw new ILTagException(e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -92,66 +143,15 @@ public abstract class ILBaseTagDataWriter implements ILTagDataWriter {
 	}
 
 	@Override
-	public void writeFloat(float v) throws ILTagException {
+	public void writeShort(short v) throws ILTagException {
 		tmp.rewind();
-		tmp.putFloat(v);
-		this.writeBytes(tmp);
-
-	}
-
-	@Override
-	public void writeDouble(double v) throws ILTagException {
-		tmp.rewind();
-		tmp.putDouble(v);
+		tmp.putShort(v);
 		this.writeBytes(tmp);
 	}
 
-	@Override
-	public void writeBytes(byte[] v) throws ILTagException {
-		this.writeBytes(v, 0, v.length);
-	}
-
-	private void writeBytes(ByteBuffer tmp) throws ILTagException {
-		this.writeBytes(tmp.array(), 0, tmp.position());
-	}
-	
-	@Override
-	public void writeBytes(byte[] v, int off, int size) throws ILTagException {
-		this.writeBytesCore(v, off, size);
-		this.updateOffset(size);
-	}
-
-	/**
-	 * Writes bytes. This method is called by writeBytes(byte,int,int) before
-	 * the update of the offset.
-	 * 
-	 * @param v The value to be written.
-	 * @param off The offset.
-	 * @param size The size.
-	 * @throws ILTagException In case of error.
-	 */
-	protected abstract void writeBytesCore(byte[] v, int off, int size) throws ILTagException;
-	
-	@Override
-	public void writeILInt(long v) throws ILTagException {
-		
-		tmp.rewind();
-		try {
-			ILIntCodec.encode(v, tmp);
-			this.writeBytes(tmp);
-		} catch (ILIntException e) {
-			throw new ILTagException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public long getOffset() {
-		return offset;
-	}
-	
 	@Override
 	public void writeString(CharSequence v) throws ILTagException {
-		
+
 		if (v.length() > 0) {
 			CharBuffer src = CharBuffer.wrap(v);
 			try {

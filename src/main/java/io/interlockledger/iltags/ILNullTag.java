@@ -21,39 +21,26 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
 /**
  * This class implements the standard null ILTag or any other variant.
  * 
- * <p>The standard null tag does not have any value and is serialized
- * to a single 0x00 byte. Variants of this class that use other codes will
- * be serialized as defined by the ILTag standard using a ILInt to encode
- * tag ID and a single 0x00 byte to represent the value size.</p>
+ * <p>
+ * The standard null tag does not have any value and is serialized to a single
+ * 0x00 byte. Variants of this class that use other codes will be serialized as
+ * defined by the ILTag standard using a ILInt to encode tag ID and a single
+ * 0x00 byte to represent the value size.
+ * </p>
  *
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
 public class ILNullTag extends ILTag {
-	
+
 	public static final ILNullTag NULL = new ILNullTag();
 
 	public ILNullTag() {
 		super(ILStandardTags.TAG_NULL.ordinal());
 	}
-	
+
 	public ILNullTag(long id) {
 		super(id);
-	}
-
-	@Override
-	protected final void serializeValue(ILTagDataWriter out) {
-		// No value to serialize
-	}
-	
-	@Override
-	protected final boolean sameValue(ILTag other) {
-		return true;
-	}
-
-	@Override
-	public final long getValueSize() {
-		return 0;
 	}
 
 	@Override
@@ -62,9 +49,24 @@ public class ILNullTag extends ILTag {
 			throw new ILTagException("");
 		}
 	}
-	
+
 	@Override
 	protected int getValueHashCode() {
 		return 0;
-	}	
+	}
+
+	@Override
+	public final long getValueSize() {
+		return 0;
+	}
+
+	@Override
+	protected final boolean sameValue(ILTag other) {
+		return true;
+	}
+
+	@Override
+	protected final void serializeValue(ILTagDataWriter out) {
+		// No value to serialize
+	}
 }

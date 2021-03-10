@@ -26,7 +26,7 @@ import io.interlockledger.iltags.io.ILTagDataReader;
  * @since 2019.06.12
  */
 public abstract class ILFixedSizeTag extends ILTag {
-	
+
 	/**
 	 * Size of the value in bytes.
 	 */
@@ -35,7 +35,7 @@ public abstract class ILFixedSizeTag extends ILTag {
 	/**
 	 * Creates a new instance of this class.
 	 * 
-	 * @param id The tag ID.
+	 * @param id        The tag ID.
 	 * @param valueSize The size of the value in bytes.
 	 */
 	protected ILFixedSizeTag(long id, int valueSize) {
@@ -44,13 +44,7 @@ public abstract class ILFixedSizeTag extends ILTag {
 	}
 
 	@Override
-	public long getValueSize() {
-		return this.valueSize;
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
 		if (tagSize != this.valueSize) {
 			throw new ILTagException("Invalid byte tag size.");
 		}
@@ -58,15 +52,20 @@ public abstract class ILFixedSizeTag extends ILTag {
 	}
 
 	/**
-	 * Actually deserializes the value of the tag. It is called by 
-	 * deserializeValue(ILTagFactory,long,DataInputStream) after the
-	 * verification of the intial parameters.
+	 * Actually deserializes the value of the tag. It is called by
+	 * deserializeValue(ILTagFactory,long,DataInputStream) after the verification of
+	 * the intial parameters.
 	 * 
 	 * @param factory The ILTagFactory if required.
-	 * @param in The size of the buff in bytes. Use -1 if the tag size is unknown.
+	 * @param in      The size of the buff in bytes. Use -1 if the tag size is
+	 *                unknown.
 	 * @throws ILTagException In case of erros.
-	 * @throws IOException  In case of I/O erros.
+	 * @throws IOException    In case of I/O erros.
 	 */
-	protected abstract void deserializeValueCore(ILTagFactory factory, ILTagDataReader in)
-			throws ILTagException;
+	protected abstract void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException;
+
+	@Override
+	public long getValueSize() {
+		return this.valueSize;
+	}
 }

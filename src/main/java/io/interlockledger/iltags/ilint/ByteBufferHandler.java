@@ -20,32 +20,33 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 /**
- * Implementation of the ILIntCodec's OutputHandler and InputHandler for ByteBuffer instances.
+ * Implementation of the ILIntCodec's OutputHandler and InputHandler for
+ * ByteBuffer instances.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.10
  */
 public class ByteBufferHandler implements ILIntCodec.OutputHandler<ByteBuffer>, ILIntCodec.InputHandler<ByteBuffer> {
-	
+
 	/**
 	 * Preallocated instance of this class.
 	 */
 	public static final ByteBufferHandler INSTANCE = new ByteBufferHandler();
 
 	@Override
-	public void write(int b, ByteBuffer out) throws ILIntException {
-		try {
-			out.put((byte)b);
-		} catch (BufferOverflowException e) {
-			throw new ILIntException(e); 
-		}
-	}
-	
-	@Override
 	public int get(ByteBuffer in) throws ILIntException {
 		try {
 			return in.get() & 0xFF;
 		} catch (BufferUnderflowException e) {
+			throw new ILIntException(e);
+		}
+	}
+
+	@Override
+	public void write(int b, ByteBuffer out) throws ILIntException {
+		try {
+			out.put((byte) b);
+		} catch (BufferOverflowException e) {
 			throw new ILIntException(e);
 		}
 	}

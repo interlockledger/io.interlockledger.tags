@@ -15,7 +15,11 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -25,8 +29,55 @@ import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 public class ILNullTagTest {
 
 	@Test
+	public void testDeserializeValue() throws Exception {
+		ILNullTag t = new ILNullTag();
+
+		t.deserializeValue(null, 0, new ILMemoryTagDataReader(new byte[0]));
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testDeserializeValueFail() throws Exception {
+		ILNullTag t = new ILNullTag();
+
+		t.deserializeValue(null, 1, new ILMemoryTagDataReader(new byte[0]));
+	}
+
+	@Test
+	public void testEquals() {
+		ILNullTag t1 = new ILNullTag();
+		ILNullTag t2 = new ILNullTag();
+		ILNullTag t4 = new ILNullTag(15);
+
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t4));
+	}
+
+	@Test
+	public void testGetValueSize() {
+		ILNullTag t = new ILNullTag();
+
+		assertEquals(0, t.getValueSize());
+	}
+
+	@Test
+	public void testILNullTag() {
+		ILNullTag t = new ILNullTag();
+
+		assertEquals(ILStandardTags.TAG_NULL.ordinal(), t.getId());
+	}
+
+	@Test
+	public void testILNullTagLong() {
+		ILNullTag t = new ILNullTag(123);
+
+		assertEquals(123, t.getId());
+	}
+
+	@Test
 	public void testNULL() {
-		
+
 		assertNotNull(ILNullTag.NULL);
 		assertEquals(ILStandardTags.TAG_NULL.ordinal(), ILNullTag.NULL.getId());
 	}
@@ -35,55 +86,8 @@ public class ILNullTagTest {
 	public void testSerializeValue() throws Exception {
 		ILNullTag t = new ILNullTag();
 		ILMemoryTagDataWriter out = new ILMemoryTagDataWriter();
-		
+
 		t.serializeValue(out);
 		assertArrayEquals(new byte[0], out.toByteArray());
-	}
-
-	@Test
-	public void testGetValueSize() {
-		ILNullTag t = new ILNullTag();
-		
-		assertEquals(0, t.getValueSize());
-	}
-
-	@Test
-	public void testDeserializeValue() throws Exception {
-		ILNullTag t = new ILNullTag();
-		
-		t.deserializeValue(null, 0, new ILMemoryTagDataReader(new byte[0]));
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testDeserializeValueFail() throws Exception {
-		ILNullTag t = new ILNullTag();
-		
-		t.deserializeValue(null, 1, new ILMemoryTagDataReader(new byte[0]));
-	}	
-
-	@Test
-	public void testILNullTag() {
-		ILNullTag t = new ILNullTag();
-		
-		assertEquals(ILStandardTags.TAG_NULL.ordinal(), t.getId());
-	}
-	
-	@Test
-	public void testILNullTagLong() {
-		ILNullTag t = new ILNullTag(123);
-		
-		assertEquals(123, t.getId());
-	}
-	
-	@Test
-	public void testEquals() {
-		ILNullTag t1 = new ILNullTag();
-		ILNullTag t2 = new ILNullTag();
-		ILNullTag t4 = new ILNullTag(15);
-		
-		assertTrue(t1.equals(t1));
-		assertTrue(t1.equals(t2));
-		assertFalse(t1.equals(null));
-		assertFalse(t1.equals(t4));
 	}
 }

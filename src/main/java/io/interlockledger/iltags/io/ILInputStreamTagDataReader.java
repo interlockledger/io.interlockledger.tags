@@ -27,10 +27,10 @@ import io.interlockledger.iltags.ILTagException;
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
-public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements Closeable  {
+public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements Closeable {
 
 	protected final InputStream in;
-	
+
 	/**
 	 * Creates a new instance of this class.
 	 * 
@@ -41,14 +41,19 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 	}
 
 	@Override
+	public void close() throws IOException {
+		this.in.close();
+	}
+
+	@Override
 	protected byte readByteCore() throws ILTagException {
-		
+
 		try {
 			int r = in.read();
 			if (r < 0) {
 				throw new ILTagNotEnoughDataException("Unexpected end of stream.");
 			}
-			return (byte)r;
+			return (byte) r;
 		} catch (IOException e) {
 			throw new ILTagException(e.getMessage(), e);
 		}
@@ -56,7 +61,7 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 
 	@Override
 	protected void readBytesCore(byte[] v, int off, int size) throws ILTagException {
-		
+
 		try {
 			while (size > 0) {
 				int r = this.in.read(v, off, size);
@@ -73,7 +78,7 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 
 	@Override
 	protected void skipCore(long n) throws ILTagException {
-		
+
 		try {
 			while (n > 0) {
 				long s = this.in.skip(n);
@@ -87,10 +92,5 @@ public class ILInputStreamTagDataReader extends ILBaseTagDataReader implements C
 		} catch (IOException e) {
 			throw new ILTagException(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public void close() throws IOException {
-		this.in.close();
 	}
 }

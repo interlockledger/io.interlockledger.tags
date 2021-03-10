@@ -27,22 +27,12 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  */
 public class ILILIntTag extends ILInt64Tag {
 
-	public ILILIntTag(long id) {
-		super(id);
-	}
-	
 	public ILILIntTag() {
 		super(ILStandardTags.TAG_ILINT64.ordinal());
 	}
 
-	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeILInt(this.getValue());
-	}
-
-	@Override
-	public long getValueSize() {
-		return ILIntCodec.getEncodedSize(this.value);
+	public ILILIntTag(long id) {
+		super(id);
 	}
 
 	@Override
@@ -52,5 +42,15 @@ public class ILILIntTag extends ILInt64Tag {
 			throw new ILTagException("Invalid value.");
 		}
 		this.value = in.readILInt();
+	}
+
+	@Override
+	public long getValueSize() {
+		return ILIntCodec.getEncodedSize(this.value);
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeILInt(this.getValue());
 	}
 }

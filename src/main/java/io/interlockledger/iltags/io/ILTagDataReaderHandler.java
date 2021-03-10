@@ -20,13 +20,14 @@ import io.interlockledger.iltags.ilint.ILIntCodec;
 import io.interlockledger.iltags.ilint.ILIntException;
 
 /**
- * Implementation of the ILIntCodec's InputHandler for ILTagDataReader instances.
+ * Implementation of the ILIntCodec's InputHandler for ILTagDataReader
+ * instances.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
  */
 public class ILTagDataReaderHandler implements ILIntCodec.InputHandler<ILTagDataReader> {
-	
+
 	public static final ILTagDataReaderHandler INSTANCE = new ILTagDataReaderHandler();
 
 	@Override

@@ -28,49 +28,45 @@ import io.interlockledger.iltags.io.UTF8Utils;
 public class ILStringTag extends ILTag {
 
 	protected String value;
-	
+
 	public ILStringTag() {
 		this(ILStandardTags.TAG_STRING.ordinal());
 	}
-	
+
 	public ILStringTag(long id) {
 		super(id);
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-
-		if (this.value == null) {
-			throw new IllegalStateException("Value not set.");	
-		}
-		out.writeString(this.value);
-	}
-
-	@Override
-	public long getValueSize() {
-		if (this.value == null) {
-			throw new IllegalStateException("Value not set.");	
-		}
-		return UTF8Utils.getEncodedSize(this.value); 
-	}
-
-	@Override
 	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
-		this.value = in.readString(tagSize);	
+		this.value = in.readString(tagSize);
 	}
 
 	public String getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	@Override
+	protected int getValueHashCode() {
+		if (this.getValue() != null) {
+			return this.getValue().hashCode();
+		} else {
+			return 0;
+		}
 	}
-	
+
+	@Override
+	public long getValueSize() {
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
+		}
+		return UTF8Utils.getEncodedSize(this.value);
+	}
+
 	@Override
 	protected boolean sameValue(ILTag other) {
-		ILStringTag t = (ILStringTag)other;
-		
+		ILStringTag t = (ILStringTag) other;
+
 		if (this.getValue() == t.getValue()) {
 			return true;
 		}
@@ -79,13 +75,17 @@ public class ILStringTag extends ILTag {
 		}
 		return this.getValue().equals(t.getValue());
 	}
-	
+
 	@Override
-	protected int getValueHashCode() {
-		if (this.getValue() != null) {
-			return this.getValue().hashCode();
-		} else {
-			return 0;
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+
+		if (this.value == null) {
+			throw new IllegalStateException("Value not set.");
 		}
+		out.writeString(this.value);
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

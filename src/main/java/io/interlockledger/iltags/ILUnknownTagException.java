@@ -24,7 +24,7 @@ package io.interlockledger.iltags;
 public class ILUnknownTagException extends ILTagException {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final long tagId;
 
 	public ILUnknownTagException(long tagId) {
@@ -34,5 +34,5 @@ public class ILUnknownTagException extends ILTagException {
 
 	public long getTagId() {
 		return tagId;
-	}	
+	}
 }

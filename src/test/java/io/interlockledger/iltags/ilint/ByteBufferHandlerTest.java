@@ -26,16 +26,35 @@ import org.junit.Test;
 public class ByteBufferHandlerTest {
 
 	@Test
+	public void testGet() throws Exception {
+		byte[] src = new byte[256];
+		for (int i = 0; i < src.length; i++) {
+			src[i] = (byte) i;
+		}
+		ByteBuffer in = ByteBuffer.wrap(src);
+
+		for (int i = 0; i < src.length; i++) {
+			assertEquals(i, ByteBufferHandler.INSTANCE.get(in));
+		}
+
+		try {
+			ByteBufferHandler.INSTANCE.get(in);
+			fail();
+		} catch (ILIntException e) {
+		}
+	}
+
+	@Test
 	public void testInstance() {
 
 		assertNotNull(ByteBufferHandler.INSTANCE);
 	}
-	
+
 	@Test
 	public void testWrite() throws Exception {
-		
+
 		ByteBuffer out = ByteBuffer.allocate(256);
-		
+
 		for (int i = 0; i < 256; i++) {
 			ByteBufferHandler.INSTANCE.write(i, out);
 		}
@@ -45,29 +64,12 @@ public class ByteBufferHandlerTest {
 		for (int i = 0; i < 256; i++) {
 			assertEquals(i, out.get() & 0xFF);
 		}
-		
+
 		try {
 			ByteBufferHandler.INSTANCE.write(0, out);
 			fail();
-		} catch (ILIntException e) {}		
-	}
-
-	@Test
-	public void testGet() throws Exception {
-		byte [] src = new byte[256];
-		for (int i = 0; i < src.length; i++) {
-			src[i] = (byte)i;
+		} catch (ILIntException e) {
 		}
-		ByteBuffer in = ByteBuffer.wrap(src);
-		
-		for (int i = 0; i < src.length; i++) {
-			assertEquals(i, ByteBufferHandler.INSTANCE.get(in));
-		}
-		
-		try {
-			ByteBufferHandler.INSTANCE.get(in);
-			fail();
-		} catch (ILIntException e) {}
 	}
 
 }

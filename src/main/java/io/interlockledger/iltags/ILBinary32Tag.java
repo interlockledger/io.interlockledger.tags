@@ -19,8 +19,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard float 32 array tag but can also be
- * used to implement other variants.
+ * This class implements the standard float 32 array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
@@ -32,7 +32,7 @@ public class ILBinary32Tag extends ILFixedSizeTag {
 	public ILBinary32Tag() {
 		this(ILStandardTags.TAG_BINARY32.ordinal());
 	}
-	
+
 	public ILBinary32Tag(long id) {
 		super(id, 4);
 	}
@@ -42,27 +42,27 @@ public class ILBinary32Tag extends ILFixedSizeTag {
 		this.value = in.readFloat();
 	}
 
+	public float getValue() {
+		return value;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return Float.floatToIntBits(this.getValue());
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBinary32Tag t = (ILBinary32Tag) other;
+		return this.getValue() == t.getValue();
+	}
+
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		out.writeFloat(this.value);
 	}
 
-	public float getValue() {
-		return value;
-	}
-
 	public void setValue(float value) {
 		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBinary32Tag t = (ILBinary32Tag)other;
-		return this.getValue() == t.getValue();
-	}
-	
-	@Override
-	protected int getValueHashCode() {
-		return Float.floatToIntBits(this.getValue());
 	}
 }

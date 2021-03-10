@@ -25,25 +25,19 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
  * @since 2019.06.12
  */
 public class ILInt32Tag extends ILFixedSizeTag {
-	
+
 	protected int value;
 
-	public ILInt32Tag(long id) {
-		super(id, 4);
-	}
-	
 	public ILInt32Tag() {
 		this(ILStandardTags.TAG_INT32.ordinal());
 	}
 
-	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeInt(this.value);
+	public ILInt32Tag(long id) {
+		super(id, 4);
 	}
 
 	@Override
-	public void deserializeValueCore(ILTagFactory factory, ILTagDataReader in)
-			throws ILTagException {
+	public void deserializeValueCore(ILTagFactory factory, ILTagDataReader in) throws ILTagException {
 		this.value = in.readInt();
 	}
 
@@ -51,19 +45,24 @@ public class ILInt32Tag extends ILFixedSizeTag {
 		return value;
 	}
 
-	public void setValue(int value) {
-		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILInt32Tag t = (ILInt32Tag)other;
-		return this.getValue() == t.getValue();
-	}
-	
 	@Override
 	protected int getValueHashCode() {
 		return this.getValue();
-	}	
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILInt32Tag t = (ILInt32Tag) other;
+		return this.getValue() == t.getValue();
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeInt(this.value);
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
 
 }

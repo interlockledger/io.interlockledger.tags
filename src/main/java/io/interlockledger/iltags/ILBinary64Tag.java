@@ -19,8 +19,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard float 64 array tag but can also be
- * used to implement other variants.
+ * This class implements the standard float 64 array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
@@ -32,7 +32,7 @@ public class ILBinary64Tag extends ILFixedSizeTag {
 	public ILBinary64Tag() {
 		this(ILStandardTags.TAG_BINARY64.ordinal());
 	}
-	
+
 	public ILBinary64Tag(long id) {
 		super(id, 8);
 	}
@@ -42,27 +42,27 @@ public class ILBinary64Tag extends ILFixedSizeTag {
 		this.value = in.readDouble();
 	}
 
+	public double getValue() {
+		return value;
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return (int) Double.doubleToLongBits(this.getValue());
+	}
+
+	@Override
+	protected boolean sameValue(ILTag other) {
+		ILBinary64Tag t = (ILBinary64Tag) other;
+		return this.getValue() == t.getValue();
+	}
+
 	@Override
 	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
 		out.writeDouble(this.value);
 	}
 
-	public double getValue() {
-		return value;
-	}
-
 	public void setValue(double value) {
 		this.value = value;
-	}
-	
-	@Override
-	protected boolean sameValue(ILTag other) {
-		ILBinary64Tag t = (ILBinary64Tag)other;
-		return this.getValue() == t.getValue();
-	}
-	
-	@Override
-	protected int getValueHashCode() {
-		return (int)Double.doubleToLongBits(this.getValue());
 	}
 }

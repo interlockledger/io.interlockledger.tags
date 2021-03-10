@@ -32,15 +32,15 @@ public class ILTagException extends Exception {
 		super(message);
 	}
 
-	public ILTagException(Throwable cause) {
-		super(cause);
-	}
-
 	public ILTagException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	public ILTagException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ILTagException(Throwable cause) {
+		super(cause);
 	}
 }

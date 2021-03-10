@@ -22,7 +22,7 @@ package io.interlockledger.iltags;
  * @since 2019.06.12
  */
 public class ILUInt64Tag extends ILInt64Tag {
-	
+
 	public ILUInt64Tag() {
 		super(ILStandardTags.TAG_UINT64.ordinal());
 	}

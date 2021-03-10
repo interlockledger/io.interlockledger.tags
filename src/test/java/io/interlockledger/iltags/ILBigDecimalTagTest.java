@@ -15,7 +15,11 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,46 +32,14 @@ import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 
 public class ILBigDecimalTagTest {
 
-	private static final byte [] SAMPLE_UNSCALED = TestUtils.createSampleByteArray(64);
+	private static final byte[] SAMPLE_UNSCALED = TestUtils.createSampleByteArray(64);
 	private static final int SAMPLE_SCALE = 11;
 	private static final BigDecimal SAMPLE = new BigDecimal(new BigInteger(SAMPLE_UNSCALED), SAMPLE_SCALE);
-	
-
-	@Test
-	public void testSerializeValue() throws Exception {
-		ILBigDecimalTag t = new ILBigDecimalTag();
-
-		t.setValue(SAMPLE);
-		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
-		t.serializeValue(w);
-		
-		ByteBuffer b = ByteBuffer.allocate(SAMPLE_UNSCALED.length + 4 - 1);
-		b.putInt(SAMPLE_SCALE);
-		b.put(SAMPLE_UNSCALED, 1, SAMPLE_UNSCALED.length - 1);
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-
-	@Test
-	public void testGetValueSize() {
-		ILBigDecimalTag t = new ILBigDecimalTag();
-		
-		t.setValue(SAMPLE);
-		assertEquals(4 + SAMPLE_UNSCALED.length - 1, t.getValueSize());
-		
-		t.setValue(BigDecimal.ONE);
-		assertEquals(4 + 1, t.getValueSize());
-		
-		t.setValue(BigDecimal.ONE.negate());
-		assertEquals(4 + 1, t.getValueSize());
-		
-		t.setValue(new BigDecimal(0xFFFF));
-		assertEquals(4 + 3, t.getValueSize());
-	}
 
 	@Test
 	public void testDeserializeValue() throws Exception {
 		ByteBuffer b = ByteBuffer.allocate(SAMPLE_UNSCALED.length + 4);
-		
+
 		b.putInt(SAMPLE_SCALE);
 		b.put(SAMPLE_UNSCALED);
 
@@ -75,11 +47,11 @@ public class ILBigDecimalTagTest {
 		t.deserializeValue(null, b.position(), new ILMemoryTagDataReader(b.array()));
 		assertEquals(SAMPLE, t.getValue());
 	}
-	
+
 	@Test(expected = ILTagException.class)
 	public void testDeserializeValueFail() throws Exception {
 		ByteBuffer b = ByteBuffer.allocate(SAMPLE_UNSCALED.length + 4 - 1);
-		
+
 		b.putInt(SAMPLE_SCALE);
 		b.put(SAMPLE_UNSCALED, 0, SAMPLE_UNSCALED.length - 1);
 
@@ -88,18 +60,21 @@ public class ILBigDecimalTagTest {
 	}
 
 	@Test
-	public void testILBigDecimalTag() {
-		ILBigDecimalTag t = new ILBigDecimalTag();
-		
-		assertEquals(ILStandardTags.TAG_BDEC.ordinal(), t.getId());
-		assertNull(t.getValue());
-	}
+	public void testEquals() {
+		ILBigDecimalTag t1 = new ILBigDecimalTag();
+		t1.setValue(BigDecimal.ONE);
+		ILBigDecimalTag t2 = new ILBigDecimalTag();
+		t2.setValue(BigDecimal.ONE);
+		ILBigDecimalTag t3 = new ILBigDecimalTag();
+		t3.setValue(BigDecimal.TEN);
+		ILBigDecimalTag t4 = new ILBigDecimalTag(15);
+		t4.setValue(BigDecimal.ONE);
 
-	@Test
-	public void testILBigDecimalTagLong() {
-		ILBigDecimalTag t = new ILBigDecimalTag(1234);
-		assertEquals(1234, t.getId());
-		assertNull(t.getValue());
+		assertTrue(t1.equals(t1));
+		assertTrue(t1.equals(t2));
+		assertFalse(t1.equals(null));
+		assertFalse(t1.equals(t3));
+		assertFalse(t1.equals(t4));
 	}
 
 	@Test
@@ -113,22 +88,50 @@ public class ILBigDecimalTagTest {
 		t.setValue(SAMPLE);
 		assertEquals(SAMPLE, t.getValue());
 	}
-	
+
 	@Test
-	public void testEquals() {
-		ILBigDecimalTag t1 = new ILBigDecimalTag();
-		t1.setValue(BigDecimal.ONE);
-		ILBigDecimalTag t2 = new ILBigDecimalTag();
-		t2.setValue(BigDecimal.ONE);
-		ILBigDecimalTag t3 = new ILBigDecimalTag();
-		t3.setValue(BigDecimal.TEN);
-		ILBigDecimalTag t4 = new ILBigDecimalTag(15);
-		t4.setValue(BigDecimal.ONE);
-		
-		assertTrue(t1.equals(t1));
-		assertTrue(t1.equals(t2));
-		assertFalse(t1.equals(null));
-		assertFalse(t1.equals(t3));
-		assertFalse(t1.equals(t4));
+	public void testGetValueSize() {
+		ILBigDecimalTag t = new ILBigDecimalTag();
+
+		t.setValue(SAMPLE);
+		assertEquals(4 + SAMPLE_UNSCALED.length - 1, t.getValueSize());
+
+		t.setValue(BigDecimal.ONE);
+		assertEquals(4 + 1, t.getValueSize());
+
+		t.setValue(BigDecimal.ONE.negate());
+		assertEquals(4 + 1, t.getValueSize());
+
+		t.setValue(new BigDecimal(0xFFFF));
+		assertEquals(4 + 3, t.getValueSize());
+	}
+
+	@Test
+	public void testILBigDecimalTag() {
+		ILBigDecimalTag t = new ILBigDecimalTag();
+
+		assertEquals(ILStandardTags.TAG_BDEC.ordinal(), t.getId());
+		assertNull(t.getValue());
+	}
+
+	@Test
+	public void testILBigDecimalTagLong() {
+		ILBigDecimalTag t = new ILBigDecimalTag(1234);
+		assertEquals(1234, t.getId());
+		assertNull(t.getValue());
+	}
+
+	@Test
+	public void testSerializeValue() throws Exception {
+		ILBigDecimalTag t = new ILBigDecimalTag();
+
+		t.setValue(SAMPLE);
+		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
+		t.serializeValue(w);
+
+		ByteBuffer b = ByteBuffer.allocate(SAMPLE_UNSCALED.length + 4 - 1);
+		b.putInt(SAMPLE_SCALE);
+		b.put(SAMPLE_UNSCALED, 1, SAMPLE_UNSCALED.length - 1);
+		assertArrayEquals(b.array(), w.toByteArray());
 	}
 }

@@ -15,8 +15,12 @@
  */
 package io.interlockledger.iltags.io;
 
-import static io.interlockledger.iltags.TestUtils.*;
-import static org.junit.Assert.*;
+import static io.interlockledger.iltags.TestUtils.SAMPLE;
+import static io.interlockledger.iltags.TestUtils.SAMPLE_BIN;
+import static io.interlockledger.iltags.TestUtils.UTF8;
+import static io.interlockledger.iltags.TestUtils.genRandomString;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -28,12 +32,20 @@ import io.interlockledger.iltags.ILTagException;
 import io.interlockledger.iltags.ilint.ILIntCodec;
 
 public class ILBaseTagDataWriterTest {
-	
+
 	public static class TestBaseTagDataWriter extends ILBaseTagDataWriter {
-		
+
 		private ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
+
 		private boolean forceError = false;
+
+		public void setForceError(boolean forceError) {
+			this.forceError = forceError;
+		}
+
+		public byte[] toByteArray() {
+			return this.out.toByteArray();
+		}
 
 		@Override
 		protected void writeByteCore(byte v) throws ILTagException {
@@ -50,27 +62,34 @@ public class ILBaseTagDataWriterTest {
 			}
 			this.out.write(v, off, size);
 		}
-		
-		public byte [] toByteArray() {
-			return this.out.toByteArray();
-		}
+	}
 
-		public void setForceError(boolean forceError) {
-			this.forceError = forceError;
+	@Test
+	public void testGetOffset() throws Exception {
+		Random r = new Random();
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		long offs = 0;
+		for (int i = 0; i < 16; i++) {
+			int size = r.nextInt(128);
+			byte[] bin = new byte[size];
+			w.writeBytes(bin);
+			offs += size;
+			assertEquals(offs, w.getOffset());
 		}
 	}
 
 	@Test
 	public void testILBaseTagDataWriter() {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
+
 		assertEquals(0, w.getOffset());
 	}
 
 	@Test
 	public void testUpdateOffset() {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
+
 		long offset = 0;
 		for (int i = 0; i < 100; i++) {
 			assertEquals(offset, w.getOffset());
@@ -84,150 +103,35 @@ public class ILBaseTagDataWriterTest {
 	public void testWriteByte() throws Exception {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
 		Random r = new Random();
-		
+
 		ByteBuffer b = ByteBuffer.allocate(128);
 		while (b.hasRemaining()) {
 			assertEquals(b.position(), w.getOffset());
-			byte v = (byte)r.nextInt();
+			byte v = (byte) r.nextInt();
 			w.writeByte(v);
 			b.put(v);
 			assertEquals(b.position(), w.getOffset());
 		}
 		assertArrayEquals(b.array(), w.toByteArray());
 	}
-	
+
 	@Test(expected = ILTagException.class)
 	public void testWriteByteFail() throws Exception {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
 		w.setForceError(true);
-		w.writeByte((byte)0);
+		w.writeByte((byte) 0);
 	}
 
-	@Test
-	public void testWriteShort() throws Exception {
-		Random r = new Random();
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		ByteBuffer b = ByteBuffer.allocate(128);
-		while (b.hasRemaining()) {
-			assertEquals(b.position(), w.getOffset());
-			short v = (short)r.nextInt();
-			w.writeShort(v);
-			b.putShort(v);
-			assertEquals(b.position(), w.getOffset());
-		}
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testWriteShortFail() throws Exception {
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		w.setForceError(true);
-		w.writeShort((short)0);
-	}
-
-	@Test
-	public void testWriteInt() throws Exception {
-		Random r = new Random();
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		ByteBuffer b = ByteBuffer.allocate(128);
-		while (b.hasRemaining()) {
-			assertEquals(b.position(), w.getOffset());
-			int v = r.nextInt();
-			w.writeInt(v);
-			b.putInt(v);
-			assertEquals(b.position(), w.getOffset());
-		}
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testWriteIntFail() throws Exception {
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		w.setForceError(true);
-		w.writeInt(0);
-	}
-	
-	@Test
-	public void testWriteLong() throws Exception {
-		Random r = new Random();
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		ByteBuffer b = ByteBuffer.allocate(128);
-		while (b.hasRemaining()) {
-			assertEquals(b.position(), w.getOffset());
-			long v = r.nextLong();
-			w.writeLong(v);
-			b.putLong(v);
-			assertEquals(b.position(), w.getOffset());
-		}
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testWriteLongFail() throws Exception {
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		w.setForceError(true);
-		w.writeLong(0);
-	}
-
-	@Test
-	public void testWriteFloat() throws Exception {
-		Random r = new Random();
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		ByteBuffer b = ByteBuffer.allocate(128);
-		while (b.hasRemaining()) {
-			assertEquals(b.position(), w.getOffset());
-			float v = r.nextFloat();
-			w.writeFloat(v);
-			b.putFloat(v);
-			assertEquals(b.position(), w.getOffset());
-		}
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testWriteFloatFail() throws Exception {
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		w.setForceError(true);
-		w.writeFloat(0);
-	}
-
-	@Test
-	public void testWriteDouble() throws Exception {
-		Random r = new Random();
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		ByteBuffer b = ByteBuffer.allocate(128);
-		while (b.hasRemaining()) {
-			assertEquals(b.position(), w.getOffset());
-			double v = r.nextDouble();
-			w.writeDouble(v);
-			b.putDouble(v);
-			assertEquals(b.position(), w.getOffset());
-		}
-		assertArrayEquals(b.array(), w.toByteArray());
-	}
-	
-	@Test(expected = ILTagException.class)
-	public void testWriteDoubleFail() throws Exception {
-		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		w.setForceError(true);
-		w.writeDouble(0);
-	}
-	
 	@Test
 	public void testWriteBytesByteArray() throws Exception {
 		Random r = new Random();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
+
 		long offs = 0;
 		for (int i = 0; i < 16; i++) {
 			for (int size = 0; size < 16; size++) {
-				byte [] bin = new byte[size];
+				byte[] bin = new byte[size];
 				r.nextBytes(bin);
 				w.writeBytes(bin);
 				out.write(bin);
@@ -237,7 +141,7 @@ public class ILBaseTagDataWriterTest {
 		}
 		assertArrayEquals(out.toByteArray(), w.toByteArray());
 	}
-	
+
 	@Test(expected = ILTagException.class)
 	public void testWriteBytesByteArrayFail() throws Exception {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
@@ -250,12 +154,12 @@ public class ILBaseTagDataWriterTest {
 		Random r = new Random();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
+
 		long offs = 0;
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				for (int size = 0; size < 16; size++) {
-					byte [] bin = new byte[i + j + size];
+					byte[] bin = new byte[i + j + size];
 					r.nextBytes(bin);
 					w.writeBytes(bin, i, size);
 					out.write(bin, i, size);
@@ -273,12 +177,58 @@ public class ILBaseTagDataWriterTest {
 		w.setForceError(true);
 		w.writeBytes(new byte[1], 0, 1);
 	}
-	
+
+	@Test
+	public void testWriteDouble() throws Exception {
+		Random r = new Random();
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		ByteBuffer b = ByteBuffer.allocate(128);
+		while (b.hasRemaining()) {
+			assertEquals(b.position(), w.getOffset());
+			double v = r.nextDouble();
+			w.writeDouble(v);
+			b.putDouble(v);
+			assertEquals(b.position(), w.getOffset());
+		}
+		assertArrayEquals(b.array(), w.toByteArray());
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testWriteDoubleFail() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+		w.setForceError(true);
+		w.writeDouble(0);
+	}
+
+	@Test
+	public void testWriteFloat() throws Exception {
+		Random r = new Random();
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		ByteBuffer b = ByteBuffer.allocate(128);
+		while (b.hasRemaining()) {
+			assertEquals(b.position(), w.getOffset());
+			float v = r.nextFloat();
+			w.writeFloat(v);
+			b.putFloat(v);
+			assertEquals(b.position(), w.getOffset());
+		}
+		assertArrayEquals(b.array(), w.toByteArray());
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testWriteFloatFail() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+		w.setForceError(true);
+		w.writeFloat(0);
+	}
+
 	@Test
 	public void testWriteILInt() throws Exception {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
+
 		long offs = 0;
 		long value = 0x08;
 		for (int i = 0; i < 16; i++, value = (value << 4) + 1) {
@@ -290,7 +240,7 @@ public class ILBaseTagDataWriterTest {
 		}
 		assertArrayEquals(out.toByteArray(), w.toByteArray());
 	}
-	
+
 	@Test(expected = ILTagException.class)
 	public void testWriteILIntFail() throws Exception {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
@@ -299,18 +249,72 @@ public class ILBaseTagDataWriterTest {
 	}
 
 	@Test
-	public void testGetOffset() throws Exception {
+	public void testWriteInt() throws Exception {
 		Random r = new Random();
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
-		
-		long offs = 0;
-		for (int i = 0; i < 16; i++) {
-			int size = r.nextInt(128);
-			byte [] bin = new byte[size];
-			w.writeBytes(bin);
-			offs += size;
-			assertEquals(offs, w.getOffset());
+
+		ByteBuffer b = ByteBuffer.allocate(128);
+		while (b.hasRemaining()) {
+			assertEquals(b.position(), w.getOffset());
+			int v = r.nextInt();
+			w.writeInt(v);
+			b.putInt(v);
+			assertEquals(b.position(), w.getOffset());
 		}
+		assertArrayEquals(b.array(), w.toByteArray());
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testWriteIntFail() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+		w.setForceError(true);
+		w.writeInt(0);
+	}
+
+	@Test
+	public void testWriteLong() throws Exception {
+		Random r = new Random();
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		ByteBuffer b = ByteBuffer.allocate(128);
+		while (b.hasRemaining()) {
+			assertEquals(b.position(), w.getOffset());
+			long v = r.nextLong();
+			w.writeLong(v);
+			b.putLong(v);
+			assertEquals(b.position(), w.getOffset());
+		}
+		assertArrayEquals(b.array(), w.toByteArray());
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testWriteLongFail() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+		w.setForceError(true);
+		w.writeLong(0);
+	}
+
+	@Test
+	public void testWriteShort() throws Exception {
+		Random r = new Random();
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+
+		ByteBuffer b = ByteBuffer.allocate(128);
+		while (b.hasRemaining()) {
+			assertEquals(b.position(), w.getOffset());
+			short v = (short) r.nextInt();
+			w.writeShort(v);
+			b.putShort(v);
+			assertEquals(b.position(), w.getOffset());
+		}
+		assertArrayEquals(b.array(), w.toByteArray());
+	}
+
+	@Test(expected = ILTagException.class)
+	public void testWriteShortFail() throws Exception {
+		TestBaseTagDataWriter w = new TestBaseTagDataWriter();
+		w.setForceError(true);
+		w.writeShort((short) 0);
 	}
 
 	@Test
@@ -322,12 +326,12 @@ public class ILBaseTagDataWriterTest {
 			String s = genRandomString(size);
 			w.writeString(s);
 			ByteBuffer out = UTF8.encode(s);
-			byte [] expected = new byte[out.limit()];
+			byte[] expected = new byte[out.limit()];
 			out.get(expected);
 			assertArrayEquals(expected, w.toByteArray());
 		}
 	}
-	
+
 	@Test
 	public void testWriteStringSample() throws Exception {
 		TestBaseTagDataWriter w = new TestBaseTagDataWriter();

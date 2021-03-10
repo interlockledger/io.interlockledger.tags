@@ -33,14 +33,23 @@ public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements 
 	 * The underlying output stream.
 	 */
 	protected OutputStream out;
-	
+
 	/**
 	 * Creates a new instance of this class.
 	 * 
 	 * @param out The underlying output stream.
 	 */
 	public ILOutputStreamTagDataWriter(OutputStream out) {
-		this.out = out; 
+		this.out = out;
+	}
+
+	@Override
+	public void close() throws IOException {
+		this.out.close();
+	}
+
+	public void flush() throws IOException {
+		this.out.flush();
 	}
 
 	@Override
@@ -59,14 +68,5 @@ public class ILOutputStreamTagDataWriter extends ILBaseTagDataWriter implements 
 		} catch (IOException e) {
 			throw new ILTagException(e.getMessage());
 		}
-	}
-
-	public void flush() throws IOException {
-		this.out.flush();
-	}
-	
-	@Override
-	public void close() throws IOException {
-		this.out.close();		
 	}
 }

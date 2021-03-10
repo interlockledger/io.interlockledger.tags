@@ -15,7 +15,9 @@
  */
 package io.interlockledger.iltags;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -28,84 +30,34 @@ import io.interlockledger.iltags.io.ILMemoryTagDataWriter;
 public class ILTagArrayTagTest {
 
 	@Test
-	public void testSerializeValueEmpty() throws Exception {
-		ILTagArrayTag t = new ILTagArrayTag();
-
-		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter(); 
-		t.serializeValue(w);
-		assertArrayEquals(new byte[1], w.toByteArray());	
-	}
-	
-	@Test
-	public void testSerializeValue() throws Exception {
-		ILTagArrayTag t = new ILTagArrayTag();
-
-		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter(); 
-		t.getValue().add(new ILNullTag());
-		t.getValue().add(null);
-		t.getValue().add(new ILBinary128Tag());
-		t.getValue().add(new ILInt8Tag());
-		t.serializeValue(w);
-
-		ILMemoryTagDataWriter expected = new ILMemoryTagDataWriter();
-		expected.writeILInt(4);
-		ILNullTag.NULL.serialize(expected);
-		ILNullTag.NULL.serialize(expected);
-		(new ILBinary128Tag()).serialize(expected);
-		(new ILInt8Tag()).serialize(expected);
-		assertArrayEquals(expected.toByteArray(), w.toByteArray());			
-	}
-
-	@Test
-	public void testGetValueSize() {
-		ILTagArrayTag t = new ILTagArrayTag();
-		
-		assertEquals(1, t.getValueSize());
-		
-		t.getValue().add(new ILNullTag());
-		t.getValue().add(null);
-		t.getValue().add(new ILBinary128Tag());
-		t.getValue().add(new ILInt8Tag());
-		
-		long size = ILIntCodec.getEncodedSize(t.getValue().size());
-		for (ILTag tag: t.getValue()) {
-			if (tag != null) {
-				size += tag.getTagSize();
-			} else {
-				size += ILNullTag.NULL.getTagSize();
-			}
-		}
-		assertEquals(size, t.getValueSize());
-	}
-	
-	@Test
-	public void testDeserializeValueEmpty() throws Exception {
-		ILTagArrayTag t = new ILTagArrayTag();
-		
-		t.deserializeValue(new ILTagFactory(), 1, new ILMemoryTagDataReader(new byte[1]));
-		assertEquals(0, t.getValue().size());
-	}
-	
-	@Test
 	public void testDeserializeValue() throws Exception {
 		ArrayList<ILTag> a = new ArrayList<ILTag>();
 		a.add(new ILNullTag());
 		a.add(new ILNullTag());
 		a.add(new ILBinary128Tag());
 		a.add(new ILInt8Tag());
-		
+
 		ILMemoryTagDataWriter serialized = new ILMemoryTagDataWriter();
 		serialized.writeILInt(4);
-		for (ILTag tag: a) {
+		for (ILTag tag : a) {
 			tag.serialize(serialized);
 		}
 
 		ILTagArrayTag t = new ILTagArrayTag();
-		t.deserializeValue(new ILTagFactory(), serialized.getOffset(), new ILMemoryTagDataReader(serialized.toByteArray()));
+		t.deserializeValue(new ILTagFactory(), serialized.getOffset(),
+				new ILMemoryTagDataReader(serialized.toByteArray()));
 		assertEquals(4, t.getValue().size());
 		assertTrue(ILTagSequenceTag.equals(a, t.getValue()));
 	}
-	
+
+	@Test
+	public void testDeserializeValueEmpty() throws Exception {
+		ILTagArrayTag t = new ILTagArrayTag();
+
+		t.deserializeValue(new ILTagFactory(), 1, new ILMemoryTagDataReader(new byte[1]));
+		assertEquals(0, t.getValue().size());
+	}
+
 	@Test(expected = ILTagException.class)
 	public void testDeserializeValueFailedEmpty() throws Exception {
 
@@ -120,16 +72,39 @@ public class ILTagArrayTagTest {
 		a.add(new ILNullTag());
 		a.add(new ILBinary128Tag());
 		a.add(new ILInt8Tag());
-		
+
 		ILMemoryTagDataWriter serialized = new ILMemoryTagDataWriter();
 		serialized.writeILInt(4);
-		for (ILTag tag: a) {
+		for (ILTag tag : a) {
 			tag.serialize(serialized);
 		}
-		serialized.writeByte((byte)0);
+		serialized.writeByte((byte) 0);
 
 		ILTagArrayTag t = new ILTagArrayTag();
-		t.deserializeValue(new ILTagFactory(), serialized.getOffset(), new ILMemoryTagDataReader(serialized.toByteArray()));
+		t.deserializeValue(new ILTagFactory(), serialized.getOffset(),
+				new ILMemoryTagDataReader(serialized.toByteArray()));
+	}
+
+	@Test
+	public void testGetValueSize() {
+		ILTagArrayTag t = new ILTagArrayTag();
+
+		assertEquals(1, t.getValueSize());
+
+		t.getValue().add(new ILNullTag());
+		t.getValue().add(null);
+		t.getValue().add(new ILBinary128Tag());
+		t.getValue().add(new ILInt8Tag());
+
+		long size = ILIntCodec.getEncodedSize(t.getValue().size());
+		for (ILTag tag : t.getValue()) {
+			if (tag != null) {
+				size += tag.getTagSize();
+			} else {
+				size += ILNullTag.NULL.getTagSize();
+			}
+		}
+		assertEquals(size, t.getValueSize());
 	}
 
 	@Test
@@ -146,5 +121,34 @@ public class ILTagArrayTagTest {
 
 		assertEquals(123, t.getId());
 		assertEquals(0, t.getValue().size());
+	}
+
+	@Test
+	public void testSerializeValue() throws Exception {
+		ILTagArrayTag t = new ILTagArrayTag();
+
+		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
+		t.getValue().add(new ILNullTag());
+		t.getValue().add(null);
+		t.getValue().add(new ILBinary128Tag());
+		t.getValue().add(new ILInt8Tag());
+		t.serializeValue(w);
+
+		ILMemoryTagDataWriter expected = new ILMemoryTagDataWriter();
+		expected.writeILInt(4);
+		ILNullTag.NULL.serialize(expected);
+		ILNullTag.NULL.serialize(expected);
+		(new ILBinary128Tag()).serialize(expected);
+		(new ILInt8Tag()).serialize(expected);
+		assertArrayEquals(expected.toByteArray(), w.toByteArray());
+	}
+
+	@Test
+	public void testSerializeValueEmpty() throws Exception {
+		ILTagArrayTag t = new ILTagArrayTag();
+
+		ILMemoryTagDataWriter w = new ILMemoryTagDataWriter();
+		t.serializeValue(w);
+		assertArrayEquals(new byte[1], w.toByteArray());
 	}
 }

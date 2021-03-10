@@ -15,7 +15,12 @@
  */
 package io.interlockledger.iltags.io;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,26 +33,76 @@ import io.interlockledger.iltags.ILTagException;
 public class ILOutputStreamTagDataWriterTest {
 
 	@Test
+	public void testClose() throws Exception {
+		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
+		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
+
+		assertFalse(out.isCloseUsed());
+		w.close();
+		assertTrue(out.isCloseUsed());
+	}
+
+	@Test(expected = IOException.class)
+	public void testCloseFail() throws Exception {
+		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
+		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
+
+		out.setForError(true);
+		w.close();
+	}
+
+	@Test
+	public void testFlush() throws Exception {
+		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
+		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
+
+		assertFalse(out.isFlushUsed());
+		w.flush();
+		assertTrue(out.isFlushUsed());
+		w.close();
+	}
+
+	@Test(expected = IOException.class)
+	public void testFlushFail() throws Exception {
+		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
+		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
+
+		out.setForError(true);
+		w.flush();
+		fail();
+		w.close();
+	}
+
+	@Test
+	public void testILOutputStreamTagDataWriter() throws Exception {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try (ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out)) {
+			assertSame(out, w.out);
+		}
+	}
+
+	@Test
 	public void testWriteByteCore() throws Exception {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ByteArrayOutputStream expected = new ByteArrayOutputStream();
-		
+
 		try (ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out)) {
 			for (int i = 0; i < 128; i++) {
-				w.writeByteCore((byte)i);
+				w.writeByteCore((byte) i);
 				expected.write(i);
 			}
 		}
 		assertArrayEquals(expected.toByteArray(), out.toByteArray());
 	}
-	
+
 	@Test(expected = ILTagException.class)
 	public void testWriteByteCoreFail() throws Exception {
 		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
 		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
 
 		out.setForError(true);
-		w.writeByteCore((byte)0);
+		w.writeByteCore((byte) 0);
 		fail();
 		w.close();
 	}
@@ -57,14 +112,14 @@ public class ILOutputStreamTagDataWriterTest {
 		Random r = new Random();
 		ByteArrayOutputStream expected = new ByteArrayOutputStream();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
+
 		try (ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out)) {
-			
+
 			long offs = 0;
 			for (int i = 0; i < 16; i++) {
 				for (int j = 0; j < 16; j++) {
 					for (int size = 0; size < 16; size++) {
-						byte [] bin = new byte[i + j + size];
+						byte[] bin = new byte[i + j + size];
 						r.nextBytes(bin);
 						w.writeBytes(bin, i, size);
 						expected.write(bin, i, size);
@@ -84,56 +139,6 @@ public class ILOutputStreamTagDataWriterTest {
 
 		out.setForError(true);
 		w.writeBytesCore(new byte[1], 0, 1);
-		fail();
-		w.close();
-	}
-
-	@Test
-	public void testILOutputStreamTagDataWriter() throws Exception {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
-		try (ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out)) {
-			assertSame(out, w.out);
-		}
-	}
-
-	@Test
-	public void testClose() throws Exception {
-		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
-		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
-		
-		assertFalse(out.isCloseUsed());
-		w.close();
-		assertTrue(out.isCloseUsed());
-	}
-	
-	@Test(expected = IOException.class)
-	public void testCloseFail() throws Exception {
-		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
-		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
-
-		out.setForError(true);
-		w.close();
-	}	
-	
-	@Test
-	public void testFlush() throws Exception {
-		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
-		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
-		
-		assertFalse(out.isFlushUsed());
-		w.flush();
-		assertTrue(out.isFlushUsed());
-		w.close();
-	}
-	
-	@Test(expected = IOException.class)
-	public void testFlushFail() throws Exception {
-		TestOutputStream out = new TestOutputStream(new ByteArrayOutputStream());
-		ILOutputStreamTagDataWriter w = new ILOutputStreamTagDataWriter(out);
-
-		out.setForError(true);
-		w.flush();
 		fail();
 		w.close();
 	}

@@ -20,8 +20,8 @@ import io.interlockledger.iltags.io.ILTagDataReader;
 import io.interlockledger.iltags.io.ILTagDataWriter;
 
 /**
- * This class implements the standard tag array tag but can also be
- * used to implement other variants.
+ * This class implements the standard tag array tag but can also be used to
+ * implement other variants.
  * 
  * @author Fabio Jun Takada Chino
  * @since 2019.06.14
@@ -31,25 +31,13 @@ public class ILTagArrayTag extends ILTagSequenceTag {
 	public ILTagArrayTag() {
 		this(ILStandardTags.TAG_ILTAG_ARRAY.ordinal());
 	}
-	
+
 	public ILTagArrayTag(long id) {
 		super(id);
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		out.writeILInt(this.value.size());
-		super.serializeValue(out);
-	}
-
-	@Override
-	public long getValueSize() {
-		return ILIntCodec.getEncodedSize(this.value.size()) + super.getValueSize();
-	}
-
-	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
 		long count;
 
 		in.pushLimit(tagSize);
@@ -60,7 +48,18 @@ public class ILTagArrayTag extends ILTagSequenceTag {
 		this.value.clear();
 		for (; count > 0; count--) {
 			this.value.add(factory.deserialize(in));
-		}		
+		}
 		in.popLimit(true);
+	}
+
+	@Override
+	public long getValueSize() {
+		return ILIntCodec.getEncodedSize(this.value.size()) + super.getValueSize();
+	}
+
+	@Override
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+		out.writeILInt(this.value.size());
+		super.serializeValue(out);
 	}
 }

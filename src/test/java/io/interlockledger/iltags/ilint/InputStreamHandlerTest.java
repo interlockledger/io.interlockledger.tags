@@ -15,7 +15,9 @@
  */
 package io.interlockledger.iltags.ilint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 
@@ -24,28 +26,29 @@ import org.junit.Test;
 public class InputStreamHandlerTest {
 
 	@Test
-	public void testInstance() {
-
-		assertNotNull(InputStreamHandler.INSTANCE);
-	}
-	
-	@Test
 	public void testGet() throws Exception {
 
-		byte [] src = new byte[256];
+		byte[] src = new byte[256];
 		for (int i = 0; i < src.length; i++) {
-			src[i] = (byte)i;
+			src[i] = (byte) i;
 		}
-		
+
 		ByteArrayInputStream in = new ByteArrayInputStream(src);
 		for (int i = 0; i < src.length; i++) {
 			assertEquals(i, InputStreamHandler.INSTANCE.get(in));
 		}
-		
+
 		try {
 			InputStreamHandler.INSTANCE.get(in);
 			fail();
-		} catch (ILIntException e) {}
+		} catch (ILIntException e) {
+		}
 	}
-	
+
+	@Test
+	public void testInstance() {
+
+		assertNotNull(InputStreamHandler.INSTANCE);
+	}
+
 }

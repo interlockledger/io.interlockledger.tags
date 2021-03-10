@@ -31,12 +31,21 @@ public class ILMemoryTagDataWriter extends ILBaseTagDataWriter {
 	 * The underlying output stream.
 	 */
 	protected ByteArrayOutputStream out;
-	
+
 	/**
 	 * Creates a new instance of this class.
 	 */
 	public ILMemoryTagDataWriter() {
-		this.out = new ByteArrayOutputStream(); 
+		this.out = new ByteArrayOutputStream();
+	}
+
+	/**
+	 * Returns the contents o this writer as a byte array.
+	 * 
+	 * @return The contents o this writer as a byte array.
+	 */
+	public byte[] toByteArray() {
+		return this.out.toByteArray();
 	}
 
 	@Override
@@ -47,14 +56,5 @@ public class ILMemoryTagDataWriter extends ILBaseTagDataWriter {
 	@Override
 	protected void writeBytesCore(byte[] v, int off, int size) throws ILTagException {
 		this.out.write(v, off, size);
-	}
-	
-	/**
-	 * Returns the contents o this writer as a byte array.
-	 * 
-	 * @return The contents o this writer as a byte array.
-	 */
-	public byte [] toByteArray() {
-		return this.out.toByteArray();
 	}
 }

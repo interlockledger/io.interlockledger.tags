@@ -15,33 +15,34 @@
  */
 package io.interlockledger.iltags.io;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import io.interlockledger.iltags.ilint.ILIntException;
 
 public class ILTagDataReaderHandlerTest {
-	
-	@Test
-	public void testInstance() {
-		assertNotNull(ILTagDataReaderHandler.INSTANCE);
-	}
 
 	@Test
 	public void testGet() throws Exception {
 		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
-		
+
 		for (int i = 0; i < 256; i++) {
-			assertEquals((i + 1) &0xFF, ILTagDataReaderHandler.INSTANCE.get(r));
+			assertEquals((i + 1) & 0xFF, ILTagDataReaderHandler.INSTANCE.get(r));
 		}
 	}
 
 	@Test(expected = ILIntException.class)
 	public void testGetFail() throws Exception {
 		ILBaseTagDataReaderTest.TestTagDataReader r = new ILBaseTagDataReaderTest.TestTagDataReader();
-		
+
 		r.pushLimit(0);
 		ILTagDataReaderHandler.INSTANCE.get(r);
+	}
+
+	@Test
+	public void testInstance() {
+		assertNotNull(ILTagDataReaderHandler.INSTANCE);
 	}
 }

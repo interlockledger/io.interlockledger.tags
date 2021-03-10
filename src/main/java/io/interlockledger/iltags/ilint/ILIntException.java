@@ -32,15 +32,15 @@ public class ILIntException extends Exception {
 		super(message);
 	}
 
-	public ILIntException(Throwable cause) {
-		super(cause);
-	}
-
 	public ILIntException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	public ILIntException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ILIntException(Throwable cause) {
+		super(cause);
 	}
 }

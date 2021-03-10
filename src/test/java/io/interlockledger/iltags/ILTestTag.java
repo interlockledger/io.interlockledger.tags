@@ -21,18 +21,20 @@ import io.interlockledger.iltags.io.ILTagDataWriter;
 public class ILTestTag extends ILTag {
 
 	private long valueSize;
-	
+
 	public ILTestTag(long id, long valueSize) {
 		super(id);
 		this.valueSize = valueSize;
 	}
 
 	@Override
-	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
-		
-		for (long i = 0; i < this.valueSize; i++) {
-			out.writeByte((byte)(i & 0xFF));
-		}
+	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in) throws ILTagException {
+		throw new UnsupportedOperationException("This method should not be tested.");
+	}
+
+	@Override
+	protected int getValueHashCode() {
+		return 0;
 	}
 
 	@Override
@@ -41,19 +43,16 @@ public class ILTestTag extends ILTag {
 	}
 
 	@Override
-	public void deserializeValue(ILTagFactory factory, long tagSize, ILTagDataReader in)
-			throws ILTagException {
-		throw new UnsupportedOperationException("This method should not be tested.");
-	}
-	
-	@Override
 	protected boolean sameValue(ILTag other) {
-		ILTestTag t = (ILTestTag)other;
+		ILTestTag t = (ILTestTag) other;
 		return this.valueSize == t.valueSize;
 	}
-	
+
 	@Override
-	protected int getValueHashCode() {
-		return 0;
-	}	
+	protected void serializeValue(ILTagDataWriter out) throws ILTagException {
+
+		for (long i = 0; i < this.valueSize; i++) {
+			out.writeByte((byte) (i & 0xFF));
+		}
+	}
 }
