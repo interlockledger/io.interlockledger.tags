@@ -1,11 +1,11 @@
-# jiltags
+# io.interlockledger.tags
 
 ## Introduction
 
-The **jiltags** library is a pure Java implementation of the
-[**ILInt**](https://github.com/interlockledger/specification/tree/master/ILInt) and 
-[**ILTags**](https://github.com/interlockledger/specification/tree/master/ILTags)
-standards defined by the **InterlockLedger**.
+The **io.interlockledger.tags** library is a pure Java implementation of the
+[ILInt](https://github.com/interlockledger/specification/tree/master/ILInt) and 
+[ILTags](https://github.com/interlockledger/specification/tree/master/ILTags)
+standards defined by **InterlockLedger**.
 
 The primary intent of this library is to be used for interactions with **InterlockLedger**
 nodes and formats using Java. Regardless of that, this library can be used for any
@@ -21,7 +21,7 @@ purpose without restrictions.
 ## Bug report
 
 Any bugs and suggestions may be reported directly using the 
-[GitHub Issue System](https://github.com/interlockledger/io.interlockledger.rest-client/issues).
+[GitHub Issue System](https://github.com/interlockledger/io.interlockledger.tags/issues).
 
 ## Collaboration
 
