@@ -3,29 +3,29 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.interlockledger</groupId>
-	<artifactId>io.interlockledger.tags</artifactId>
+	<artifactId>tags</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 	<name>iltags</name>
 	<description>Java implementation of the ILInt and ILTags standard.</description>
-	<url>https://github.com/interlockledger/jiltags</url>
+	<url>https://github.com/interlockledger/io.interlockledger.tags</url>
 	<organization>
 		<name>InterlockLedger Network</name>
 		<url>https://interlockledger.network/</url>
 	</organization>	
 	<issueManagement>
-		<url>https://github.com/interlockledger/jiltags/issues</url>
+		<url>https://github.com/interlockledger/io.interlockledger.tags/issues</url>
 	</issueManagement>
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>The 3-Clause BSD License</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
 		</license>
 	</licenses>
 	<distributionManagement>
 	   <repository>
 	     <id>github</id>
 	     <name>GitHub interlockledger Apache Maven Packages</name>
-	     <url>https://maven.pkg.github.com/interlockledger/interlockledger-rest-client-java</url>
+	     <url>https://maven.pkg.github.com/interlockledger/io.interlockledger.rest-client</url>
 	   </repository>
 	</distributionManagement>
 	<properties>

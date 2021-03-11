@@ -21,7 +21,7 @@ purpose without restrictions.
 ## Bug report
 
 Any bugs and suggestions may be reported directly using the 
-[GitHub Issue System](https://github.com/interlockledger/jiltags/issues).
+[GitHub Issue System](https://github.com/interlockledger/io.interlockledger.rest-client/issues).
 
 ## Collaboration
 
@@ -34,7 +34,7 @@ external dependencies will be allowed.
 
 ## License
 
-This library is licensed under the **Apache License Version 2.0**.
+This library is licensed under the **The 3-Clause BSD License**.
 
 ## Support
 
