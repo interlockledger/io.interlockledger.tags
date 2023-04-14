@@ -9,8 +9,3 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# Eclipse project files
-/.project
-/.classpath
-/.settings
-
